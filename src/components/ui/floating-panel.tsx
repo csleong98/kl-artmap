@@ -12,9 +12,27 @@ import { Badge } from './badge';
 
 interface FloatingPanelProps {
   className?: string;
+  onLocationSelect?: (location: Location) => Promise<void>;
+  onLocationDeselect?: () => void;
+  getRouteInfo?: (stationName: string) => {
+    distance: string;
+    duration: string;
+    color: string;
+    distanceMeters: number;
+    durationMinutes: number;
+  } | null;
+  routeLoading?: boolean;
+  routeError?: string | null;
 }
 
-export default function FloatingPanel({ className = '' }: FloatingPanelProps) {
+export default function FloatingPanel({
+  className = '',
+  onLocationSelect,
+  onLocationDeselect,
+  getRouteInfo,
+  routeLoading = false,
+  routeError = null
+}: FloatingPanelProps) {
   // State management
   const [panelState, setPanelState] = useState<PanelState>('collapsed');
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -85,16 +103,30 @@ export default function FloatingPanel({ className = '' }: FloatingPanelProps) {
   }, [activeTab, activeFilter, searchQuery, filterState]);
 
   // Handle location selection (expand panel)
-  const handleLocationSelect = (location: Location) => {
+  const handleLocationSelect = async (location: Location) => {
     setSelectedLocation(location);
     setPanelState('expanded');
     setDetailTab('overview'); // Reset to overview tab
+
+    // Trigger route display if handler is provided
+    if (onLocationSelect) {
+      try {
+        await onLocationSelect(location);
+      } catch (error) {
+        console.error('Error displaying routes:', error);
+      }
+    }
   };
 
   // Handle back to list view
   const handleBackToList = () => {
     setSelectedLocation(null);
     setPanelState('collapsed');
+
+    // Clear routes when going back to list
+    if (onLocationDeselect) {
+      onLocationDeselect();
+    }
   };
 
   // Handle filter dialog
@@ -207,26 +239,111 @@ export default function FloatingPanel({ className = '' }: FloatingPanelProps) {
 
               <TabsContent value="station_guide" className="px-4 pb-4 mt-0">
                 <div className="space-y-3">
-                  {selectedLocation.details.stationGuide.stations.map((station, index) => (
-                    <div key={index} className="bg-blue-100 rounded-lg p-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium text-gray-900">{station.name}</h4>
-                          <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                            <span className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs">
-                              {station.line}
-                            </span>
-                            <span>•</span>
-                            <span>{station.line.split(' ').pop()} Line</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="font-semibold text-gray-900">{station.walkTime}</div>
-                          <div className="text-xs text-gray-600">mins walk</div>
-                        </div>
+                  {/* Route loading state */}
+                  {routeLoading && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-blue-800 text-sm">Loading walking routes...</span>
                       </div>
                     </div>
-                  ))}
+                  )}
+
+                  {/* Route error state */}
+                  {routeError && (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                      <div className="flex items-start gap-2">
+                        <svg className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                        <p className="text-red-800 text-sm">{routeError}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedLocation.details.stationGuide.stations.map((station, index) => {
+                    const routeInfo = getRouteInfo ? getRouteInfo(station.name) : null;
+
+                    return (
+                      <div key={index} className="bg-blue-100 rounded-lg p-3 relative">
+                        {/* Route color indicator */}
+                        {routeInfo && (
+                          <div
+                            className="absolute left-0 top-0 bottom-0 w-1 rounded-l-lg"
+                            style={{ backgroundColor: routeInfo.color }}
+                          ></div>
+                        )}
+
+                        <div className="flex items-center justify-between ml-2">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900">{station.name}</h4>
+                            <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+                              <span className="bg-blue-600 text-white px-2 py-0.5 rounded text-xs">
+                                {station.line}
+                              </span>
+                              <span>•</span>
+                              <span>{station.line.split(' ').pop()} Line</span>
+                            </div>
+                          </div>
+
+                          <div className="text-right">
+                            {/* Display route info if available, otherwise fallback to static data */}
+                            {routeInfo ? (
+                              <div>
+                                <div className="font-semibold text-gray-900">
+                                  {routeInfo.durationMinutes} mins
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  {routeInfo.distance} walk
+                                </div>
+                              </div>
+                            ) : (
+                              <div>
+                                <div className="font-semibold text-gray-900">{station.walkTime}</div>
+                                <div className="text-xs text-gray-600">
+                                  {station.walkDistance || 'mins walk'}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Additional route details */}
+                        {routeInfo && !routeLoading && (
+                          <div className="mt-2 pt-2 border-t border-blue-200">
+                            <div className="flex items-center gap-4 text-xs text-gray-600">
+                              <span>Walking route calculated</span>
+                              <span>•</span>
+                              <span>Distance: {routeInfo.distance}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Route legend */}
+                  {getRouteInfo && selectedLocation.nearestStations && !routeLoading && !routeError && (
+                    <div className="bg-gray-50 rounded-lg p-3 mt-4">
+                      <h5 className="text-sm font-medium text-gray-700 mb-2">Route Colors</h5>
+                      <div className="space-y-1">
+                        {selectedLocation.nearestStations.map((stationName) => {
+                          const routeInfo = getRouteInfo(stationName);
+                          if (!routeInfo) return null;
+
+                          return (
+                            <div key={stationName} className="flex items-center gap-2 text-xs">
+                              <div
+                                className="w-3 h-3 rounded"
+                                style={{ backgroundColor: routeInfo.color }}
+                              ></div>
+                              <span className="text-gray-600">Route from {stationName}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </TabsContent>
 

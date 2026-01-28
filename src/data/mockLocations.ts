@@ -9,7 +9,7 @@ export const mockLocations: Location[] = [
     walkTime: '15mins',
     openingHours: 'Closes at 5pm today',
     status: 'open',
-    coordinates: [101.6869, 3.1390],
+    coordinates: [101.6873, 3.1527], // Actual National Art Gallery location near Dayabumi Complex
     address: 'Jalan Temerloh, Titiwangsa, 53200 Kuala Lumpur',
     imageUrl: '/images/national-art-gallery.jpg',
     images: ['/images/national-art-gallery-1.jpg', '/images/national-art-gallery-2.jpg', '/images/national-art-gallery-3.jpg', '/images/national-art-gallery-4.jpg'],
@@ -61,7 +61,7 @@ export const mockLocations: Location[] = [
     walkTime: '15mins',
     openingHours: 'Closes at 5pm today',
     status: 'open',
-    coordinates: [101.6869, 3.1390],
+    coordinates: [101.6845, 3.1329], // Near Brickfields area
     address: '8, Jalan Scott, Brickfields, 50470 Kuala Lumpur',
     imageUrl: '/images/wei-ling-gallery.jpg',
     nearestStations: ['KL Sentral', 'Brickfields'],

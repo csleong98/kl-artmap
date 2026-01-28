@@ -30,6 +30,11 @@ export interface LocationDetails {
       line: string;
       walkTime: number;
       walkDistance: string;
+      routeInfo?: {
+        distance: number; // in meters
+        duration: number; // in minutes
+        routeGeometry?: any; // GeoJSON geometry for the route
+      };
     }[];
   };
   contact: {

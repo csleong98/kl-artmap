@@ -5,9 +5,10 @@ import dynamic from 'next/dynamic';
 
 interface MapProps {
   className?: string;
+  onMapLoad?: (map: any) => void;
 }
 
-function MapComponent({ className }: MapProps) {
+function MapComponent({ className, onMapLoad }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,6 +44,10 @@ function MapComponent({ className }: MapProps) {
 
         mapInstance.on('load', () => {
           setMapLoaded(true);
+          // Pass map instance to parent component
+          if (onMapLoad) {
+            onMapLoad(mapInstance);
+          }
         });
 
         // Add navigation controls
