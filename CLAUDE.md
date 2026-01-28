@@ -11,6 +11,12 @@ A Next.js 14 application for discovering street art in Kuala Lumpur, featuring a
 - **Mapping**: MapLibre GL JS + Maptiler API
 - **Package Manager**: npm
 
+## Development Guidelines
+- **ALWAYS use shadcn/ui components** instead of creating custom components
+- **Install missing shadcn components** with `npx shadcn@latest add [component]` when needed
+- **Available shadcn components**: Dialog, Sheet, Tabs, Button, Card, Badge, and more
+- **Component imports**: Import from `./[component]` (e.g., `import { Button } from './button'`)
+
 ## Key Files
 - `src/app/page.tsx` - Main page with fullscreen map and floating panel
 - `src/components/ui/map.tsx` - MapLibre GL JS map component

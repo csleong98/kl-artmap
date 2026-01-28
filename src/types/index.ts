@@ -9,6 +9,36 @@ export interface ArtLocation {
   imageUrl?: string;
 }
 
+export interface LocationDetails {
+  overview: {
+    description: string;
+    admission: string;
+    openingHours: {
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+      sunday: string;
+    };
+    specialNote?: string;
+  };
+  stationGuide: {
+    stations: {
+      name: string;
+      line: string;
+      walkTime: number;
+      walkDistance: string;
+    }[];
+  };
+  contact: {
+    address: string;
+    website?: string;
+    phone?: string;
+  };
+}
+
 export interface Location {
   id: string;
   name: string;
@@ -21,6 +51,10 @@ export interface Location {
   coordinates: [number, number]; // [longitude, latitude]
   address: string;
   imageUrl?: string;
+  images?: string[];
+  nearestStations?: string[];
+  admission?: 'free' | 'paid';
+  details?: LocationDetails;
 }
 
 export interface MapProps {
@@ -29,5 +63,5 @@ export interface MapProps {
 }
 
 export type FilterType = 'all' | 'art_gallery' | 'art_museum' | 'monument';
-export type TabType = 'places' | 'train_stations';
+export type TabType = 'art_museums' | 'art_galleries' | 'art_spaces' | 'overview' | 'station_guide' | 'contact';
 export type PanelState = 'collapsed' | 'expanded';

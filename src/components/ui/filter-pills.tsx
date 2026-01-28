@@ -7,9 +7,9 @@ interface FilterPillsProps {
 
 const filters = [
   { value: 'all' as FilterType, label: 'All' },
-  { value: 'art_gallery' as FilterType, label: 'Art galleries' },
-  { value: 'art_museum' as FilterType, label: 'Art museums' },
-  { value: 'monument' as FilterType, label: 'Monuments' },
+  { value: 'art_gallery' as FilterType, label: 'Art Galleries' },
+  { value: 'art_museum' as FilterType, label: 'Art Museums' },
+  { value: 'monument' as FilterType, label: 'Art Spaces' },
 ];
 
 export default function FilterPills({ activeFilter, onFilterChange }: FilterPillsProps) {

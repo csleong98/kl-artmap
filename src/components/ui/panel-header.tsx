@@ -1,4 +1,6 @@
 import { TabType } from '@/types';
+import { Tabs, TabsList, TabsTrigger } from './tabs';
+import { Button } from './button';
 
 interface PanelHeaderProps {
   activeTab: TabType;
@@ -8,6 +10,9 @@ interface PanelHeaderProps {
   showBackButton?: boolean;
   onBackClick?: () => void;
   title?: string;
+  resultsCount?: number;
+  onFilterClick?: () => void;
+  isDetailView?: boolean;
 }
 
 export default function PanelHeader({
@@ -17,7 +22,10 @@ export default function PanelHeader({
   onSearchChange,
   showBackButton = false,
   onBackClick,
-  title
+  title,
+  resultsCount,
+  onFilterClick,
+  isDetailView = false
 }: PanelHeaderProps) {
   if (showBackButton) {
     return (
@@ -38,28 +46,13 @@ export default function PanelHeader({
   return (
     <div className="p-4 space-y-4">
       {/* Tab Navigation */}
-      <div className="flex bg-gray-100 rounded-lg p-1">
-        <button
-          onClick={() => onTabChange('places')}
-          className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-            activeTab === 'places'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Places
-        </button>
-        <button
-          onClick={() => onTabChange('train_stations')}
-          className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-            activeTab === 'train_stations'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900'
-          }`}
-        >
-          Train stations
-        </button>
-      </div>
+      <Tabs value={activeTab} onValueChange={onTabChange}>
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="art_museums">Art Museums</TabsTrigger>
+          <TabsTrigger value="art_galleries">Art Galleries</TabsTrigger>
+          <TabsTrigger value="art_spaces">Art Spaces</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Search and Sort */}
       <div className="flex gap-2">
@@ -80,12 +73,20 @@ export default function PanelHeader({
             className="w-full pl-9 pr-4 py-2 bg-gray-100 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <button className="px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-          </svg>
-        </button>
+        <Button
+          variant="secondary"
+          onClick={onFilterClick}
+        >
+          Filter & Sort
+        </Button>
       </div>
+
+      {/* Results count */}
+      {resultsCount !== undefined && (
+        <div className="text-sm text-gray-600">
+          {resultsCount} places found
+        </div>
+      )}
     </div>
   );
 }
