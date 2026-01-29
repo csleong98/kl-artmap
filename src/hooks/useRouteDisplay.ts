@@ -117,7 +117,7 @@ export function useRouteDisplay() {
         color: routes[index]?.color || '#666666'
       }));
 
-      const markerIds = addStationMarkers(mapRef.current, stationMarkersData, location.coordinates);
+      const markerIds = addStationMarkers(mapRef.current, stationMarkersData, location.coordinates, location.type);
 
       // Fit map to show all routes
       fitMapToRoutes(mapRef.current, allCoordinates);
