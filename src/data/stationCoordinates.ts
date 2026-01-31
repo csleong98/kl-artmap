@@ -53,7 +53,7 @@ export const stationCoordinates: Record<string, StationData> = {
   },
   'Muzium Negara MRT': {
     name: 'Muzium Negara MRT',
-    coordinates: [101.6883, 3.1329],
+    coordinates: [101.6878027561305, 3.1375158655082434],
     lines: ['MRT Kajang Line'],
     type: 'MRT'
   },

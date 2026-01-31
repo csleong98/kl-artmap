@@ -44,6 +44,12 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
         mapInstance.on('load', () => {
           setMapLoaded(true);
+
+          // Add all markers for debugging coordinates
+          import('../../services/mapService').then(({ addAllMarkersForDebug }) => {
+            addAllMarkersForDebug(mapInstance);
+          });
+
           // Pass map instance to parent component
           if (onMapLoad) {
             onMapLoad(mapInstance);
@@ -52,6 +58,73 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
         // Add navigation controls
         mapInstance.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        // Add geolocation control
+        const geolocateControl = new maplibregl.GeolocateControl({
+          positionOptions: {
+            enableHighAccuracy: true
+          },
+          trackUserLocation: true,
+          showUserLocation: true
+        });
+
+        mapInstance.addControl(geolocateControl, 'top-right');
+
+        // Add coordinate overlay for user location
+        let locationPopup: any = null;
+
+        geolocateControl.on('geolocate', (e: any) => {
+          const { latitude, longitude } = e.coords;
+
+          // Remove existing popup
+          if (locationPopup) {
+            locationPopup.remove();
+          }
+
+          // Create coordinate display (Google Maps format: lat, lng without brackets)
+          const coordText = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
+          // Create popup with coordinates
+          locationPopup = new maplibregl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            offset: [0, -40],
+            className: 'coordinate-popup'
+          })
+            .setLngLat([longitude, latitude])
+            .setHTML(`
+              <div
+                style="
+                  background: rgba(0,0,0,0.8);
+                  color: white;
+                  padding: 6px 10px;
+                  border-radius: 4px;
+                  font-family: monospace;
+                  font-size: 12px;
+                  cursor: pointer;
+                  border: 1px solid rgba(255,255,255,0.3);
+                  user-select: none;
+                "
+                title="Click to copy coordinates"
+                onclick="
+                  navigator.clipboard.writeText('${coordText}');
+                  this.innerHTML = 'Copied!';
+                  setTimeout(() => this.innerHTML = '${coordText}', 1500);
+                "
+              >
+                ${coordText}
+              </div>
+            `)
+            .addTo(mapInstance);
+        });
+
+        // Clean up popup when tracking stops
+        geolocateControl.on('trackuserlocationend', () => {
+          if (locationPopup) {
+            locationPopup.remove();
+            locationPopup = null;
+          }
+        });
 
       } catch (err) {
         console.error('Error initializing map:', err);

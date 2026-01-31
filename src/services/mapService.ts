@@ -247,30 +247,17 @@ export function addStationMarkers(
   const markerIds: string[] = [];
 
   try {
-    // Add station markers with custom icons
+    // Add station markers with simple circles
     stations.forEach((station, index) => {
       const sourceId = `station-marker-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
       const layerId = `station-layer-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
-      const iconId = `station-icon-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
-
-      // Add custom icon to map
-      const iconUrl = createStationIcon(station.color);
-      map.loadImage(iconUrl, (error: any, image: any) => {
-        if (error) {
-          console.error('Error loading station icon:', error);
-          return;
-        }
-        if (!map.hasImage(iconId)) {
-          map.addImage(iconId, image);
-        }
-      });
 
       const stationGeoJSON = {
         type: 'Feature',
         properties: {
           name: station.name,
           type: 'station',
-          icon: iconId
+          color: station.color
         },
         geometry: {
           type: 'Point',
@@ -283,19 +270,30 @@ export function addStationMarkers(
         data: stationGeoJSON
       });
 
-      // Use symbol layer for custom icons
+      // Use simple circle markers
       map.addLayer({
         id: layerId,
+        type: 'circle',
+        source: sourceId,
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 8, 15, 12, 18, 16],
+          'circle-color': ['get', 'color'],
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 2,
+          'circle-opacity': 0.8
+        }
+      });
+
+      // Add text labels
+      const textLayerId = `station-text-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
+      map.addLayer({
+        id: textLayerId,
         type: 'symbol',
         source: sourceId,
         layout: {
-          'icon-image': iconId,
-          'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.6, 15, 1.0, 18, 1.4],
-          'icon-anchor': 'center',
-          'icon-allow-overlap': true,
           'text-field': ['get', 'name'],
           'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
-          'text-offset': [0, 2.2],
+          'text-offset': [0, 2],
           'text-anchor': 'top',
           'text-size': ['interpolate', ['linear'], ['zoom'], 10, 9, 15, 11, 18, 13],
           'text-max-width': 8
@@ -303,36 +301,36 @@ export function addStationMarkers(
         paint: {
           'text-color': '#333333',
           'text-halo-color': '#ffffff',
-          'text-halo-width': 1.5,
-          'icon-opacity': ['interpolate', ['linear'], ['zoom'], 8, 0.7, 12, 1.0]
+          'text-halo-width': 1.5
         }
       });
 
-      markerIds.push(sourceId, layerId, iconId);
+      markerIds.push(sourceId, layerId, textLayerId);
     });
 
-    // Add venue marker with custom icon
+    // Add venue marker with simple circle
     const venueSourceId = 'venue-marker';
     const venueLayerId = 'venue-layer';
-    const venueIconId = 'venue-icon';
 
-    // Add custom venue icon to map
-    const venueIconUrl = createVenueIcon(venueType);
-    map.loadImage(venueIconUrl, (error: any, image: any) => {
-      if (error) {
-        console.error('Error loading venue icon:', error);
-        return;
-      }
-      if (!map.hasImage(venueIconId)) {
-        map.addImage(venueIconId, image);
-      }
-    });
+    // Choose color based on venue type
+    let venueColor = '#E53E3E'; // Red default
+    switch (venueType) {
+      case 'art_museum':
+        venueColor = '#9F7AEA'; // Purple for museums
+        break;
+      case 'art_gallery':
+        venueColor = '#38B2AC'; // Teal for galleries
+        break;
+      case 'monument':
+        venueColor = '#D69E2E'; // Golden for monuments
+        break;
+    }
 
     const venueGeoJSON = {
       type: 'Feature',
       properties: {
         type: 'venue',
-        icon: venueIconId
+        color: venueColor
       },
       geometry: {
         type: 'Point',
@@ -345,22 +343,21 @@ export function addStationMarkers(
       data: venueGeoJSON
     });
 
+    // Use larger circle for venue
     map.addLayer({
       id: venueLayerId,
-      type: 'symbol',
+      type: 'circle',
       source: venueSourceId,
-      layout: {
-        'icon-image': venueIconId,
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 10, 0.8, 15, 1.2, 18, 1.6],
-        'icon-anchor': 'center',
-        'icon-allow-overlap': true
-      },
       paint: {
-        'icon-opacity': ['interpolate', ['linear'], ['zoom'], 8, 0.8, 12, 1.0]
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 12, 15, 18, 18, 24],
+        'circle-color': ['get', 'color'],
+        'circle-stroke-color': '#ffffff',
+        'circle-stroke-width': 3,
+        'circle-opacity': 0.9
       }
     });
 
-    markerIds.push(venueSourceId, venueLayerId, venueIconId);
+    markerIds.push(venueSourceId, venueLayerId);
 
     return markerIds;
 
@@ -432,5 +429,162 @@ export function fitMapToRoutes(
 
   } catch (error) {
     console.error('Error fitting map to routes:', error);
+  }
+}
+
+/**
+ * Adds all stations and venues to the map for debugging/verification
+ * @param map - MapLibre GL JS map instance
+ * @returns Array of marker IDs for later removal
+ */
+export function addAllMarkersForDebug(map: any): string[] {
+  const markerIds: string[] = [];
+
+  try {
+    // Import station and location data
+    const { stationCoordinates } = require('../data/stationCoordinates');
+    const { mockLocations } = require('../data/mockLocations');
+
+    // Add all stations
+    Object.values(stationCoordinates).forEach((station: any) => {
+      const sourceId = `debug-station-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
+      const layerId = `debug-station-layer-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
+      const textLayerId = `debug-station-text-${station.name.replace(/\s+/g, '-').toLowerCase()}`;
+
+      const stationGeoJSON = {
+        type: 'Feature',
+        properties: {
+          name: station.name,
+          type: 'station',
+          color: '#FF6B6B' // Red for stations
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: station.coordinates
+        }
+      };
+
+      map.addSource(sourceId, {
+        type: 'geojson',
+        data: stationGeoJSON
+      });
+
+      // Station circle
+      map.addLayer({
+        id: layerId,
+        type: 'circle',
+        source: sourceId,
+        paint: {
+          'circle-radius': 10,
+          'circle-color': '#FF6B6B',
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 2,
+          'circle-opacity': 0.8
+        }
+      });
+
+      // Station label
+      map.addLayer({
+        id: textLayerId,
+        type: 'symbol',
+        source: sourceId,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-offset': [0, 2],
+          'text-anchor': 'top',
+          'text-size': 11,
+          'text-max-width': 8
+        },
+        paint: {
+          'text-color': '#333333',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.5
+        }
+      });
+
+      markerIds.push(sourceId, layerId, textLayerId);
+    });
+
+    // Add all venues
+    mockLocations.forEach((location: any) => {
+      const sourceId = `debug-venue-${location.id}`;
+      const layerId = `debug-venue-layer-${location.id}`;
+      const textLayerId = `debug-venue-text-${location.id}`;
+
+      // Choose color based on venue type
+      let venueColor = '#E53E3E'; // Red default
+      switch (location.type) {
+        case 'art_museum':
+          venueColor = '#9F7AEA'; // Purple
+          break;
+        case 'art_gallery':
+          venueColor = '#38B2AC'; // Teal
+          break;
+        case 'monument':
+          venueColor = '#D69E2E'; // Gold
+          break;
+      }
+
+      const venueGeoJSON = {
+        type: 'Feature',
+        properties: {
+          name: location.name,
+          type: 'venue',
+          color: venueColor
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: location.coordinates
+        }
+      };
+
+      map.addSource(sourceId, {
+        type: 'geojson',
+        data: venueGeoJSON
+      });
+
+      // Venue circle (larger)
+      map.addLayer({
+        id: layerId,
+        type: 'circle',
+        source: sourceId,
+        paint: {
+          'circle-radius': 15,
+          'circle-color': venueColor,
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 3,
+          'circle-opacity': 0.9
+        }
+      });
+
+      // Venue label
+      map.addLayer({
+        id: textLayerId,
+        type: 'symbol',
+        source: sourceId,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+          'text-offset': [0, 2.5],
+          'text-anchor': 'top',
+          'text-size': 12,
+          'text-max-width': 10
+        },
+        paint: {
+          'text-color': '#333333',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 2
+        }
+      });
+
+      markerIds.push(sourceId, layerId, textLayerId);
+    });
+
+    return markerIds;
+
+  } catch (error) {
+    console.error('Error adding debug markers:', error);
+    return [];
   }
 }

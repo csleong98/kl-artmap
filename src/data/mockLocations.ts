@@ -9,11 +9,11 @@ export const mockLocations: Location[] = [
     walkTime: '15mins',
     openingHours: 'Closes at 5pm today',
     status: 'open',
-    coordinates: [101.6873, 3.1527], // Actual National Art Gallery location near Dayabumi Complex
+    coordinates: [101.7038, 3.1736], // Actual National Art Gallery location at Jalan Temerloh
     address: 'Jalan Temerloh, Titiwangsa, 53200 Kuala Lumpur',
     imageUrl: '/images/national-art-gallery.jpg',
     images: ['/images/national-art-gallery-1.jpg', '/images/national-art-gallery-2.jpg', '/images/national-art-gallery-3.jpg', '/images/national-art-gallery-4.jpg'],
-    nearestStations: ['KL Sentral', 'Masjid Jamek LRT'],
+    nearestStations: ['KLCC', 'Ampang Park', 'Persiaran KLCC'],
     admission: 'free',
     details: {
       overview: {

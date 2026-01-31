@@ -77,3 +77,9 @@ src/
 - Map component uses dynamic loading to prevent SSR issues
 - Maptiler API key is required for map tiles
 - Clean dependency reinstall resolved initial compilation issues
+
+## Claude Development Behavior
+- **SUGGEST FIRST, IMPLEMENT SECOND**: Always propose solutions and get approval before implementing code changes
+- **NO IMMEDIATE IMPLEMENTATION**: Do not directly edit files without first discussing the approach
+- **EXPLAIN OPTIONS**: Present multiple solution options with pros/cons before proceeding
+- **WAIT FOR APPROVAL**: Get explicit user confirmation before making code changes
