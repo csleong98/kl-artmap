@@ -16,13 +16,14 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "KL Art Map - Discover Street Art in Kuala Lumpur",
   description: "Interactive map for discovering street art, galleries, and cultural spaces in Kuala Lumpur",
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
-  }
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover'
 };
 
 export default function RootLayout({

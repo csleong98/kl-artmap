@@ -46,7 +46,7 @@ export default function PanelHeader({
   return (
     <div className="p-4 space-y-4">
       {/* Tab Navigation */}
-      <Tabs value={activeTab} onValueChange={onTabChange}>
+      <Tabs value={activeTab} onValueChange={(value) => onTabChange(value as TabType)}>
         <TabsList className="grid w-full grid-cols-3 h-12 md:h-10">
           <TabsTrigger value="art_museums" className="text-xs md:text-sm px-2">Art Museums</TabsTrigger>
           <TabsTrigger value="art_galleries" className="text-xs md:text-sm px-2">Art Galleries</TabsTrigger>
