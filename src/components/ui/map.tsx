@@ -21,7 +21,7 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
       const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
       if (!apiKey) {
-        setError('Missing NEXT_PUBLIC_MAPTILER_API_KEY environment variable');
+        setError('Missing NEXT_PUBLIC_MAPTILER_API_KEY environment variable. Please add your Maptiler API key in Vercel environment variables.');
         return;
       }
 
