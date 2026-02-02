@@ -13,9 +13,9 @@ export default function LocationCard({ location, onClick }: LocationCardProps) {
       className="cursor-pointer hover:bg-muted/50 transition-colors border-0 shadow-none"
       onClick={() => onClick?.(location)}
     >
-      <CardContent className="flex gap-3 p-3">
+      <CardContent className="flex gap-3 p-4 md:p-3">
         {/* Placeholder image */}
-        <div className="w-16 h-16 bg-muted rounded-lg flex-shrink-0" />
+        <div className="w-20 h-20 md:w-16 md:h-16 bg-muted rounded-lg flex-shrink-0" />
 
         <div className="flex-1 min-w-0">
           <h3 className="font-medium truncate">

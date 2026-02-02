@@ -38,7 +38,7 @@ export default function FloatingPanel({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('art_museums');
   const [detailTab, setDetailTab] = useState<TabType>('overview');
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [activeFilter] = useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
   const [filterState, setFilterState] = useState<FilterState>({
@@ -138,11 +138,20 @@ export default function FloatingPanel({
     setFilterState(filters);
   };
 
-  const baseClasses = "absolute top-4 left-4 w-96 bg-white rounded-lg shadow-lg z-10 max-h-[calc(100vh-2rem)] overflow-hidden";
+  // Mobile-first responsive classes with safe area support
+  const baseClasses = "fixed inset-x-4 bottom-4 safe-bottom md:absolute md:top-4 md:left-4 md:bottom-auto md:right-auto w-auto md:w-96 bg-white rounded-lg shadow-lg z-10 max-h-[70vh] md:max-h-[calc(100vh-2rem)] overflow-hidden";
+
+  // Mobile handle indicator component
+  const MobileHandle = () => (
+    <div className="md:hidden flex justify-center py-2">
+      <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
+    </div>
+  );
 
   if (panelState === 'expanded' && selectedLocation) {
     return (
       <div className={`${baseClasses} ${className}`}>
+        <MobileHandle />
         <PanelHeader
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -154,7 +163,7 @@ export default function FloatingPanel({
           onFilterClick={handleFilterClick}
         />
 
-        <div className="overflow-y-auto max-h-[calc(100vh-8rem)]">
+        <div className="overflow-y-auto max-h-[calc(70vh-8rem)] md:max-h-[calc(100vh-8rem)]">
           <div className="p-4 space-y-4">
             {/* Image Carousel */}
             <ImageCarousel
@@ -187,7 +196,7 @@ export default function FloatingPanel({
 
             {/* Detail Tabs */}
             {selectedLocation.details && (
-              <Tabs value={detailTab} onValueChange={setDetailTab}>
+              <Tabs value={detailTab} onValueChange={(value) => setDetailTab(value as TabType)}>
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="station_guide">Station guide</TabsTrigger>
@@ -199,7 +208,7 @@ export default function FloatingPanel({
 
           {/* Tab Content */}
           {selectedLocation.details && (
-            <Tabs value={detailTab} onValueChange={setDetailTab}>
+            <Tabs value={detailTab} onValueChange={(value) => setDetailTab(value as TabType)}>
               <TabsContent value="overview" className="px-4 pb-4 mt-0">
                 <div className="space-y-4">
                   <p className="text-gray-700 text-sm leading-relaxed">
@@ -389,6 +398,7 @@ export default function FloatingPanel({
   // Collapsed state (list view)
   return (
     <div className={`${baseClasses} ${className}`}>
+      <MobileHandle />
       <PanelHeader
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -400,7 +410,7 @@ export default function FloatingPanel({
 
 
       {/* Location list */}
-      <div className="overflow-y-auto max-h-96">
+      <div className="overflow-y-auto max-h-[50vh] md:max-h-96">
         <div className="px-4 pb-4 space-y-1">
           {filteredLocations.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
