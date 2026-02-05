@@ -12,6 +12,8 @@ function MapComponent({ className, onMapLoad }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [transitVisible, setTransitVisible] = useState(true);
+  const mapInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     let mapInstance: any = null;
@@ -42,8 +44,130 @@ function MapComponent({ className, onMapLoad }: MapProps) {
           zoom: 11
         });
 
+        // Store map instance reference
+        mapInstanceRef.current = mapInstance;
+
         mapInstance.on('load', () => {
           setMapLoaded(true);
+
+          // Log available layers to see what Maptiler provides
+          try {
+            const style = mapInstance.getStyle();
+            if (style && style.layers && Array.isArray(style.layers)) {
+              const layerIds = style.layers
+                .filter((layer: any) => layer && layer.id)
+                .map((layer: any) => layer.id);
+
+              console.log('Available layers:', layerIds);
+
+              // Check if transit layers exist - expanded search terms
+              const transitLayers = style.layers.filter((layer: any) => {
+                if (!layer || !layer.id || typeof layer.id !== 'string') return false;
+
+                const layerId = layer.id.toLowerCase();
+                return layerId.includes('transit') ||
+                       layerId.includes('railway') ||
+                       layerId.includes('rail') ||
+                       layerId.includes('subway') ||
+                       layerId.includes('metro') ||
+                       layerId.includes('mrt') ||
+                       layerId.includes('lrt') ||
+                       layerId.includes('monorail') ||
+                       layerId.includes('train') ||
+                       layerId.includes('line') ||
+                       layerId.includes('transport');
+              });
+
+              if (transitLayers.length > 0) {
+                console.log('Found transit layers:', transitLayers.map((l: any) => l.id));
+              } else {
+                console.log('No transit layers found in this style');
+              }
+            }
+          } catch (err) {
+            console.error('Error analyzing map layers:', err);
+          }
+
+          // Enhance railway line styling for better visibility
+          try {
+            const railwayLayers = [
+              'Railway tunnel',
+              'Railway tunnel hatching',
+              'Major rail',
+              'Major rail hatching',
+              'Minor rail',
+              'Minor rail hatching'
+            ];
+
+            railwayLayers.forEach(layerId => {
+              try {
+                const layer = mapInstance.getLayer(layerId);
+                if (layer && layer.type === 'line') {
+                  // Make railway lines more prominent
+                  mapInstance.setPaintProperty(layerId, 'line-width', [
+                    'interpolate',
+                    ['linear'],
+                    ['zoom'],
+                    8, 2,  // At zoom 8, width 2px
+                    12, 4, // At zoom 12, width 4px
+                    16, 6  // At zoom 16, width 6px
+                  ]);
+
+                  // Use distinct colors for different railway types
+                  if (layerId.includes('Major')) {
+                    mapInstance.setPaintProperty(layerId, 'line-color', '#FF6B35'); // Orange for major rail
+                  } else if (layerId.includes('Minor')) {
+                    mapInstance.setPaintProperty(layerId, 'line-color', '#4ECDC4'); // Teal for minor rail
+                  } else if (layerId.includes('tunnel')) {
+                    mapInstance.setPaintProperty(layerId, 'line-color', '#9B59B6'); // Purple for tunnels
+                  }
+
+                  mapInstance.setPaintProperty(layerId, 'line-opacity', 0.8);
+                  console.log('Enhanced railway layer styling:', layerId);
+                }
+              } catch (err) {
+                console.log('Could not enhance layer:', layerId, err);
+              }
+            });
+          } catch (err) {
+            console.error('Error enhancing railway layers:', err);
+          }
+
+          // Add custom KL rail lines
+          import('../../data/railLines').then(({ getAllRailLinesGeoJSON, railLines }) => {
+            const railLinesGeoJSON = getAllRailLinesGeoJSON();
+
+            // Add rail lines source
+            mapInstance.addSource('kl-rail-lines', {
+              type: 'geojson',
+              data: railLinesGeoJSON
+            });
+
+            // Add rail lines layer
+            mapInstance.addLayer({
+              id: 'kl-rail-lines',
+              type: 'line',
+              source: 'kl-rail-lines',
+              layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+              },
+              paint: {
+                'line-color': ['get', 'color'],
+                'line-width': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  8, 3,
+                  12, 5,
+                  16, 8
+                ],
+                'line-opacity': 0.8
+              }
+            });
+
+            console.log('Added custom KL rail lines:', railLines.length);
+          });
 
           // Add all markers for debugging coordinates
           import('../../services/mapService').then(({ addAllMarkersForDebug }) => {
@@ -58,6 +182,15 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
         // Add navigation controls
         mapInstance.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+        // Use Maptiler's built-in style switching or layer controls
+        // Check if the style supports layer toggling via metadata
+        mapInstance.on('styledata', () => {
+          const style = mapInstance.getStyle();
+          if (style.metadata && style.metadata.layerControl) {
+            console.log('Style supports built-in layer control:', style.metadata.layerControl);
+          }
+        });
 
         // Add geolocation control
         const geolocateControl = new maplibregl.GeolocateControl({
@@ -141,6 +274,59 @@ function MapComponent({ className, onMapLoad }: MapProps) {
     };
   }, []);
 
+  // Toggle transit/railway layers visibility using the native layer names
+  const toggleTransitLines = () => {
+    if (!mapInstanceRef.current) return;
+
+    const newVisibility = !transitVisible;
+    setTransitVisible(newVisibility);
+
+    // Get all available layers and find transit-related ones
+    try {
+      const style = mapInstanceRef.current.getStyle();
+      if (style && style.layers) {
+        const allTransitLayers = style.layers
+          .filter((layer: any) => {
+            if (!layer || !layer.id || typeof layer.id !== 'string') return false;
+            const layerId = layer.id.toLowerCase();
+            return layerId.includes('transit') ||
+                   layerId.includes('railway') ||
+                   layerId.includes('rail') ||
+                   layerId.includes('subway') ||
+                   layerId.includes('metro') ||
+                   layerId.includes('mrt') ||
+                   layerId.includes('lrt') ||
+                   layerId.includes('monorail') ||
+                   layerId.includes('train');
+          })
+          .map((layer: any) => layer.id);
+
+        console.log(`${newVisibility ? 'Showing' : 'Hiding'} transit layers:`, allTransitLayers);
+
+        allTransitLayers.forEach((layerId: string) => {
+          try {
+            mapInstanceRef.current.setLayoutProperty(layerId, 'visibility', newVisibility ? 'visible' : 'none');
+          } catch (err) {
+            console.log('Could not toggle layer:', layerId, err);
+          }
+        });
+
+        // Also toggle our custom KL rail lines
+        try {
+          const customLayer = mapInstanceRef.current.getLayer('kl-rail-lines');
+          if (customLayer) {
+            mapInstanceRef.current.setLayoutProperty('kl-rail-lines', 'visibility', newVisibility ? 'visible' : 'none');
+            console.log(`${newVisibility ? 'Showing' : 'Hiding'} custom KL rail lines`);
+          }
+        } catch (err) {
+          console.log('Could not toggle custom rail lines:', err);
+        }
+      }
+    } catch (err) {
+      console.error('Error toggling transit layers:', err);
+    }
+  };
+
   if (error) {
     return (
       <div className={`w-full h-full ${className || ''}`} style={{ minHeight: '400px' }}>
@@ -157,6 +343,19 @@ function MapComponent({ className, onMapLoad }: MapProps) {
         ref={mapContainer}
         className="w-full h-full"
       />
+
+      {/* Transit Lines Toggle Button - positioned with other map controls */}
+      {mapLoaded && (
+        <button
+          onClick={toggleTransitLines}
+          className="absolute right-4 bg-white border border-gray-300 rounded px-2 py-2 text-sm hover:bg-gray-50 shadow-md z-10"
+          style={{ top: '120px' }}
+          title={transitVisible ? 'Hide rail lines' : 'Show rail lines'}
+        >
+          🚇
+        </button>
+      )}
+
       {!mapLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
           <div className="text-gray-600">Loading map...</div>
