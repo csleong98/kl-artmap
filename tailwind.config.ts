@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['var(--font-geist-sans)', 'sans-serif'],
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -49,13 +52,30 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			ds: {
+  				text: {
+  					primary: 'var(--ds-text-primary)',
+  					secondary: 'var(--ds-text-secondary)',
+  					muted: 'var(--ds-text-muted)',
+  				},
+  				border: {
+  					DEFAULT: 'var(--ds-border)',
+  					light: 'var(--ds-border-light)',
+  				},
+  				surface: 'var(--ds-surface)',
   			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		}
+  			sm: 'calc(var(--radius) - 4px)',
+  			input: 'var(--ds-radius-input)',
+  		},
+  		spacing: {
+  			'grid-margin': 'var(--ds-grid-margin)',
+  			'grid-gutter': 'var(--ds-grid-gutter)',
+  		},
   	}
   },
   plugins: [require("tailwindcss-animate")],

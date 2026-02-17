@@ -374,24 +374,27 @@ export function addStationMarkers(
  * @param markerIds - Array of source, layer, and icon IDs to remove
  */
 export function clearMarkers(map: any, markerIds: string[]): void {
+  // Remove layers first, then sources — a source can't be removed while a layer references it
   markerIds.forEach(id => {
     try {
-      // Remove layer if it exists
       if (map.getLayer(id)) {
         map.removeLayer(id);
       }
+    } catch (error) {
+      console.error(`Error removing layer ${id}:`, error);
+    }
+  });
 
-      // Remove source if it exists
+  markerIds.forEach(id => {
+    try {
       if (map.getSource(id)) {
         map.removeSource(id);
       }
-
-      // Remove image/icon if it exists
       if (map.hasImage && map.hasImage(id)) {
         map.removeImage(id);
       }
     } catch (error) {
-      console.error(`Error removing marker ${id}:`, error);
+      console.error(`Error removing source ${id}:`, error);
     }
   });
 }
