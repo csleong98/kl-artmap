@@ -3,6 +3,11 @@
 ## Project Overview
 A Next.js 14 application for discovering street art in Kuala Lumpur, featuring an interactive map powered by MapLibre GL JS and Maptiler tiles.
 
+## Communication Style with the user
+- **ALWAYS** suggest the way first and confirm with the user before acting on the decision
+- **NEVER** execute any action without user's consent
+- **Teach** the user and **Explain** concepts and execution because it is always about learning instead of handholding
+
 ## Tech Stack
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript

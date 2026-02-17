@@ -21,25 +21,26 @@ function MapComponent({ className, onMapLoad }: MapProps) {
     async function initializeMap() {
       if (!mapContainer.current) return;
 
-      const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
-      if (!apiKey) {
-        setError('Missing NEXT_PUBLIC_MAPTILER_API_KEY environment variable. Please add your Maptiler API key in Vercel environment variables.');
+      const apiToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+      if (!apiToken) {
+        setError('Missing NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN environment variable. Please add your Maptiler API key in Vercel environment variables.');
         return;
       }
 
       try {
-        // Dynamically import MapLibre GL JS
-        const maplibregl = (await import('maplibre-gl')).default;
+        // Dynamically import mapbox GL JS
+        const mapboxgl = (await import('mapbox-gl')).default;
 
         // Load CSS
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css';
+        link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css';
         document.head.appendChild(link);
-
-        mapInstance = new maplibregl.Map({
+        mapboxgl.accessToken = apiToken;
+        
+        mapInstance = new mapboxgl.Map({
           container: mapContainer.current,
-          style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${apiKey}`,
+          style: 'mapbox://styles/mapbox/streets-v12',
           center: [101.6869, 3.1390], // Kuala Lumpur coordinates
           zoom: 11
         });
@@ -181,7 +182,7 @@ function MapComponent({ className, onMapLoad }: MapProps) {
         });
 
         // Add navigation controls
-        mapInstance.addControl(new maplibregl.NavigationControl(), 'top-right');
+         mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
         // Use Maptiler's built-in style switching or layer controls
         // Check if the style supports layer toggling via metadata
@@ -193,7 +194,7 @@ function MapComponent({ className, onMapLoad }: MapProps) {
         });
 
         // Add geolocation control
-        const geolocateControl = new maplibregl.GeolocateControl({
+        const geolocateControl = new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
           },
@@ -218,7 +219,7 @@ function MapComponent({ className, onMapLoad }: MapProps) {
           const coordText = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
 
           // Create popup with coordinates
-          locationPopup = new maplibregl.Popup({
+          locationPopup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
             offset: [0, -40],

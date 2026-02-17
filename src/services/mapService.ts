@@ -292,7 +292,7 @@ export function addStationMarkers(
         source: sourceId,
         layout: {
           'text-field': ['get', 'name'],
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
           'text-offset': [0, 2],
           'text-anchor': 'top',
           'text-size': ['interpolate', ['linear'], ['zoom'], 10, 9, 15, 11, 18, 13],
@@ -490,7 +490,7 @@ export function addAllMarkersForDebug(map: any): string[] {
         source: sourceId,
         layout: {
           'text-field': ['get', 'name'],
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
           'text-offset': [0, 2],
           'text-anchor': 'top',
           'text-size': 11,
@@ -565,7 +565,7 @@ export function addAllMarkersForDebug(map: any): string[] {
         source: sourceId,
         layout: {
           'text-field': ['get', 'name'],
-          'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+        'text-font': ['DIN Pro Bold', 'Arial Unicode MS Bold'],
           'text-offset': [0, 2.5],
           'text-anchor': 'top',
           'text-size': 12,

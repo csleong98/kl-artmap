@@ -3,7 +3,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  transpilePackages: ['maplibre-gl'],
+  transpilePackages: ['mapbox-gl'],
 };
 
 export default nextConfig;
