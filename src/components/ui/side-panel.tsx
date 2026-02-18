@@ -1,19 +1,19 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Search, ListFilter } from 'lucide-react';
-import { Location } from '@/types';
+import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
+import { Location } from '@/types';
+import LocationDetail from './location-detail';
 
 interface SidePanelProps {
-  onLocationSelect?: (location: Location) => Promise<void>;
-  onLocationDeselect?: () => void;
+  selectedLocation: Location | null;
+  onLocationSelect: (location: Location) => void;
+  onBack: () => void;
 }
 
-export default function SidePanel({
-  onLocationSelect,
-  onLocationDeselect,
-}: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredLocations = useMemo(() => {
@@ -26,16 +26,19 @@ export default function SidePanel({
     );
   }, [searchQuery]);
 
-  const handleLocationClick = async (location: Location) => {
-    if (onLocationSelect) {
-      try {
-        await onLocationSelect(location);
-      } catch (error) {
-        console.error('Error displaying routes:', error);
-      }
-    }
-  };
+  const handleLocationHover = useCallback((locationId: string, isEntering: boolean) => {
+    const markerEl = document.querySelector(`[data-marker-id="${locationId}"]`);
+    const svg = markerEl?.querySelector('svg');
+    if (!svg) return;
+    animate(svg, { scale: isEntering ? 1.3 : 1 }, { duration: 0.2 });
+  }, []);
 
+  // Detail view
+  if (selectedLocation) {
+    return <LocationDetail location={selectedLocation} onBack={onBack} />;
+  }
+
+  // List view
   return (
     <div className="flex flex-col pt-10">
       {/* Title + subtitle */}
@@ -74,22 +77,17 @@ export default function SidePanel({
             <li
               key={location.id}
               className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => handleLocationClick(location)}
+              onClick={() => onLocationSelect(location)}
+              onMouseEnter={() => handleLocationHover(location.id, true)}
+              onMouseLeave={() => handleLocationHover(location.id, false)}
             >
               <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
                 {location.name}
               </h2>
               <div className="flex flex-col gap-2">
                 <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
-                  <span className="shrink-0">Distance:</span>
-                  <span className="truncate">{location.distance} away from you</span>
+                  <span className="truncate">{location.address}</span>
                 </div>
-                {location.nearestStations && location.nearestStations.length > 0 && (
-                  <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
-                    <span className="shrink-0">Nearest stations:</span>
-                    <span className="truncate">{location.nearestStations.join(', ')}</span>
-                  </div>
-                )}
               </div>
             </li>
           ))

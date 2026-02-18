@@ -170,9 +170,9 @@ function MapComponent({ className, onMapLoad }: MapProps) {
             console.log('Added custom KL rail lines:', railLines.length);
           });
 
-          // Add all markers for debugging coordinates
-          import('../../services/mapService').then(({ addAllMarkersForDebug }) => {
-            addAllMarkersForDebug(mapInstance);
+          // Add all location markers
+          import('../../services/mapService').then(({ addAllMarkers }) => {
+            addAllMarkers(mapInstance);
           });
 
           // Pass map instance to parent component
