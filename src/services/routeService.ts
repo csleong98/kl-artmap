@@ -15,10 +15,21 @@ export interface MatrixResult {
   success: boolean;
 }
 
+export interface RouteStep {
+  distance: number;
+  duration: number;
+  name: string;
+  instruction: string;
+  maneuverType: string;
+  maneuverModifier?: string;
+  isCrossing: boolean;
+}
+
 export interface DirectionsResult {
   distance: number;      // meters
   duration: number;      // seconds
   geometry: GeoJSON.LineString;
+  steps: RouteStep[];
   success: boolean;
 }
 
@@ -72,7 +83,7 @@ export async function fetchDirectionsRoute(
 ): Promise<DirectionsResult> {
   try {
     const coords = `${start[0]},${start[1]};${end[0]},${end[1]}`;
-    const url = `${MAPBOX_BASE}/directions/v5/mapbox/walking/${coords}?geometries=geojson&access_token=${getAccessToken()}`;
+    const url = `${MAPBOX_BASE}/directions/v5/mapbox/walking/${coords}?geometries=geojson&steps=true&access_token=${getAccessToken()}`;
 
     const res = await fetch(url, { signal });
     if (!res.ok) throw new Error(`Directions API ${res.status}`);
@@ -84,16 +95,27 @@ export async function fetchDirectionsRoute(
     }
 
     const route = data.routes[0];
+    const steps: RouteStep[] = (route.legs?.[0]?.steps ?? []).map((s: any) => ({
+      distance: s.distance,
+      duration: s.duration,
+      name: s.name || '',
+      instruction: s.maneuver?.instruction || '',
+      maneuverType: s.maneuver?.type || '',
+      maneuverModifier: s.maneuver?.modifier,
+      isCrossing: (s.maneuver?.instruction || '').toLowerCase().includes('cross'),
+    }));
+
     return {
       distance: route.distance,
       duration: route.duration,
       geometry: route.geometry,
+      steps,
       success: true,
     };
   } catch (err) {
     if ((err as Error).name === 'AbortError') throw err;
     console.error('Directions API error:', err);
-    return { distance: 0, duration: 0, geometry: { type: 'LineString', coordinates: [] }, success: false };
+    return { distance: 0, duration: 0, geometry: { type: 'LineString', coordinates: [] }, steps: [], success: false };
   }
 }
 

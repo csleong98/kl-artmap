@@ -15,9 +15,11 @@ interface SidePanelProps {
   routeData?: WalkingRouteData[];
   routesLoading?: boolean;
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
+  onRouteSelect?: (routeId: string) => void;
+  onRouteDeselect?: () => void;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onRouteSelect, onRouteDeselect }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredLocations = useMemo(() => {
@@ -46,6 +48,8 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
         routeData={routeData}
         routesLoading={routesLoading}
         getStationRouteInfo={getStationRouteInfo}
+        onRouteSelect={onRouteSelect}
+        onRouteDeselect={onRouteDeselect}
       />
     );
   }

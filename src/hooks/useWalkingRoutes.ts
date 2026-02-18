@@ -6,6 +6,7 @@ import {
   fetchDirectionsRoute,
   formatDistance,
   formatDuration,
+  RouteStep,
 } from '@/services/routeService';
 import {
   addRouteLayer,
@@ -24,6 +25,7 @@ export interface WalkingRouteData {
   formattedDistance: string;
   formattedDuration: string;
   geometry: GeoJSON.LineString | null;
+  steps: RouteStep[];
   color: string;
   routeId: string;
 }
@@ -150,6 +152,8 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
         const color = getRouteColor(station.name, i);
         const routeId = `walking-route-${i}`;
 
+        const steps = dirResult?.success ? dirResult.steps : [];
+
         return {
           stationName: station.name,
           coordinates: station.coordinates,
@@ -159,6 +163,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
           formattedDistance: distance > 0 ? formatDistance(distance) : '',
           formattedDuration: duration > 0 ? formatDuration(duration) : '',
           geometry,
+          steps,
           color,
           routeId,
         };

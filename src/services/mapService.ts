@@ -195,6 +195,49 @@ export function clearRouteLayers(map: any, routeIds: string[]): void {
 }
 
 /**
+ * Highlights the selected route and dims all others.
+ */
+export function highlightRoute(map: any, selectedRouteId: string, allRouteIds: string[]): void {
+  for (const id of allRouteIds) {
+    const casingId = `${id}-casing`;
+    if (id === selectedRouteId) {
+      if (map.getLayer(id)) {
+        map.setPaintProperty(id, 'line-opacity', 1);
+        map.setPaintProperty(id, 'line-width', 6);
+      }
+      if (map.getLayer(casingId)) {
+        map.setPaintProperty(casingId, 'line-opacity', 0.4);
+        map.setPaintProperty(casingId, 'line-width', 10);
+      }
+    } else {
+      if (map.getLayer(id)) {
+        map.setPaintProperty(id, 'line-opacity', 0.15);
+      }
+      if (map.getLayer(casingId)) {
+        map.setPaintProperty(casingId, 'line-opacity', 0.05);
+      }
+    }
+  }
+}
+
+/**
+ * Restores all routes to their default opacity.
+ */
+export function unhighlightRoutes(map: any, allRouteIds: string[]): void {
+  for (const id of allRouteIds) {
+    const casingId = `${id}-casing`;
+    if (map.getLayer(id)) {
+      map.setPaintProperty(id, 'line-opacity', 0.9);
+      map.setPaintProperty(id, 'line-width', 5);
+    }
+    if (map.getLayer(casingId)) {
+      map.setPaintProperty(casingId, 'line-opacity', 0.3);
+      map.setPaintProperty(casingId, 'line-width', 8);
+    }
+  }
+}
+
+/**
  * Fits the map view to contain all given coordinates with padding.
  */
 export function fitMapToBounds(map: any, coordinates: [number, number][]): void {

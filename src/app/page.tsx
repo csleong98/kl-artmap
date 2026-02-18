@@ -5,6 +5,7 @@ import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
 import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
+import { highlightRoute, unhighlightRoutes } from '@/services/mapService';
 
 export default function Home() {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -27,6 +28,20 @@ export default function Home() {
     }
   }, [fetchRoutes]);
 
+  const handleRouteSelect = useCallback((routeId: string) => {
+    if (mapRef.current) {
+      const allRouteIds = routeData.map(r => r.routeId);
+      highlightRoute(mapRef.current, routeId, allRouteIds);
+    }
+  }, [routeData]);
+
+  const handleRouteDeselect = useCallback(() => {
+    if (mapRef.current) {
+      const allRouteIds = routeData.map(r => r.routeId);
+      unhighlightRoutes(mapRef.current, allRouteIds);
+    }
+  }, [routeData]);
+
   const handleBack = useCallback(() => {
     clearRoutes(mapRef.current);
     setSelectedLocation(null);
@@ -43,6 +58,8 @@ export default function Home() {
           routeData={routeData}
           routesLoading={routesLoading}
           getStationRouteInfo={getStationRouteInfo}
+          onRouteSelect={handleRouteSelect}
+          onRouteDeselect={handleRouteDeselect}
         />
       </aside>
 
