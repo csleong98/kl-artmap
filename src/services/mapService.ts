@@ -65,17 +65,7 @@ export async function addAllMarkers(map: any): Promise<any[]> {
 
   try {
     const mapboxgl = (await import('mapbox-gl')).default;
-    const { stationCoordinates } = require('../data/stationCoordinates');
     const { mockLocations } = require('../data/mockLocations');
-
-    // Add all stations
-    Object.values(stationCoordinates).forEach((station: any) => {
-      const el = createPinElement('#FF6B6B', '#991B1B', `station-${station.name}`);
-      const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
-        .setLngLat(station.coordinates)
-        .addTo(map);
-      markers.push(marker);
-    });
 
     // Add all venues
     mockLocations.forEach((location: any) => {
@@ -111,6 +101,34 @@ export async function addAllMarkers(map: any): Promise<any[]> {
   }
 }
 
+// ── Station markers (shown only when viewing nearby stations) ─────
+
+/**
+ * Adds station pin markers for nearby stations when routes are displayed.
+ * Returns an array of Marker instances so they can be removed later.
+ */
+export async function addStationMarkers(
+  map: any,
+  stations: { name: string; coordinates: [number, number]; color: string }[]
+): Promise<any[]> {
+  const mapboxgl = (await import('mapbox-gl')).default;
+  return stations.map(station => {
+    const el = createPinElement(station.color, '#1a1a2e', `station-${station.name}`);
+    return new mapboxgl.Marker({ element: el, anchor: 'bottom' })
+      .setLngLat(station.coordinates)
+      .addTo(map);
+  });
+}
+
+/**
+ * Removes station markers from the map.
+ */
+export function clearStationMarkers(markers: any[]): void {
+  markers.forEach(m => {
+    try { m.remove(); } catch (_) {}
+  });
+}
+
 // ── Route drawing ──────────────────────────────────────────────────
 
 /**
@@ -125,11 +143,27 @@ export function addRouteLayer(
   // Avoid duplicates
   if (map.getSource(routeId)) return;
 
+  const casingId = `${routeId}-casing`;
+
   map.addSource(routeId, {
     type: 'geojson',
     data: { type: 'Feature', geometry, properties: {} },
   });
 
+  // Casing (outline) layer — wider, dark, drawn underneath
+  map.addLayer({
+    id: casingId,
+    type: 'line',
+    source: routeId,
+    layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: {
+      'line-color': '#1a1a2e',
+      'line-width': 8,
+      'line-opacity': 0.3,
+    },
+  });
+
+  // Main route line — colored, dashed, on top of casing
   map.addLayer({
     id: routeId,
     type: 'line',
@@ -137,9 +171,9 @@ export function addRouteLayer(
     layout: { 'line-join': 'round', 'line-cap': 'round' },
     paint: {
       'line-color': color,
-      'line-width': 4,
-      'line-opacity': 0.85,
-      'line-dasharray': [2, 1],
+      'line-width': 5,
+      'line-opacity': 0.9,
+      'line-dasharray': [3, 1.5],
     },
   });
 }
@@ -150,7 +184,9 @@ export function addRouteLayer(
 export function clearRouteLayers(map: any, routeIds: string[]): void {
   for (const id of routeIds) {
     try {
+      const casingId = `${id}-casing`;
       if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getLayer(casingId)) map.removeLayer(casingId);
       if (map.getSource(id)) map.removeSource(id);
     } catch (err) {
       console.error('Error clearing route layer:', id, err);

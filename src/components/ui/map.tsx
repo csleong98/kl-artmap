@@ -12,8 +12,6 @@ function MapComponent({ className, onMapLoad }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [transitVisible, setTransitVisible] = useState(true);
-  const mapInstanceRef = useRef<any>(null);
 
   useEffect(() => {
     let mapInstance: any = null;
@@ -45,49 +43,8 @@ function MapComponent({ className, onMapLoad }: MapProps) {
           zoom: 11
         });
 
-        // Store map instance reference
-        mapInstanceRef.current = mapInstance;
-
         mapInstance.on('load', () => {
           setMapLoaded(true);
-
-          // Log available layers to see what Maptiler provides
-          try {
-            const style = mapInstance.getStyle();
-            if (style && style.layers && Array.isArray(style.layers)) {
-              const layerIds = style.layers
-                .filter((layer: any) => layer && layer.id)
-                .map((layer: any) => layer.id);
-
-              console.log('Available layers:', layerIds);
-
-              // Check if transit layers exist - expanded search terms
-              const transitLayers = style.layers.filter((layer: any) => {
-                if (!layer || !layer.id || typeof layer.id !== 'string') return false;
-
-                const layerId = layer.id.toLowerCase();
-                return layerId.includes('transit') ||
-                       layerId.includes('railway') ||
-                       layerId.includes('rail') ||
-                       layerId.includes('subway') ||
-                       layerId.includes('metro') ||
-                       layerId.includes('mrt') ||
-                       layerId.includes('lrt') ||
-                       layerId.includes('monorail') ||
-                       layerId.includes('train') ||
-                       layerId.includes('line') ||
-                       layerId.includes('transport');
-              });
-
-              if (transitLayers.length > 0) {
-                console.log('Found transit layers:', transitLayers.map((l: any) => l.id));
-              } else {
-                console.log('No transit layers found in this style');
-              }
-            }
-          } catch (err) {
-            console.error('Error analyzing map layers:', err);
-          }
 
           // Add all location markers
           import('../../services/mapService').then(({ addAllMarkers }) => {
@@ -102,15 +59,6 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
         // Add navigation controls
          mapInstance.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-        // Use Maptiler's built-in style switching or layer controls
-        // Check if the style supports layer toggling via metadata
-        mapInstance.on('styledata', () => {
-          const style = mapInstance.getStyle();
-          if (style.metadata && style.metadata.layerControl) {
-            console.log('Style supports built-in layer control:', style.metadata.layerControl);
-          }
-        });
 
         // Add geolocation control
         const geolocateControl = new mapboxgl.GeolocateControl({
@@ -194,50 +142,6 @@ function MapComponent({ className, onMapLoad }: MapProps) {
     };
   }, []);
 
-  // Toggle transit/railway layers visibility using the native layer names
-  const toggleTransitLines = () => {
-    if (!mapInstanceRef.current) return;
-
-    const newVisibility = !transitVisible;
-    setTransitVisible(newVisibility);
-
-    // Get all available layers and find transit-related ones
-    try {
-      const style = mapInstanceRef.current.getStyle();
-      if (style && style.layers) {
-        const allTransitLayers = style.layers
-          .filter((layer: any) => {
-            if (!layer || !layer.id || typeof layer.id !== 'string') return false;
-            const layerId = layer.id.toLowerCase();
-            return layerId.includes('transit') ||
-                   layerId.includes('railway') ||
-                   layerId.includes('rail') ||
-                   layerId.includes('subway') ||
-                   layerId.includes('metro') ||
-                   layerId.includes('mrt') ||
-                   layerId.includes('lrt') ||
-                   layerId.includes('monorail') ||
-                   layerId.includes('train');
-          })
-          .map((layer: any) => layer.id);
-
-        console.log(`${newVisibility ? 'Showing' : 'Hiding'} transit layers:`, allTransitLayers);
-
-        allTransitLayers.forEach((layerId: string) => {
-          try {
-            mapInstanceRef.current.setLayoutProperty(layerId, 'visibility', newVisibility ? 'visible' : 'none');
-          } catch (err) {
-            console.log('Could not toggle layer:', layerId, err);
-          }
-        });
-
-
-      }
-    } catch (err) {
-      console.error('Error toggling transit layers:', err);
-    }
-  };
-
   if (error) {
     return (
       <div className={`w-full h-full ${className || ''}`} style={{ minHeight: '400px' }}>
@@ -254,18 +158,6 @@ function MapComponent({ className, onMapLoad }: MapProps) {
         ref={mapContainer}
         className="w-full h-full"
       />
-
-      {/* Transit Lines Toggle Button - positioned with other map controls */}
-      {mapLoaded && (
-        <button
-          onClick={toggleTransitLines}
-          className="absolute right-4 bg-white border border-gray-300 rounded px-2 py-2 text-sm hover:bg-gray-50 shadow-md z-10"
-          style={{ top: '120px' }}
-          title={transitVisible ? 'Hide rail lines' : 'Show rail lines'}
-        >
-          🚇
-        </button>
-      )}
 
       {!mapLoaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100">

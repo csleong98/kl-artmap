@@ -11,6 +11,8 @@ import {
   addRouteLayer,
   clearRouteLayers,
   fitMapToBounds,
+  addStationMarkers,
+  clearStationMarkers,
 } from '@/services/mapService';
 
 export interface WalkingRouteData {
@@ -54,16 +56,19 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
 
   const abortRef = useRef<AbortController | null>(null);
   const activeRouteIds = useRef<string[]>([]);
+  const stationMarkers = useRef<any[]>([]);
 
   const clearRoutes = useCallback((map: any) => {
     // Cancel in-flight requests
     abortRef.current?.abort();
     abortRef.current = null;
 
-    // Remove map layers
+    // Remove map layers and station markers
     if (map) {
       clearRouteLayers(map, activeRouteIds.current);
     }
+    clearStationMarkers(stationMarkers.current);
+    stationMarkers.current = [];
     activeRouteIds.current = [];
     setRouteData([]);
     setError(null);
@@ -75,10 +80,12 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
     const controller = new AbortController();
     abortRef.current = controller;
 
-    // Clean up previous route layers
+    // Clean up previous route layers and station markers
     if (map) {
       clearRouteLayers(map, activeRouteIds.current);
     }
+    clearStationMarkers(stationMarkers.current);
+    stationMarkers.current = [];
     activeRouteIds.current = [];
 
     const stations = resolveStations(location);
@@ -172,6 +179,15 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
       }
 
       activeRouteIds.current = newRouteIds;
+
+      // Add station markers
+      if (map) {
+        const markers = await addStationMarkers(
+          map,
+          routes.map(r => ({ name: r.stationName, coordinates: r.coordinates, color: r.color }))
+        );
+        stationMarkers.current = markers;
+      }
 
       // Fit map to show all routes
       if (map && boundsCoords.length > 1) {
