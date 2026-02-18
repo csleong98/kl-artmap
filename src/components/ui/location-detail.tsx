@@ -3,10 +3,14 @@
 import { X, DoorOpen, Route, Ticket, Info } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
+import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 
 interface LocationDetailProps {
   location: Location;
   onBack: () => void;
+  routeData?: WalkingRouteData[];
+  routesLoading?: boolean;
+  getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
 }
 
 const LINE_TYPES = ['LRT', 'MRT', 'KTM', 'Monorail', 'ETS', 'KLIA'];
@@ -31,7 +35,7 @@ const daysOfWeek = [
   { key: 'sunday', label: 'Sun' },
 ] as const;
 
-export default function LocationDetail({ location, onBack }: LocationDetailProps) {
+export default function LocationDetail({ location, onBack, routeData, routesLoading, getStationRouteInfo }: LocationDetailProps) {
   const details = location.details;
 
   return (
@@ -162,46 +166,52 @@ export default function LocationDetail({ location, onBack }: LocationDetailProps
             Train stations that are within walkable distance with this place
           </p>
 
-          {details?.stationGuide ? (
+          {routesLoading ? (
             <div className="flex flex-col">
-              {details.stationGuide.stations.map((station, i) => {
-                const lineInfo = parseLineInfo(station.line);
-                return (
-                  <div
-                    key={i}
-                    className="flex flex-col gap-3 py-6 border-b border-ds-border"
-                  >
-                    <div className="flex flex-col gap-2.5">
-                      <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                        {station.name}
-                      </p>
-                      <div className="flex gap-1.5 items-center">
-                        <span className="bg-[#f2f2f2] rounded-full pl-1.5 pr-2 py-1 text-xs font-medium text-ds-text-primary">
-                          {lineInfo.type}
-                        </span>
-                        <span className="bg-[#f2f2f2] rounded-full pl-1.5 pr-2 py-1 text-xs font-medium text-ds-text-primary">
-                          {lineInfo.name}
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-sm leading-none text-ds-text-secondary">
-                      <span>Distance: </span>
-                      <span>{station.walkDistance} walk from this station to place</span>
-                    </p>
-                  </div>
-                );
-              })}
+              {[1, 2, 3].map(i => (
+                <div key={i} className="flex flex-col gap-3 py-6 border-b border-ds-border">
+                  <div className="h-7 w-40 bg-[#f2f2f2] rounded animate-pulse" />
+                  <div className="h-4 w-52 bg-[#f2f2f2] rounded animate-pulse" />
+                </div>
+              ))}
             </div>
-          ) : location.nearestStations?.length ? (
+          ) : routeData && routeData.length > 0 ? (
             <div className="flex flex-col">
-              {location.nearestStations.map((station, i) => (
+              {routeData.map((route, i) => (
                 <div
                   key={i}
                   className="flex flex-col gap-3 py-6 border-b border-ds-border"
                 >
-                  <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                    {station}
-                  </p>
+                  <div className="flex flex-col gap-2.5">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: route.color }}
+                      />
+                      <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
+                        {route.stationName}
+                      </p>
+                    </div>
+                    <div className="flex gap-1.5 items-center flex-wrap">
+                      {route.lines.map((line, j) => {
+                        const lineInfo = parseLineInfo(line);
+                        return (
+                          <span
+                            key={j}
+                            className="bg-[#f2f2f2] rounded-full pl-1.5 pr-2 py-1 text-xs font-medium text-ds-text-primary"
+                          >
+                            {lineInfo.type} {lineInfo.name !== lineInfo.type ? lineInfo.name : ''}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  {route.formattedDistance && (
+                    <p className="text-sm leading-none text-ds-text-secondary">
+                      <span>Distance: </span>
+                      <span>{route.formattedDistance} · {route.formattedDuration} walk</span>
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

@@ -89,87 +89,6 @@ function MapComponent({ className, onMapLoad }: MapProps) {
             console.error('Error analyzing map layers:', err);
           }
 
-          // Enhance railway line styling for better visibility
-          try {
-            const railwayLayers = [
-              'Railway tunnel',
-              'Railway tunnel hatching',
-              'Major rail',
-              'Major rail hatching',
-              'Minor rail',
-              'Minor rail hatching'
-            ];
-
-            railwayLayers.forEach(layerId => {
-              try {
-                const layer = mapInstance.getLayer(layerId);
-                if (layer && layer.type === 'line') {
-                  // Make railway lines more prominent
-                  mapInstance.setPaintProperty(layerId, 'line-width', [
-                    'interpolate',
-                    ['linear'],
-                    ['zoom'],
-                    8, 2,  // At zoom 8, width 2px
-                    12, 4, // At zoom 12, width 4px
-                    16, 6  // At zoom 16, width 6px
-                  ]);
-
-                  // Use distinct colors for different railway types
-                  if (layerId.includes('Major')) {
-                    mapInstance.setPaintProperty(layerId, 'line-color', '#FF6B35'); // Orange for major rail
-                  } else if (layerId.includes('Minor')) {
-                    mapInstance.setPaintProperty(layerId, 'line-color', '#4ECDC4'); // Teal for minor rail
-                  } else if (layerId.includes('tunnel')) {
-                    mapInstance.setPaintProperty(layerId, 'line-color', '#9B59B6'); // Purple for tunnels
-                  }
-
-                  mapInstance.setPaintProperty(layerId, 'line-opacity', 0.8);
-                  console.log('Enhanced railway layer styling:', layerId);
-                }
-              } catch (err) {
-                console.log('Could not enhance layer:', layerId, err);
-              }
-            });
-          } catch (err) {
-            console.error('Error enhancing railway layers:', err);
-          }
-
-          // Add custom KL rail lines
-          import('../../data/railLines').then(({ getAllRailLinesGeoJSON, railLines }) => {
-            const railLinesGeoJSON = getAllRailLinesGeoJSON();
-
-            // Add rail lines source
-            mapInstance.addSource('kl-rail-lines', {
-              type: 'geojson',
-              data: railLinesGeoJSON
-            });
-
-            // Add rail lines layer
-            mapInstance.addLayer({
-              id: 'kl-rail-lines',
-              type: 'line',
-              source: 'kl-rail-lines',
-              layout: {
-                'line-join': 'round',
-                'line-cap': 'round'
-              },
-              paint: {
-                'line-color': ['get', 'color'],
-                'line-width': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  8, 3,
-                  12, 5,
-                  16, 8
-                ],
-                'line-opacity': 0.8
-              }
-            });
-
-            console.log('Added custom KL rail lines:', railLines.length);
-          });
-
           // Add all location markers
           import('../../services/mapService').then(({ addAllMarkers }) => {
             addAllMarkers(mapInstance);
@@ -312,16 +231,7 @@ function MapComponent({ className, onMapLoad }: MapProps) {
           }
         });
 
-        // Also toggle our custom KL rail lines
-        try {
-          const customLayer = mapInstanceRef.current.getLayer('kl-rail-lines');
-          if (customLayer) {
-            mapInstanceRef.current.setLayoutProperty('kl-rail-lines', 'visibility', newVisibility ? 'visible' : 'none');
-            console.log(`${newVisibility ? 'Showing' : 'Hiding'} custom KL rail lines`);
-          }
-        } catch (err) {
-          console.log('Could not toggle custom rail lines:', err);
-        }
+
       }
     } catch (err) {
       console.error('Error toggling transit layers:', err);

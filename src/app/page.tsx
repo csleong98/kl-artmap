@@ -4,10 +4,12 @@ import { useState, useRef, useCallback } from 'react';
 import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
+import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
 
 export default function Home() {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const mapRef = useRef<any>(null);
+  const { routeData, isLoading: routesLoading, fetchRoutes, clearRoutes, getStationRouteInfo } = useWalkingRoutes();
 
   const handleMapLoad = useCallback((map: any) => {
     mapRef.current = map;
@@ -21,12 +23,14 @@ export default function Home() {
         zoom: 15,
         duration: 1500,
       });
+      fetchRoutes(location, mapRef.current);
     }
-  }, []);
+  }, [fetchRoutes]);
 
   const handleBack = useCallback(() => {
+    clearRoutes(mapRef.current);
     setSelectedLocation(null);
-  }, []);
+  }, [clearRoutes]);
 
   return (
     <div className="grid grid-cols-12 gap-grid-gutter h-screen pl-grid-margin">
@@ -36,6 +40,9 @@ export default function Home() {
           selectedLocation={selectedLocation}
           onLocationSelect={handleLocationSelect}
           onBack={handleBack}
+          routeData={routeData}
+          routesLoading={routesLoading}
+          getStationRouteInfo={getStationRouteInfo}
         />
       </aside>
 

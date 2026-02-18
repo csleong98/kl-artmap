@@ -5,15 +5,19 @@ import { Search, ListFilter } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
+import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
 
 interface SidePanelProps {
   selectedLocation: Location | null;
   onLocationSelect: (location: Location) => void;
   onBack: () => void;
+  routeData?: WalkingRouteData[];
+  routesLoading?: boolean;
+  getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredLocations = useMemo(() => {
@@ -35,7 +39,15 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack }
 
   // Detail view
   if (selectedLocation) {
-    return <LocationDetail location={selectedLocation} onBack={onBack} />;
+    return (
+      <LocationDetail
+        location={selectedLocation}
+        onBack={onBack}
+        routeData={routeData}
+        routesLoading={routesLoading}
+        getStationRouteInfo={getStationRouteInfo}
+      />
+    );
   }
 
   // List view

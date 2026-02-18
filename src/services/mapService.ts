@@ -110,3 +110,77 @@ export async function addAllMarkers(map: any): Promise<any[]> {
     return [];
   }
 }
+
+// ── Route drawing ──────────────────────────────────────────────────
+
+/**
+ * Adds a walking route line to the map as a dashed GeoJSON layer.
+ */
+export function addRouteLayer(
+  map: any,
+  routeId: string,
+  geometry: GeoJSON.LineString,
+  color: string
+): void {
+  // Avoid duplicates
+  if (map.getSource(routeId)) return;
+
+  map.addSource(routeId, {
+    type: 'geojson',
+    data: { type: 'Feature', geometry, properties: {} },
+  });
+
+  map.addLayer({
+    id: routeId,
+    type: 'line',
+    source: routeId,
+    layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: {
+      'line-color': color,
+      'line-width': 4,
+      'line-opacity': 0.85,
+      'line-dasharray': [2, 1],
+    },
+  });
+}
+
+/**
+ * Removes route layers and their sources from the map.
+ */
+export function clearRouteLayers(map: any, routeIds: string[]): void {
+  for (const id of routeIds) {
+    try {
+      if (map.getLayer(id)) map.removeLayer(id);
+      if (map.getSource(id)) map.removeSource(id);
+    } catch (err) {
+      console.error('Error clearing route layer:', id, err);
+    }
+  }
+}
+
+/**
+ * Fits the map view to contain all given coordinates with padding.
+ */
+export function fitMapToBounds(map: any, coordinates: [number, number][]): void {
+  if (coordinates.length < 2) return;
+
+  const bounds = coordinates.reduce(
+    (b, coord) => {
+      return {
+        minLng: Math.min(b.minLng, coord[0]),
+        maxLng: Math.max(b.maxLng, coord[0]),
+        minLat: Math.min(b.minLat, coord[1]),
+        maxLat: Math.max(b.maxLat, coord[1]),
+      };
+    },
+    { minLng: Infinity, maxLng: -Infinity, minLat: Infinity, maxLat: -Infinity }
+  );
+
+  map.fitBounds(
+    [
+      [bounds.minLng, bounds.minLat],
+      [bounds.maxLng, bounds.maxLat],
+    ],
+    { padding: 80, duration: 1000 }
+  );
+}

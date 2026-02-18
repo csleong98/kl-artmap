@@ -90,6 +90,38 @@ export const getStationData = (stationName: string): StationData | null => {
   return null;
 };
 
+/**
+ * Haversine distance between two [lng, lat] points in meters.
+ */
+function haversineMeters(a: [number, number], b: [number, number]): number {
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const R = 6_371_000; // Earth radius in meters
+  const dLat = toRad(b[1] - a[1]);
+  const dLng = toRad(b[0] - a[0]);
+  const sin2 =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(a[1])) * Math.cos(toRad(b[1])) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(sin2), Math.sqrt(1 - sin2));
+}
+
+/**
+ * Returns the N nearest stations to the given coordinates,
+ * sorted closest-first.
+ */
+export const getNearestStations = (
+  coordinates: [number, number],
+  count: number = 3
+): StationData[] => {
+  return Object.values(stationCoordinates)
+    .map(station => ({
+      station,
+      dist: haversineMeters(coordinates, station.coordinates),
+    }))
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, count)
+    .map(entry => entry.station);
+};
+
 // Route colors for different stations/lines
 export const routeColors = [
   '#FF6B6B', // Red
