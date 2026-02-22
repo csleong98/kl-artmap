@@ -56,6 +56,31 @@ export function clearMarkers(markers: any[]): void {
 }
 
 /**
+ * Mutes all place markers except the selected one.
+ */
+export function muteOtherMarkers(selectedName: string): void {
+  const allMarkers = document.querySelectorAll('[data-marker-id]');
+  allMarkers.forEach(el => {
+    const htmlEl = el as HTMLElement;
+    if (htmlEl.getAttribute('data-marker-id') === selectedName) {
+      htmlEl.style.opacity = '1';
+    } else {
+      htmlEl.style.opacity = '0.3';
+    }
+  });
+}
+
+/**
+ * Restores all place markers to full opacity.
+ */
+export function unmuteAllMarkers(): void {
+  const allMarkers = document.querySelectorAll('[data-marker-id]');
+  allMarkers.forEach(el => {
+    (el as HTMLElement).style.opacity = '1';
+  });
+}
+
+/**
  * Adds all stations and venues to the map using custom SVG pin markers
  * @param map - Mapbox GL JS map instance
  * @returns Array of Mapbox Marker instances
@@ -67,26 +92,9 @@ export async function addAllMarkers(map: any): Promise<any[]> {
     const mapboxgl = (await import('mapbox-gl')).default;
     const { mockLocations } = require('../data/mockLocations');
 
-    // Add all venues
+    // Add all venues with uniform color
     mockLocations.forEach((location: any) => {
-      let venueColor = '#E53E3E';
-      let strokeColor = '#154C66';
-      switch (location.type) {
-        case 'art_museum':
-          venueColor = '#9F7AEA';
-          strokeColor = '#553C9A';
-          break;
-        case 'art_gallery':
-          venueColor = '#38B2AC';
-          strokeColor = '#1D4044';
-          break;
-        case 'monument':
-          venueColor = '#D69E2E';
-          strokeColor = '#744210';
-          break;
-      }
-
-      const el = createPinElement(venueColor, strokeColor, location.name);
+      const el = createPinElement('#E53E3E', '#154C66', location.name);
       const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);
@@ -101,79 +109,59 @@ export async function addAllMarkers(map: any): Promise<any[]> {
   }
 }
 
-// ── Station markers (shown only when viewing nearby stations) ─────
+// ── Route styling constants ────────────────────────────────────────
 
-/**
- * Adds station pin markers for nearby stations when routes are displayed.
- * Returns an array of Marker instances so they can be removed later.
- */
-export async function addStationMarkers(
-  map: any,
-  stations: { name: string; coordinates: [number, number]; color: string }[]
-): Promise<any[]> {
-  const mapboxgl = (await import('mapbox-gl')).default;
-  return stations.map(station => {
-    const el = createPinElement(station.color, '#1a1a2e', `station-${station.name}`);
-    return new mapboxgl.Marker({ element: el, anchor: 'bottom' })
-      .setLngLat(station.coordinates)
-      .addTo(map);
-  });
-}
-
-/**
- * Removes station markers from the map.
- */
-export function clearStationMarkers(markers: any[]): void {
-  markers.forEach(m => {
-    try { m.remove(); } catch (_) {}
-  });
-}
+const ROUTE_COLORS = {
+  active:  { line: '#285ABD', casing: '#1B3C7E' },
+  muted:   { line: '#C9C9C9', casing: '#6B6B6B' },
+} as const;
 
 // ── Route drawing ──────────────────────────────────────────────────
 
 /**
- * Adds a walking route line to the map as a dashed GeoJSON layer.
+ * Adds a walking route line to the map as a GeoJSON layer.
+ * @param isActive - true → bold blue, false → muted gray
  */
 export function addRouteLayer(
   map: any,
   routeId: string,
   geometry: GeoJSON.LineString,
-  color: string
+  isActive: boolean
 ): void {
   // Avoid duplicates
   if (map.getSource(routeId)) return;
 
   const casingId = `${routeId}-casing`;
+  const palette = isActive ? ROUTE_COLORS.active : ROUTE_COLORS.muted;
 
   map.addSource(routeId, {
     type: 'geojson',
     data: { type: 'Feature', geometry, properties: {} },
   });
 
-  // Casing (outline) layer — wider, dark, drawn underneath
+  // Casing (outline) layer — wider, drawn underneath
   map.addLayer({
     id: casingId,
     type: 'line',
     source: routeId,
     layout: { 'line-join': 'round', 'line-cap': 'round' },
     paint: {
-      'line-color': '#1a1a2e',
-      'line-width': 8,
-      'line-opacity': 0.3,
+      'line-color': palette.casing,
+      'line-width': isActive ? 10 : 7,
+      'line-opacity': isActive ? 0.8 : 0.5,
     },
   });
 
-  // Main route line — colored, dashed, on top of casing
+  // Main route line — on top of casing
   map.addLayer({
     id: routeId,
     type: 'line',
     source: routeId,
     layout: { 'line-join': 'round', 'line-cap': 'round' },
     paint: {
-      'line-color': color,
-      'line-width': 5,
-      'line-opacity': 0.9,
-      'line-dasharray': [3, 1.5],
+      'line-color': palette.line,
+      'line-width': isActive ? 6 : 4,
+      'line-opacity': isActive ? 1 : 0.7,
     },
   });
 }
@@ -195,46 +183,60 @@ export function clearRouteLayers(map: any, routeIds: string[]): void {
 }
 
 /**
- * Highlights the selected route and dims all others.
+ * Swaps one route to active styling and all others to muted.
+ * Also moves the active route's layers to the top so it draws over muted routes.
  */
-export function highlightRoute(map: any, selectedRouteId: string, allRouteIds: string[]): void {
+export function setActiveRoute(map: any, activeRouteId: string, allRouteIds: string[]): void {
   for (const id of allRouteIds) {
     const casingId = `${id}-casing`;
-    if (id === selectedRouteId) {
-      if (map.getLayer(id)) {
-        map.setPaintProperty(id, 'line-opacity', 1);
-        map.setPaintProperty(id, 'line-width', 6);
-      }
-      if (map.getLayer(casingId)) {
-        map.setPaintProperty(casingId, 'line-opacity', 0.4);
-        map.setPaintProperty(casingId, 'line-width', 10);
-      }
-    } else {
-      if (map.getLayer(id)) {
-        map.setPaintProperty(id, 'line-opacity', 0.15);
-      }
-      if (map.getLayer(casingId)) {
-        map.setPaintProperty(casingId, 'line-opacity', 0.05);
-      }
-    }
-  }
-}
+    const isActive = id === activeRouteId;
+    const palette = isActive ? ROUTE_COLORS.active : ROUTE_COLORS.muted;
 
-/**
- * Restores all routes to their default opacity.
- */
-export function unhighlightRoutes(map: any, allRouteIds: string[]): void {
-  for (const id of allRouteIds) {
-    const casingId = `${id}-casing`;
     if (map.getLayer(id)) {
-      map.setPaintProperty(id, 'line-opacity', 0.9);
-      map.setPaintProperty(id, 'line-width', 5);
+      map.setPaintProperty(id, 'line-color', palette.line);
+      map.setPaintProperty(id, 'line-width', isActive ? 6 : 4);
+      map.setPaintProperty(id, 'line-opacity', isActive ? 1 : 0.7);
     }
     if (map.getLayer(casingId)) {
-      map.setPaintProperty(casingId, 'line-opacity', 0.3);
-      map.setPaintProperty(casingId, 'line-width', 8);
+      map.setPaintProperty(casingId, 'line-color', palette.casing);
+      map.setPaintProperty(casingId, 'line-width', isActive ? 10 : 7);
+      map.setPaintProperty(casingId, 'line-opacity', isActive ? 0.8 : 0.5);
     }
   }
+
+  // Move the active route's layers to the top so it renders above muted routes
+  const activeCasingId = `${activeRouteId}-casing`;
+  if (map.getLayer(activeCasingId)) map.moveLayer(activeCasingId);
+  if (map.getLayer(activeRouteId)) map.moveLayer(activeRouteId);
+}
+
+// ── Route endpoint markers ─────────────────────────────────────────
+
+/**
+ * Adds endpoint markers for a walking route.
+ * Green pin at the station (start of walk), red pin at the art venue (destination).
+ * @param start - location/art venue coordinates
+ * @param end - station coordinates
+ * Returns the marker array for cleanup.
+ */
+export async function addRouteEndpointMarkers(
+  map: any,
+  start: [number, number],
+  end: [number, number]
+): Promise<any[]> {
+  const mapboxgl = (await import('mapbox-gl')).default;
+
+  const startEl = createPinElement('#E53E3E', '#9B2C2C'); // red — art venue (destination)
+  const endEl   = createPinElement('#38A169', '#276749'); // green — station (start of walk)
+
+  const startMarker = new mapboxgl.Marker({ element: startEl, anchor: 'bottom' })
+    .setLngLat(start)
+    .addTo(map);
+  const endMarker = new mapboxgl.Marker({ element: endEl, anchor: 'bottom' })
+    .setLngLat(end)
+    .addTo(map);
+
+  return [startMarker, endMarker];
 }
 
 /**

@@ -16,6 +16,9 @@ interface LocationDetailProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onRouteSelect?: (routeId: string) => void;
   onRouteDeselect?: () => void;
+  onTabChange?: (tab: string) => void;
+  initialTab?: string;
+  activeRouteId?: string | null;
 }
 
 const LINE_TYPES = ['LRT', 'MRT', 'KTM', 'Monorail', 'ETS', 'KLIA'];
@@ -61,7 +64,7 @@ function RouteDetailView({
         <div className="flex items-center gap-2">
           <span
             className="w-2.5 h-2.5 rounded-full shrink-0"
-            style={{ backgroundColor: route.color }}
+            style={{ backgroundColor: '#285ABD' }}
           />
           <h3 className="text-lg font-semibold text-ds-text-primary leading-tight">
             {route.stationName}
@@ -111,12 +114,12 @@ function RouteDetailView({
           <div className="flex flex-col items-center">
             <span
               className="w-3 h-3 rounded-full shrink-0 border-2"
-              style={{ backgroundColor: route.color, borderColor: route.color }}
+              style={{ backgroundColor: '#285ABD', borderColor: '#285ABD' }}
             />
             {meaningfulSteps.length > 0 && (
               <div
                 className="w-0.5 flex-1 min-h-[24px]"
-                style={{ backgroundColor: route.color, opacity: 0.3 }}
+                style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
               />
             )}
           </div>
@@ -137,13 +140,13 @@ function RouteDetailView({
               {i < meaningfulSteps.length - 1 && (
                 <div
                   className="w-0.5 flex-1 min-h-[24px]"
-                  style={{ backgroundColor: route.color, opacity: 0.3 }}
+                  style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
                 />
               )}
               {i === meaningfulSteps.length - 1 && (
                 <div
                   className="w-0.5 flex-1 min-h-[24px]"
-                  style={{ backgroundColor: route.color, opacity: 0.3 }}
+                  style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
                 />
               )}
             </div>
@@ -184,9 +187,19 @@ function RouteDetailView({
   );
 }
 
-export default function LocationDetail({ location, onBack, routeData, routesLoading, getStationRouteInfo, onRouteSelect, onRouteDeselect }: LocationDetailProps) {
+export default function LocationDetail({ location, onBack, routeData, routesLoading, getStationRouteInfo, onRouteSelect, onRouteDeselect, onTabChange, initialTab, activeRouteId }: LocationDetailProps) {
   const [selectedRoute, setSelectedRoute] = useState<WalkingRouteData | null>(null);
+  const [activeTab, setActiveTab] = useState(initialTab || 'about');
   const details = location.details;
+
+  const handleTabValueChange = (tab: string) => {
+    setActiveTab(tab);
+    onTabChange?.(tab);
+    // When leaving station-guide, close any open route detail
+    if (tab !== 'station-guide') {
+      setSelectedRoute(null);
+    }
+  };
 
   const handleStationClick = (route: WalkingRouteData) => {
     setSelectedRoute(route);
@@ -236,7 +249,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="about" className="mt-6">
+      <Tabs value={activeTab} onValueChange={handleTabValueChange} className="mt-6">
         <TabsList className="w-full bg-[#f2f2f2] rounded-[10px] p-[3px]">
           <TabsTrigger
             value="about"
@@ -356,7 +369,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                         <div className="flex items-center gap-2">
                           <span
                             className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: route.color }}
+                            style={{ backgroundColor: activeRouteId === route.routeId ? '#285ABD' : '#C9C9C9' }}
                           />
                           <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
                             {route.stationName}

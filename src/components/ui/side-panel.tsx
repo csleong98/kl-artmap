@@ -17,9 +17,12 @@ interface SidePanelProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onRouteSelect?: (routeId: string) => void;
   onRouteDeselect?: () => void;
+  onTabChange?: (tab: string) => void;
+  initialTab?: string;
+  activeRouteId?: string | null;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onRouteSelect, onRouteDeselect }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onRouteSelect, onRouteDeselect, onTabChange, initialTab, activeRouteId }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredLocations = useMemo(() => {
@@ -50,6 +53,9 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
         getStationRouteInfo={getStationRouteInfo}
         onRouteSelect={onRouteSelect}
         onRouteDeselect={onRouteDeselect}
+        onTabChange={onTabChange}
+        initialTab={initialTab}
+        activeRouteId={activeRouteId}
       />
     );
   }

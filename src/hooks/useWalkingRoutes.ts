@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Location } from '@/types';
-import { getStationsWithinRadius, getRouteColor } from '@/data/stationCoordinates';
+import { getStationsWithinRadius } from '@/data/stationCoordinates';
 import {
   fetchMatrixDistances,
   fetchDirectionsRoute,
@@ -12,8 +12,9 @@ import {
   addRouteLayer,
   clearRouteLayers,
   fitMapToBounds,
-  addStationMarkers,
-  clearStationMarkers,
+  setActiveRoute,
+  addRouteEndpointMarkers,
+  clearMarkers,
 } from '@/services/mapService';
 
 export interface WalkingRouteData {
@@ -26,7 +27,6 @@ export interface WalkingRouteData {
   formattedDuration: string;
   geometry: GeoJSON.LineString | null;
   steps: RouteStep[];
-  color: string;
   routeId: string;
 }
 
@@ -34,8 +34,10 @@ interface UseWalkingRoutesReturn {
   routeData: WalkingRouteData[];
   isLoading: boolean;
   error: string | null;
+  activeRouteId: string | null;
   fetchRoutes: (location: Location, map: any) => Promise<void>;
   clearRoutes: (map: any) => void;
+  switchActiveRoute: (routeId: string, map: any, locationCoordinates: [number, number]) => void;
   getStationRouteInfo: (stationName: string) => WalkingRouteData | undefined;
 }
 
@@ -61,25 +63,56 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
   const [routeData, setRouteData] = useState<WalkingRouteData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeRouteId, setActiveRouteId] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
   const activeRouteIds = useRef<string[]>([]);
-  const stationMarkers = useRef<any[]>([]);
+  const endpointMarkers = useRef<any[]>([]);
+  const routeDataRef = useRef<WalkingRouteData[]>([]);
 
   const clearRoutes = useCallback((map: any) => {
     // Cancel in-flight requests
     abortRef.current?.abort();
     abortRef.current = null;
 
-    // Remove map layers and station markers
+    // Remove map layers and endpoint markers
     if (map) {
       clearRouteLayers(map, activeRouteIds.current);
     }
-    clearStationMarkers(stationMarkers.current);
-    stationMarkers.current = [];
+    clearMarkers(endpointMarkers.current);
+    endpointMarkers.current = [];
     activeRouteIds.current = [];
+    routeDataRef.current = [];
     setRouteData([]);
+    setActiveRouteId(null);
     setError(null);
+  }, []);
+
+  const switchActiveRoute = useCallback((routeId: string, map: any, locationCoordinates: [number, number]) => {
+    if (!map) return;
+
+    // Swap colors on the map
+    setActiveRoute(map, routeId, activeRouteIds.current);
+
+    // Clear old endpoint markers
+    clearMarkers(endpointMarkers.current);
+    endpointMarkers.current = [];
+
+    // Find the route from the ref (synchronous, no race condition)
+    const route = routeDataRef.current.find(r => r.routeId === routeId);
+    if (route) {
+      addRouteEndpointMarkers(map, locationCoordinates, route.coordinates).then(markers => {
+        // Guard: only assign if this route is still the active one
+        if (activeRouteIds.current.length > 0) {
+          endpointMarkers.current = markers;
+        } else {
+          // Routes were cleared while markers were being created — remove them immediately
+          clearMarkers(markers);
+        }
+      });
+    }
+
+    setActiveRouteId(routeId);
   }, []);
 
   const fetchRoutes = useCallback(async (location: Location, map: any) => {
@@ -88,12 +121,12 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
     const controller = new AbortController();
     abortRef.current = controller;
 
-    // Clean up previous route layers and station markers
+    // Clean up previous route layers and endpoint markers
     if (map) {
       clearRouteLayers(map, activeRouteIds.current);
     }
-    clearStationMarkers(stationMarkers.current);
-    stationMarkers.current = [];
+    clearMarkers(endpointMarkers.current);
+    endpointMarkers.current = [];
     activeRouteIds.current = [];
 
     const stations = resolveStations(location);
@@ -134,8 +167,6 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
             ? directionsResults[i].value
             : null;
 
-        // Prefer Matrix distances (single call, more consistent),
-        // fall back to individual Directions result
         const distance =
           matrix?.success && matrix.distances[i] != null
             ? matrix.distances[i]
@@ -155,9 +186,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
             ? dirResult.geometry
             : null;
 
-        const color = getRouteColor(station.name, i);
         const routeId = `walking-route-${i}`;
-
         const steps = dirResult?.success ? dirResult.steps : [];
 
         return {
@@ -170,23 +199,25 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
           formattedDuration: duration > 0 ? formatDuration(duration) : '',
           geometry,
           steps,
-          color,
           routeId,
         };
       });
 
       if (signal.aborted) return;
 
-      // Keep only stations walkable within 15 minutes
-      const walkableRoutes = routes.filter(r => r.duration > 0 && r.duration <= MAX_WALK_SECONDS);
+      // Keep only stations walkable within 15 minutes, sorted by duration (shortest first)
+      const walkableRoutes = routes
+        .filter(r => r.duration > 0 && r.duration <= MAX_WALK_SECONDS)
+        .sort((a, b) => a.duration - b.duration);
 
-      // Draw route layers on map
+      // Draw route layers on map — first route is active (best), rest are muted
       const boundsCoords: [number, number][] = [origin];
       const newRouteIds: string[] = [];
 
-      for (const route of walkableRoutes) {
+      for (let i = 0; i < walkableRoutes.length; i++) {
+        const route = walkableRoutes[i];
         if (route.geometry && map) {
-          addRouteLayer(map, route.routeId, route.geometry, route.color);
+          addRouteLayer(map, route.routeId, route.geometry, i === 0);
           newRouteIds.push(route.routeId);
           boundsCoords.push(route.coordinates);
         }
@@ -194,13 +225,36 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
 
       activeRouteIds.current = newRouteIds;
 
-      // Add station markers
+      // Set the first route as active and add endpoint markers for it
+      const bestRoute = walkableRoutes[0];
+      if (bestRoute && map) {
+        setActiveRouteId(bestRoute.routeId);
+        const markers = await addRouteEndpointMarkers(map, origin, bestRoute.coordinates);
+        if (signal.aborted) {
+          clearMarkers(markers);
+          return;
+        }
+        endpointMarkers.current = markers;
+      }
+
+      // Register click handlers and cursor for route layers
       if (map) {
-        const markers = await addStationMarkers(
-          map,
-          walkableRoutes.map(r => ({ name: r.stationName, coordinates: r.coordinates, color: r.color }))
-        );
-        stationMarkers.current = markers;
+        for (const route of walkableRoutes) {
+          const layerIds = [route.routeId, `${route.routeId}-casing`];
+          for (const layerId of layerIds) {
+            if (!map.getLayer(layerId)) continue;
+
+            map.on('click', layerId, () => {
+              switchActiveRoute(route.routeId, map, origin);
+            });
+            map.on('mouseenter', layerId, () => {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+            map.on('mouseleave', layerId, () => {
+              map.getCanvas().style.cursor = '';
+            });
+          }
+        }
       }
 
       // Fit map to show all routes
@@ -208,6 +262,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
         fitMapToBounds(map, boundsCoords);
       }
 
+      routeDataRef.current = walkableRoutes;
       setRouteData(walkableRoutes);
     } catch (err) {
       if ((err as Error).name === 'AbortError') return;
@@ -218,7 +273,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
         setIsLoading(false);
       }
     }
-  }, []);
+  }, [switchActiveRoute]);
 
   const getStationRouteInfo = useCallback(
     (stationName: string): WalkingRouteData | undefined => {
@@ -235,8 +290,10 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
     routeData,
     isLoading,
     error,
+    activeRouteId,
     fetchRoutes,
     clearRoutes,
+    switchActiveRoute,
     getStationRouteInfo,
   };
 }
