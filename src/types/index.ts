@@ -45,7 +45,6 @@ export interface LocationDetails {
 }
 
 export interface Location {
-  id: string;
   name: string;
   type: 'art_gallery' | 'art_museum' | 'monument' | 'street_art';
   distance: string;

@@ -2,7 +2,6 @@ import { Location } from '@/types';
 
 export const mockLocations: Location[] = [
   {
-    id: '1',
     name: 'National Art Gallery',
     type: 'art_museum',
     distance:'1km',
@@ -54,7 +53,6 @@ export const mockLocations: Location[] = [
     }
   },
   {
-    id: '2',
     name: 'Bank Negara Malaysia Museum & Art Gallery',
     type: 'art_museum',
     distance:'1km',
@@ -68,7 +66,6 @@ export const mockLocations: Location[] = [
     admission: 'free'
   },
   {
-    id: '3',
     name: 'Ilham Gallery',
     type: 'art_museum',
     distance:'2km',
@@ -82,7 +79,6 @@ export const mockLocations: Location[] = [
     admission: 'free'
   },
   {
-    id: '4',
     name: 'Galeri Petronas',
     type: 'art_museum',
     distance:'2km',
@@ -96,7 +92,6 @@ export const mockLocations: Location[] = [
     admission: 'free'
   },
   {
-    id: '5',
     name: 'Islamic Arts Museum Malaysia',
     type: 'art_museum',
     distance:'3km',
@@ -111,7 +106,6 @@ export const mockLocations: Location[] = [
     admission: 'paid'
   },
   {
-    id: '6',
     name: 'Museum of Asian Arts',
     type: 'art_museum',
     distance:'3km',
@@ -126,7 +120,6 @@ export const mockLocations: Location[] = [
     admission: 'paid'
   },
   {
-    id: '7',
     name: 'National Textile Museum',
     type: 'art_museum',
     distance:'3km',
@@ -141,7 +134,6 @@ export const mockLocations: Location[] = [
     admission: 'paid'
   },
   {
-    id: '8',
     name: 'Sultan Abdul Samad Building',
     type: 'art_museum',
     distance:'3km',
@@ -156,7 +148,6 @@ export const mockLocations: Location[] = [
     admission: 'paid'
   },
   {
-    id: '9',
     name: 'Telekom Museum',
     type: 'art_museum',
     distance:'3km',

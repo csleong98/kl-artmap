@@ -86,7 +86,7 @@ export async function addAllMarkers(map: any): Promise<any[]> {
           break;
       }
 
-      const el = createPinElement(venueColor, strokeColor, location.id);
+      const el = createPinElement(venueColor, strokeColor, location.name);
       const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);

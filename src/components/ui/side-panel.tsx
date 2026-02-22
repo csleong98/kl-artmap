@@ -91,11 +91,11 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
         ) : (
           filteredLocations.map((location) => (
             <li
-              key={location.id}
+              key={location.name}
               className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
               onClick={() => onLocationSelect(location)}
-              onMouseEnter={() => handleLocationHover(location.id, true)}
-              onMouseLeave={() => handleLocationHover(location.id, false)}
+              onMouseEnter={() => handleLocationHover(location.name, true)}
+              onMouseLeave={() => handleLocationHover(location.name, false)}
             >
               <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
                 {location.name}
