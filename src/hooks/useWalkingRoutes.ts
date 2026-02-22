@@ -43,7 +43,7 @@ interface UseWalkingRoutesReturn {
 const MAX_WALK_SECONDS = 900;
 
 /** Haversine pre-filter radius in meters (~1.5km straight-line) */
-const PREFILTER_RADIUS_M = 1500;
+const PREFILTER_RADIUS_M = 2000;
 
 /**
  * Pre-filters stations within a straight-line radius.

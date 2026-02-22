@@ -59,10 +59,10 @@ export const mockLocations: Location[] = [
     walkTime:'15mins',
     openingHours: 'Closes at 5pm today',
     status: 'open',
-    coordinates: [101.6905, 3.1572], // Near Brickfields area
+    coordinates: [101.6905, 3.1572],
     address: '8, Jalan Scott, Brickfields, 50470 Kuala Lumpur',
     imageUrl: '/images/wei-ling-gallery.jpg',
-    nearestStations:['KL Sentral', 'Brickfields'],
+    nearestStations:['Bandaraya LRT'],
     admission: 'free'
   },
   {
@@ -100,20 +100,6 @@ export const mockLocations: Location[] = [
     status: 'closed',
     reopenTime: '10am tomorrow',
     coordinates: [101.6899, 3.1419],
-    address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
-    imageUrl: '/images/islamic-arts-museum.jpg',
-    nearestStations:['KL Sentral', 'Muzium Negara MRT'],
-    admission: 'paid'
-  },
-  {
-    name: 'Museum of Asian Arts',
-    type: 'art_museum',
-    distance:'3km',
-    walkTime:'35mins',
-    openingHours: 'Reopens at 10am tomorrow',
-    status: 'closed',
-    reopenTime: '10am tomorrow',
-    coordinates: [101.6532, 3.1182],
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
@@ -160,5 +146,53 @@ export const mockLocations: Location[] = [
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
     admission: 'paid'
+  },
+  {
+    name: 'UR-MU Bukit Bintang',
+    type: 'art_gallery',
+    distance:'2km',
+    walkTime:'20mins',
+    openingHours: 'Closes at 8:30pm today',
+    status: 'open',
+    coordinates: [101.7117, 3.1462],
+    address: '3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur',
+    nearestStations:['Bukit Bintang MRT', 'Bukit Bintang Monorail'],
+    admission: 'paid'
+  },
+  {
+    name: 'UR-MU The Toffee',
+    type: 'art_gallery',
+    distance:'2km',
+    walkTime:'20mins',
+    openingHours: 'Closes at 8:30pm today',
+    status: 'open',
+    coordinates: [101.7078, 3.1515],
+    address: '2, Jalan Raja Chulan, City Centre, 50100 Kuala Lumpur',
+    nearestStations:['Raja Chulan Monorail'],
+    admission: 'paid'
+  },
+  {
+    name: 'UR-MU Tun H.S. Lee',
+    type: 'art_gallery',
+    distance:'3km',
+    walkTime:'25mins',
+    openingHours: 'Closes at 8:30pm today',
+    status: 'open',
+    coordinates: [101.6967, 3.1453],
+    address: '131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur',
+    nearestStations:['Pasar Seni LRT', 'Pasar Seni MRT'],
+    admission: 'paid'
+  },
+  {
+    name: 'Kwai Chai Hong',
+    type: 'street_art',
+    distance:'3km',
+    walkTime:'25mins',
+    openingHours: 'Closes at 12am today',
+    status: 'open',
+    coordinates: [101.6968, 3.1440],
+    address: 'Lorong Panggung, 50000 Kuala Lumpur',
+    nearestStations:['Pasar Seni LRT', 'Pasar Seni MRT'],
+    admission: 'free'
   }
 ];

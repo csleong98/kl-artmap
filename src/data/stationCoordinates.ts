@@ -59,9 +59,27 @@ export const stationCoordinates: Record<string, StationData> = {
   },
   'Bandaraya': {
     name: 'Bandaraya',
-    coordinates: [101.6958, 3.1428],
+    coordinates: [101.69442589509586, 3.1556520223802424],
     lines: ['LRT Kelana Jaya Line'],
     type: 'LRT'
+  },
+  'Bukit Bintang Monorail': {
+    name: 'Bukit Bintang Monorail',
+    coordinates: [101.7111, 3.1458],
+    lines: ['KL Monorail'],
+    type: 'Monorail'
+  },
+  'Bukit Bintang MRT': {
+    name: 'Bukit Bintang MRT',
+    coordinates: [101.7100, 3.1468],
+    lines: ['MRT Kajang Line'],
+    type: 'MRT'
+  },
+  'Raja Chulan Monorail': {
+    name: 'Raja Chulan Monorail',
+    coordinates: [101.7104, 3.1508],
+    lines: ['KL Monorail'],
+    type: 'Monorail'
   }
 };
 
