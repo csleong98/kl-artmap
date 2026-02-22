@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Location } from '@/types';
-import { getNearestStations, getRouteColor } from '@/data/stationCoordinates';
+import { getStationsWithinRadius, getRouteColor } from '@/data/stationCoordinates';
 import {
   fetchMatrixDistances,
   fetchDirectionsRoute,
@@ -39,12 +39,18 @@ interface UseWalkingRoutesReturn {
   getStationRouteInfo: (stationName: string) => WalkingRouteData | undefined;
 }
 
+/** Maximum walking duration in seconds (15 minutes) */
+const MAX_WALK_SECONDS = 900;
+
+/** Haversine pre-filter radius in meters (~1.5km straight-line) */
+const PREFILTER_RADIUS_M = 1500;
+
 /**
- * Computes the 3 nearest stations to a location by haversine distance.
- * Ignores hardcoded nearestStations data — always uses coordinates.
+ * Pre-filters stations within a straight-line radius.
+ * Real walking time is checked after the Matrix API call.
  */
 function resolveStations(location: Location): { name: string; coordinates: [number, number]; lines: string[] }[] {
-  return getNearestStations(location.coordinates, 3).map(s => ({
+  return getStationsWithinRadius(location.coordinates, PREFILTER_RADIUS_M).map(s => ({
     name: s.name,
     coordinates: s.coordinates,
     lines: s.lines,
@@ -171,11 +177,14 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
 
       if (signal.aborted) return;
 
+      // Keep only stations walkable within 15 minutes
+      const walkableRoutes = routes.filter(r => r.duration > 0 && r.duration <= MAX_WALK_SECONDS);
+
       // Draw route layers on map
       const boundsCoords: [number, number][] = [origin];
       const newRouteIds: string[] = [];
 
-      for (const route of routes) {
+      for (const route of walkableRoutes) {
         if (route.geometry && map) {
           addRouteLayer(map, route.routeId, route.geometry, route.color);
           newRouteIds.push(route.routeId);
@@ -189,7 +198,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
       if (map) {
         const markers = await addStationMarkers(
           map,
-          routes.map(r => ({ name: r.stationName, coordinates: r.coordinates, color: r.color }))
+          walkableRoutes.map(r => ({ name: r.stationName, coordinates: r.coordinates, color: r.color }))
         );
         stationMarkers.current = markers;
       }
@@ -199,7 +208,7 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
         fitMapToBounds(map, boundsCoords);
       }
 
-      setRouteData(routes);
+      setRouteData(walkableRoutes);
     } catch (err) {
       if ((err as Error).name === 'AbortError') return;
       console.error('Walking routes error:', err);

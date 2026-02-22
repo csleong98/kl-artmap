@@ -122,6 +122,25 @@ export const getNearestStations = (
     .map(entry => entry.station);
 };
 
+/**
+ * Returns all stations within a straight-line radius (meters),
+ * sorted closest-first. Used as a pre-filter before checking
+ * real walking times via the Mapbox API.
+ */
+export const getStationsWithinRadius = (
+  coordinates: [number, number],
+  radiusMeters: number = 1500
+): StationData[] => {
+  return Object.values(stationCoordinates)
+    .map(station => ({
+      station,
+      dist: haversineMeters(coordinates, station.coordinates),
+    }))
+    .filter(entry => entry.dist <= radiusMeters)
+    .sort((a, b) => a.dist - b.dist)
+    .map(entry => entry.station);
+};
+
 // Route colors for different stations/lines
 export const routeColors = [
   '#FF6B6B', // Red

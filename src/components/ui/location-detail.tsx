@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, DoorOpen, Route, Ticket, Info, ArrowLeft, TriangleAlert } from 'lucide-react';
+import { X, DoorOpen, Route, Ticket, Info, ArrowLeft, TriangleAlert, ExternalLink } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
@@ -43,10 +43,12 @@ const daysOfWeek = [
 function RouteDetailView({
   route,
   locationName,
+  locationCoordinates,
   onClose,
 }: {
   route: WalkingRouteData;
   locationName: string;
+  locationCoordinates: [number, number];
   onClose: () => void;
 }) {
   const meaningfulSteps = route.steps.filter(s => s.distance > 5);
@@ -93,6 +95,14 @@ function RouteDetailView({
         {route.formattedDistance} · {route.formattedDuration} walk
         {crossingCount > 0 && ` · ${crossingCount} road crossing${crossingCount > 1 ? 's' : ''}`}
       </p>
+
+      {/* Indoor route note */}
+      <div className="flex items-start gap-2 bg-[#f2f2f2] border border-ds-border-light rounded-lg p-3 mt-4">
+        <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
+        <p className="text-xs text-ds-text-secondary leading-relaxed">
+          Directions show street-level routes only. Some stations may have underground walkways or covered links — check station signage on arrival.
+        </p>
+      </div>
 
       {/* Vertical timeline */}
       <div className="mt-6 flex flex-col">
@@ -159,6 +169,17 @@ function RouteDetailView({
           </p>
         </div>
       </div>
+
+      {/* Google Maps link */}
+      <a
+        href={`https://www.google.com/maps/dir/?api=1&origin=${route.coordinates[1]},${route.coordinates[0]}&destination=${locationCoordinates[1]},${locationCoordinates[0]}&travelmode=walking`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 flex items-center justify-center gap-2 w-full rounded-lg border border-ds-border-light py-2.5 text-sm font-medium text-ds-text-primary hover:bg-ds-surface transition-colors"
+      >
+        Open in Google Maps
+        <ExternalLink className="w-4 h-4" />
+      </a>
     </div>
   );
 }
@@ -305,6 +326,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             <RouteDetailView
               route={selectedRoute}
               locationName={location.name}
+              locationCoordinates={location.coordinates}
               onClose={handleRouteClose}
             />
           ) : (
