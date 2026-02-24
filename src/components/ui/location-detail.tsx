@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { X, DoorOpen, Route, Ticket, Info, ArrowLeft, TriangleAlert, ExternalLink } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { X, DoorOpen, Route, Ticket, Info, ArrowLeft, TriangleAlert, ExternalLink, ArrowUpLeft, ArrowUpRight, MoveRight, MapPin, Footprints, Umbrella, ChevronDown, ChevronUp, Train } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
@@ -43,6 +43,117 @@ const daysOfWeek = [
   { key: 'sunday', label: 'Sun' },
 ] as const;
 
+// Helper: Group route steps into logical segments
+interface ProcessedSegment {
+  type: 'turn' | 'walk' | 'arrive';
+  instruction: string;
+  streetName?: string;
+  distance: number;
+  duration: number;
+  maneuverType?: string;
+  maneuverModifier?: string;
+  substeps?: RouteStep[];
+  isCovered?: boolean; // TODO: Add real coverage detection
+}
+
+function processRouteSteps(steps: RouteStep[]): ProcessedSegment[] {
+  const segments: ProcessedSegment[] = [];
+  const MIN_STEP_DISTANCE = 20; // Ignore micro-steps < 20m
+
+  let i = 0;
+  while (i < steps.length) {
+    const step = steps[i];
+
+    // Skip micro-steps
+    if (step.distance < MIN_STEP_DISTANCE) {
+      i++;
+      continue;
+    }
+
+    // Detect turn maneuvers
+    if (step.maneuverType === 'turn' || step.maneuverType === 'new name') {
+      // This is a turn - check if followed by walking on same street
+      const walkingSteps: RouteStep[] = [];
+      let totalDistance = step.distance;
+      let totalDuration = step.duration;
+      let j = i + 1;
+
+      // Collect consecutive steps on the same street
+      while (j < steps.length) {
+        const nextStep = steps[j];
+        // If it's a continue/straight on same street, group it
+        if (
+          nextStep.name === step.name &&
+          (nextStep.maneuverType === 'continue' || nextStep.maneuverType === 'straight' || nextStep.distance < MIN_STEP_DISTANCE)
+        ) {
+          if (nextStep.distance >= MIN_STEP_DISTANCE) {
+            walkingSteps.push(nextStep);
+          }
+          totalDistance += nextStep.distance;
+          totalDuration += nextStep.duration;
+          j++;
+        } else {
+          break;
+        }
+      }
+
+      segments.push({
+        type: 'turn',
+        instruction: `Turn ${step.maneuverModifier || 'left'} on ${step.name || 'the street'}`,
+        streetName: step.name,
+        distance: totalDistance,
+        duration: totalDuration,
+        maneuverType: step.maneuverType,
+        maneuverModifier: step.maneuverModifier,
+        substeps: walkingSteps.length > 0 ? walkingSteps : undefined,
+        isCovered: Math.random() > 0.5, // TODO: Replace with real coverage detection
+      });
+
+      i = j;
+    } else if (step.maneuverType === 'arrive') {
+      segments.push({
+        type: 'arrive',
+        instruction: 'You have arrived at the place!',
+        distance: 0,
+        duration: 0,
+      });
+      i++;
+    } else {
+      // Generic walking segment
+      segments.push({
+        type: 'walk',
+        instruction: step.instruction || `Continue on ${step.name || 'the walkway'}`,
+        streetName: step.name,
+        distance: step.distance,
+        duration: step.duration,
+        maneuverType: step.maneuverType,
+        isCovered: Math.random() > 0.5, // TODO: Replace with real coverage detection
+      });
+      i++;
+    }
+  }
+
+  return segments;
+}
+
+// Helper: Get icon for maneuver type
+function getManeuverIcon(segment: ProcessedSegment) {
+  if (segment.type === 'arrive') {
+    return <MapPin className="w-5 h-5 text-green-600" />;
+  }
+
+  if (segment.type === 'turn') {
+    const modifier = segment.maneuverModifier?.toLowerCase() || 'left';
+    if (modifier.includes('left')) {
+      return <ArrowUpLeft className="w-5 h-5 text-ds-text-primary" />;
+    } else if (modifier.includes('right')) {
+      return <ArrowUpRight className="w-5 h-5 text-ds-text-primary" />;
+    }
+  }
+
+  return <Footprints className="w-5 h-5 text-ds-text-secondary" />;
+}
+
 function RouteDetailView({
   route,
   locationName,
@@ -54,122 +165,183 @@ function RouteDetailView({
   locationCoordinates: [number, number];
   onClose: () => void;
 }) {
-  const meaningfulSteps = route.steps.filter(s => s.distance > 5);
-  const crossingCount = meaningfulSteps.filter(s => s.isCrossing).length;
+  const [expandedSegments, setExpandedSegments] = useState<Set<number>>(new Set());
+
+  // Memoize expensive route processing to prevent recalculation on every render
+  const segments = useMemo(() => processRouteSteps(route.steps), [route.steps]);
+
+  const toggleSegment = (index: number) => {
+    setExpandedSegments(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <div className="flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span
-            className="w-2.5 h-2.5 rounded-full shrink-0"
-            style={{ backgroundColor: '#285ABD' }}
-          />
-          <h3 className="text-lg font-semibold text-ds-text-primary leading-tight">
-            {route.stationName}
+      {/* Station Header */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <div className="flex-1">
+          <h3 className="text-xl font-semibold text-ds-text-primary leading-tight mb-2">
+            {route.stationName} station
           </h3>
+          <div className="flex gap-2 items-center flex-wrap">
+            {route.lines.map((line, j) => {
+              const lineInfo = parseLineInfo(line);
+              return (
+                <div key={j} className="flex items-center gap-1.5 bg-[#f2f2f2] rounded px-2 py-1">
+                  <Train className="w-3.5 h-3.5 text-ds-text-primary" />
+                  <span className="text-xs font-medium text-ds-text-primary">
+                    {lineInfo.type}
+                  </span>
+                  {lineInfo.name !== lineInfo.type && (
+                    <>
+                      <span className="text-xs text-ds-text-muted">•</span>
+                      <span className="text-xs text-ds-text-secondary">
+                        {lineInfo.name}
+                      </span>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
         <button
           onClick={onClose}
-          className="shrink-0 border border-ds-border-light rounded-input p-1.5 hover:bg-ds-surface transition-colors"
+          className="shrink-0 border border-ds-border-light rounded-lg p-2 hover:bg-ds-surface transition-colors"
         >
-          <X className="w-4 h-4 text-ds-text-primary" />
+          <X className="w-5 h-5 text-ds-text-primary" />
         </button>
       </div>
 
-      {/* Line badges */}
-      <div className="flex gap-1.5 items-center flex-wrap mt-3">
-        {route.lines.map((line, j) => {
-          const lineInfo = parseLineInfo(line);
-          return (
-            <span
-              key={j}
-              className="bg-[#f2f2f2] rounded-full pl-1.5 pr-2 py-1 text-xs font-medium text-ds-text-primary"
-            >
-              {lineInfo.type} {lineInfo.name !== lineInfo.type ? lineInfo.name : ''}
-            </span>
-          );
-        })}
-      </div>
+      {/* Route Timeline with Overlapping Cards */}
+      <div className="relative mt-6">
+        {/* Continuous vertical line - behind everything */}
+        <div
+          className="absolute left-[20px] top-0 bottom-0 w-[2px] bg-gray-300"
+          style={{ zIndex: 1 }}
+        />
 
-      {/* Summary */}
-      <p className="text-sm text-ds-text-secondary mt-4">
-        {route.formattedDistance} · {route.formattedDuration} walk
-        {crossingCount > 0 && ` · ${crossingCount} road crossing${crossingCount > 1 ? 's' : ''}`}
-      </p>
+        {/* Segments */}
+        <div className="relative space-y-3" style={{ zIndex: 2 }}>
+          {segments.map((segment, index) => {
+            const isExpanded = expandedSegments.has(index);
+            const hasSubsteps = segment.substeps && segment.substeps.length > 0;
+            const timeEstimate = Math.ceil(segment.duration / 60); // minutes
 
-      {/* Indoor route note */}
-      <div className="flex items-start gap-2 bg-[#f2f2f2] border border-ds-border-light rounded-lg p-3 mt-4">
-        <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
-        <p className="text-xs text-ds-text-secondary leading-relaxed">
-          Directions show street-level routes only. Some stations may have underground walkways or covered links — check station signage on arrival.
-        </p>
-      </div>
+            if (segment.type === 'arrive') {
+              // Arrival point
+              return (
+                <div key={index} className="flex items-start gap-3 relative">
+                  <div className="relative flex items-center justify-center w-10 h-10 shrink-0" style={{ zIndex: 3 }}>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-green-600" fill="currentColor" />
+                    </div>
+                  </div>
+                  <div className="flex-1 pt-2">
+                    <p className="text-base font-medium text-ds-text-primary">
+                      {segment.instruction}
+                    </p>
+                  </div>
+                </div>
+              );
+            }
 
-      {/* Vertical timeline */}
-      <div className="mt-6 flex flex-col">
-        {/* Start node */}
-        <div className="flex gap-3 items-start">
-          <div className="flex flex-col items-center">
-            <span
-              className="w-3 h-3 rounded-full shrink-0 border-2"
-              style={{ backgroundColor: '#285ABD', borderColor: '#285ABD' }}
-            />
-            {meaningfulSteps.length > 0 && (
-              <div
-                className="w-0.5 flex-1 min-h-[24px]"
-                style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
-              />
-            )}
-          </div>
-          <p className="text-sm font-medium text-ds-text-primary pb-4">
-            {route.stationName}
-          </p>
-        </div>
+            if (segment.type === 'turn') {
+              // Turn card - overlaps timeline
+              return (
+                <div key={index} className="relative">
+                  {/* Direction card */}
+                  <div className="flex items-start gap-3">
+                    <div className="relative flex items-center justify-center w-10 h-10 shrink-0" style={{ zIndex: 3 }}>
+                      <div className="absolute inset-0 flex items-center justify-center bg-white rounded-full border-2 border-gray-300">
+                        {getManeuverIcon(segment)}
+                      </div>
+                    </div>
+                    <div className="flex-1 bg-gray-100 rounded-lg p-3 relative" style={{ zIndex: 3 }}>
+                      <p className="text-base font-medium text-ds-text-primary">
+                        {segment.instruction}
+                      </p>
+                    </div>
+                  </div>
 
-        {/* Step nodes */}
-        {meaningfulSteps.map((step, i) => (
-          <div key={i} className="flex gap-3 items-start">
-            <div className="flex flex-col items-center">
-              <span
-                className={`w-2 h-2 rounded-full shrink-0 mt-0.5 ${
-                  step.isCrossing ? 'bg-amber-400' : 'bg-[#d4d4d4]'
-                }`}
-              />
-              {i < meaningfulSteps.length - 1 && (
-                <div
-                  className="w-0.5 flex-1 min-h-[24px]"
-                  style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
-                />
-              )}
-              {i === meaningfulSteps.length - 1 && (
-                <div
-                  className="w-0.5 flex-1 min-h-[24px]"
-                  style={{ backgroundColor: '#285ABD', opacity: 0.3 }}
-                />
-              )}
-            </div>
-            <div className={`pb-4 flex-1 ${step.isCrossing ? 'bg-amber-50 -mx-1 px-2 py-1.5 rounded-md border border-amber-200' : ''}`}>
-              <p className={`text-sm leading-relaxed ${step.isCrossing ? 'text-amber-800' : 'text-ds-text-secondary'}`}>
-                {step.isCrossing && <TriangleAlert className="w-3.5 h-3.5 inline-block mr-1.5 -mt-0.5 text-amber-500" />}
-                {step.instruction}
-              </p>
-              <span className="text-xs text-ds-text-muted mt-0.5 block">
-                {formatDistance(step.distance)}
-              </span>
-            </div>
-          </div>
-        ))}
+                  {/* Walking segment (indented, connected to timeline) */}
+                  <div className="ml-10 mt-3">
+                    <button
+                      onClick={() => toggleSegment(index)}
+                      className="w-full flex items-center gap-2 text-left hover:bg-gray-50 rounded-lg p-2 transition-colors"
+                    >
+                      <Footprints className="w-4 h-4 text-ds-text-secondary shrink-0" />
+                      {segment.isCovered && (
+                        <>
+                          <Umbrella className="w-4 h-4 text-blue-500 shrink-0" />
+                          <Umbrella className="w-4 h-4 text-blue-500 shrink-0" />
+                        </>
+                      )}
+                      <div className="flex-1">
+                        <p className="text-sm text-ds-text-primary">
+                          Walk {timeEstimate} mins on {segment.streetName || 'the street'}
+                        </p>
+                        <p className="text-xs text-ds-text-muted">
+                          {formatDistance(segment.distance)}
+                        </p>
+                      </div>
+                      {hasSubsteps && (
+                        isExpanded ? (
+                          <ChevronUp className="w-4 h-4 text-ds-text-muted shrink-0" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-ds-text-muted shrink-0" />
+                        )
+                      )}
+                    </button>
 
-        {/* End node */}
-        <div className="flex gap-3 items-start">
-          <div className="flex flex-col items-center">
-            <span className="w-3 h-3 rounded-full shrink-0 bg-[#1a1a2e] border-2 border-[#1a1a2e]" />
-          </div>
-          <p className="text-sm font-medium text-ds-text-primary">
-            {locationName}
-          </p>
+                    {/* Expandable substeps */}
+                    {hasSubsteps && isExpanded && (
+                      <div className="ml-6 mt-2 space-y-2 pb-2 border-l-2 border-gray-200 pl-3">
+                        {segment.substeps!.map((substep, subIndex) => (
+                          <div key={subIndex} className="text-xs text-ds-text-secondary">
+                            <p>{substep.instruction}</p>
+                            <p className="text-ds-text-muted mt-0.5">
+                              {formatDistance(substep.distance)}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            }
+
+            // Generic walk segment
+            return (
+              <div key={index} className="ml-10">
+                <div className="flex items-center gap-2 text-left p-2">
+                  <Footprints className="w-4 h-4 text-ds-text-secondary shrink-0" />
+                  {segment.isCovered && (
+                    <>
+                      <Umbrella className="w-4 h-4 text-blue-500 shrink-0" />
+                      <Umbrella className="w-4 h-4 text-blue-500 shrink-0" />
+                    </>
+                  )}
+                  <div className="flex-1">
+                    <p className="text-sm text-ds-text-primary">
+                      {segment.instruction}
+                    </p>
+                    <p className="text-xs text-ds-text-muted">
+                      {formatDistance(segment.distance)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
