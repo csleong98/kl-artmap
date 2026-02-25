@@ -16,10 +16,13 @@ import {
   addRouteEndpointMarkers,
   clearMarkers,
 } from '@/services/mapService';
+import { findRelevantIndoorConnections } from '@/data/indoorConnections';
 
 export interface WalkingRouteData {
   stationName: string;
-  coordinates: [number, number];
+  exitName: string;           // Specific exit to use
+  coordinates: [number, number]; // The exit's coordinates
+  exitDescription?: string;   // Optional helper text like "Near Central Market"
   lines: string[];
   distance: number;           // meters
   duration: number;           // seconds
@@ -28,6 +31,9 @@ export interface WalkingRouteData {
   geometry: GeoJSON.LineString | null;
   steps: RouteStep[];
   routeId: string;
+  hasIndoorRoute: boolean;    // NEW: Route uses indoor connections
+  indoorPercentage?: number;  // NEW: % of route that's indoor
+  indoorFeatures?: string[];  // NEW: Indoor features (air-conditioned, etc.)
 }
 
 interface UseWalkingRoutesReturn {
@@ -50,13 +56,10 @@ const PREFILTER_RADIUS_M = 2000;
 /**
  * Pre-filters stations within a straight-line radius.
  * Real walking time is checked after the Matrix API call.
+ * Returns full StationData objects with exits.
  */
-function resolveStations(location: Location): { name: string; coordinates: [number, number]; lines: string[] }[] {
-  return getStationsWithinRadius(location.coordinates, PREFILTER_RADIUS_M).map(s => ({
-    name: s.name,
-    coordinates: s.coordinates,
-    lines: s.lines,
-  }));
+function resolveStations(location: Location) {
+  return getStationsWithinRadius(location.coordinates, PREFILTER_RADIUS_M);
 }
 
 export function useWalkingRoutes(): UseWalkingRoutesReturn {
@@ -143,63 +146,126 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
     const signal = controller.signal;
 
     try {
-      // Fire Matrix + Directions calls in parallel
-      const [matrixResult, ...directionsResults] = await Promise.allSettled([
-        fetchMatrixDistances(
-          origin,
-          stations.map(s => s.coordinates),
-          signal
-        ),
-        ...stations.map(s =>
-          fetchDirectionsRoute(origin, s.coordinates, signal)
-        ),
-      ]);
+      // Build a flat list of all station-exit combinations
+      const allExitCombos: Array<{
+        station: typeof stations[0];
+        exit: typeof stations[0]['exits'][0];
+      }> = [];
+
+      stations.forEach(station => {
+        station.exits.forEach(exit => {
+          allExitCombos.push({ station, exit });
+        });
+      });
+
+      // Calculate routes from ALL exits to the art venue
+      // First check for indoor connections, then use Mapbox API as fallback
+      const directionsResults = await Promise.allSettled(
+        allExitCombos.map(async (combo) => {
+          // Check if there's an indoor connection for this route
+          const indoorConns = findRelevantIndoorConnections(
+            combo.exit.coordinates,
+            origin,
+            150 // Allow 150m detour to use indoor route
+          );
+
+          // If indoor connection exists and is better, use it
+          if (indoorConns.length > 0) {
+            const bestIndoor = indoorConns[0]; // Use first (best) match
+
+            // Create synthetic route result with indoor connection data
+            return {
+              success: true,
+              distance: bestIndoor.distance,
+              duration: bestIndoor.duration,
+              geometry: {
+                type: 'LineString' as const,
+                coordinates: [bestIndoor.start.coordinates, bestIndoor.end.coordinates]
+              },
+              steps: [{
+                distance: bestIndoor.distance,
+                duration: bestIndoor.duration,
+                name: bestIndoor.name,
+                instruction: bestIndoor.instructions,
+                maneuverType: 'indoor',
+                isCrossing: false,
+              }],
+              isIndoor: true,
+              indoorFeatures: bestIndoor.features,
+            };
+          }
+
+          // Fallback to Mapbox API
+          const result = await fetchDirectionsRoute(
+            combo.exit.coordinates,
+            origin,
+            signal
+          );
+
+          return {
+            ...result,
+            isIndoor: false,
+          };
+        })
+      );
 
       // Check if aborted while awaiting
       if (signal.aborted) return;
 
-      const matrix =
-        matrixResult.status === 'fulfilled' ? matrixResult.value : null;
+      // Group results by station and pick best exit per station
+      const stationBestExits: Map<string, {
+        exit: typeof stations[0]['exits'][0];
+        route: any;
+        station: typeof stations[0];
+      }> = new Map();
 
-      const routes: WalkingRouteData[] = stations.map((station, i) => {
-        const dirResult =
-          directionsResults[i]?.status === 'fulfilled'
-            ? directionsResults[i].value
-            : null;
+      allExitCombos.forEach((combo, index) => {
+        const dirResult = directionsResults[index];
+        if (dirResult.status !== 'fulfilled' || !dirResult.value.success) return;
 
-        const distance =
-          matrix?.success && matrix.distances[i] != null
-            ? matrix.distances[i]
-            : dirResult?.success
-              ? dirResult.distance
-              : 0;
+        const route = dirResult.value;
+        const existing = stationBestExits.get(combo.station.name);
 
-        const duration =
-          matrix?.success && matrix.durations[i] != null
-            ? matrix.durations[i]
-            : dirResult?.success
-              ? dirResult.duration
-              : 0;
+        // Prefer indoor routes (boost priority), otherwise use shortest time
+        const routeScore = route.isIndoor
+          ? route.duration * 0.7  // 30% bonus for indoor routes
+          : route.duration;
 
-        const geometry =
-          dirResult?.success && dirResult.geometry.coordinates.length > 0
-            ? dirResult.geometry
-            : null;
+        const existingScore = existing
+          ? (existing.route.isIndoor ? existing.route.duration * 0.7 : existing.route.duration)
+          : Infinity;
 
-        const routeId = `walking-route-${i}`;
-        const steps = dirResult?.success ? dirResult.steps : [];
+        // Keep the exit with best score (shortest time, with indoor bonus)
+        if (routeScore < existingScore) {
+          stationBestExits.set(combo.station.name, {
+            exit: combo.exit,
+            route,
+            station: combo.station
+          });
+        }
+      });
+
+      // Build final route data with exit information
+      const routes: WalkingRouteData[] = Array.from(stationBestExits.values()).map((best, i) => {
+        const isIndoor = best.route.isIndoor || false;
+        const indoorPercentage = isIndoor ? 100 : 0; // Simplified - either fully indoor or outdoor
 
         return {
-          stationName: station.name,
-          coordinates: station.coordinates,
-          lines: station.lines,
-          distance,
-          duration,
-          formattedDistance: distance > 0 ? formatDistance(distance) : '',
-          formattedDuration: duration > 0 ? formatDuration(duration) : '',
-          geometry,
-          steps,
-          routeId,
+          stationName: best.station.name,
+          exitName: best.exit.exitName,
+          exitDescription: best.exit.description,
+          coordinates: best.exit.coordinates,
+          lines: best.station.lines,
+          distance: best.route.distance,
+          duration: best.route.duration,
+          formattedDistance: formatDistance(best.route.distance),
+          formattedDuration: formatDuration(best.route.duration),
+          geometry: best.route.geometry,
+          steps: best.route.steps,
+          routeId: `walking-route-${i}`,
+          hasIndoorRoute: isIndoor,
+          indoorPercentage: indoorPercentage,
+          indoorFeatures: best.route.indoorFeatures || [],
         };
       });
 

@@ -66,6 +66,12 @@ export interface MapProps {
   artLocations?: ArtLocation[];
 }
 
+export interface StationExit {
+  exitName: string;
+  coordinates: [number, number]; // [longitude, latitude]
+  description?: string; // Optional description like "Near Central Market"
+}
+
 export type FilterType = 'all' | 'art_gallery' | 'art_museum' | 'monument';
 export type TabType = 'art_museums' | 'art_galleries' | 'art_spaces' | 'overview' | 'station_guide' | 'contact';
 export type PanelState = 'collapsed' | 'expanded';

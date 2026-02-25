@@ -187,9 +187,25 @@ function RouteDetailView({
       {/* Station Header */}
       <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex-1">
-          <h3 className="text-xl font-semibold text-ds-text-primary leading-tight mb-2">
-            {route.stationName} station
+          <h3 className="text-xl font-semibold text-ds-text-primary leading-tight mb-1">
+            {route.stationName}
           </h3>
+          <p className="text-sm font-medium text-blue-600 mb-2">{route.exitName}</p>
+          {route.exitDescription && (
+            <p className="text-xs text-gray-500 mb-2">{route.exitDescription}</p>
+          )}
+          {route.hasIndoorRoute && (
+            <div className="flex gap-2 items-center mb-2">
+              <span className="px-2 py-1 bg-green-50 text-green-700 text-xs font-medium rounded flex items-center gap-1">
+                🏢 {route.indoorPercentage}% Indoor Route
+              </span>
+              {route.indoorFeatures && route.indoorFeatures.includes('air-conditioned') && (
+                <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded">
+                  ❄️ Air-conditioned
+                </span>
+              )}
+            </div>
+          )}
           <div className="flex gap-2 items-center flex-wrap">
             {route.lines.map((line, j) => {
               const lineInfo = parseLineInfo(line);
@@ -543,9 +559,19 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                             className="w-2.5 h-2.5 rounded-full shrink-0"
                             style={{ backgroundColor: activeRouteId === route.routeId ? '#285ABD' : '#C9C9C9' }}
                           />
-                          <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                            {route.stationName}
-                          </p>
+                          <div>
+                            <p className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
+                              {route.stationName}
+                            </p>
+                            <div className="flex gap-2 items-center flex-wrap">
+                              <p className="text-sm font-medium text-blue-600">{route.exitName}</p>
+                              {route.hasIndoorRoute && (
+                                <span className="px-1.5 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded">
+                                  🏢 Indoor
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <div className="flex gap-1.5 items-center flex-wrap">
                           {route.lines.map((line, j) => {

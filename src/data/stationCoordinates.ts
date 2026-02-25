@@ -1,9 +1,15 @@
 // Station coordinates for KL rail network
 // Coordinates format: [longitude, latitude] to match GeoJSON standard
 
+export interface StationExit {
+  exitName: string;
+  coordinates: [number, number];
+  description?: string;
+}
+
 export interface StationData {
   name: string;
-  coordinates: [number, number];
+  exits: StationExit[]; // Changed from single coordinates to array of exits
   lines: string[];
   type: 'LRT' | 'MRT' | 'KTM' | 'Monorail';
 }
@@ -11,73 +17,165 @@ export interface StationData {
 export const stationCoordinates: Record<string, StationData> = {
   'KL Sentral': {
     name: 'KL Sentral',
-    coordinates: [101.6860, 3.1340],
+    exits: [
+      {
+        exitName: 'Exit A - Street Level',
+        coordinates: [101.6852, 3.1337],
+        description: 'Jalan Stesen Sentral, near taxi stand'
+      },
+      {
+        exitName: 'NU Sentral Mall',
+        coordinates: [101.6869, 3.1334],
+        description: 'Direct access to NU Sentral Shopping Centre'
+      },
+      {
+        exitName: 'Hilton Hotel Exit',
+        coordinates: [101.6855, 3.1348],
+        description: 'Nearest to Hilton KL and office towers'
+      }
+    ],
     lines: ['KTM', 'LRT Kelana Jaya Line', 'MRT Kajang Line', 'KLIA Transit'],
     type: 'KTM'
   },
   'Masjid Jamek LRT': {
     name: 'Masjid Jamek LRT',
-    coordinates: [101.69646, 3.14968],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.69646, 3.14968],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['LRT Ampang Line', 'LRT Sri Petaling Line', 'LRT Kelana Jaya Line'],
     type: 'LRT'
   },
   'Pasar Seni': {
     name: 'Pasar Seni',
-    coordinates: [101.69531, 3.14247],
+    exits: [
+      {
+        exitName: 'Entrance A - Jalan Sultan',
+        coordinates: [101.6947, 3.1419],
+        description: 'Central Market side (MRT/LRT shared)'
+      },
+      {
+        exitName: 'Entrance B - Jalan Sultan Mohamed',
+        coordinates: [101.6951, 3.1428],
+        description: 'Petaling Street/Chinatown side'
+      },
+      {
+        exitName: 'Entrance D - Jln Tun Tan Cheng Lock',
+        coordinates: [101.6959, 3.1425],
+        description: 'Kasturi Walk side'
+      }
+    ],
     lines: ['LRT Kelana Jaya Line', 'MRT Kajang Line'],
     type: 'LRT'
   },
   'KLCC': {
     name: 'KLCC',
-    coordinates: [101.71396, 3.15933],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.71396, 3.15933],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['LRT Kelana Jaya Line'],
     type: 'LRT'
   },
   'Persiaran KLCC': {
     name: 'Persiaran KLCC',
-    coordinates: [101.718422, 3.1573407],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.718422, 3.1573407],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['MRT Putrajaya Line'],
     type: 'MRT'
   },
   'Ampang Park': {
     name: 'Ampang Park',
-    coordinates: [101.7183, 3.1588],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.7183, 3.1588],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['LRT Kelana Jaya Line'],
     type: 'LRT'
   },
   'Brickfields': {
     name: 'Brickfields',
-    coordinates: [101.6847, 3.1329],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.6847, 3.1329],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['KTM Komuter'],
     type: 'KTM'
   },
   'Muzium Negara MRT': {
     name: 'Muzium Negara MRT',
-    coordinates: [101.6878027561305, 3.1375158655082434],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.6878027561305, 3.1375158655082434],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['MRT Kajang Line'],
     type: 'MRT'
   },
   'Bandaraya': {
     name: 'Bandaraya',
-    coordinates: [101.69442589509586, 3.1556520223802424],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.69442589509586, 3.1556520223802424],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['LRT Kelana Jaya Line'],
     type: 'LRT'
   },
   'Bukit Bintang Monorail': {
     name: 'Bukit Bintang Monorail',
-    coordinates: [101.7111, 3.1458],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.7111, 3.1458],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['KL Monorail'],
     type: 'Monorail'
   },
   'Bukit Bintang MRT': {
     name: 'Bukit Bintang MRT',
-    coordinates: [101.7100, 3.1468],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.7100, 3.1468],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['MRT Kajang Line'],
     type: 'MRT'
   },
   'Raja Chulan Monorail': {
     name: 'Raja Chulan Monorail',
-    coordinates: [101.7104, 3.1508],
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.7104, 3.1508],
+        description: 'Temporary - needs exit research'
+      }
+    ],
     lines: ['KL Monorail'],
     type: 'Monorail'
   }
@@ -124,17 +222,20 @@ function haversineMeters(a: [number, number], b: [number, number]): number {
 
 /**
  * Returns the N nearest stations to the given coordinates,
- * sorted closest-first.
+ * sorted closest-first. Distance is calculated to the nearest exit of each station.
  */
 export const getNearestStations = (
   coordinates: [number, number],
   count: number = 3
 ): StationData[] => {
   return Object.values(stationCoordinates)
-    .map(station => ({
-      station,
-      dist: haversineMeters(coordinates, station.coordinates),
-    }))
+    .map(station => {
+      // Calculate distance to the closest exit from this station
+      const minDist = Math.min(
+        ...station.exits.map(exit => haversineMeters(coordinates, exit.coordinates))
+      );
+      return { station, dist: minDist };
+    })
     .sort((a, b) => a.dist - b.dist)
     .slice(0, count)
     .map(entry => entry.station);
@@ -142,18 +243,21 @@ export const getNearestStations = (
 
 /**
  * Returns all stations within a straight-line radius (meters),
- * sorted closest-first. Used as a pre-filter before checking
- * real walking times via the Mapbox API.
+ * sorted closest-first. Distance is calculated to the nearest exit.
+ * Used as a pre-filter before checking real walking times via the Mapbox API.
  */
 export const getStationsWithinRadius = (
   coordinates: [number, number],
   radiusMeters: number = 1500
 ): StationData[] => {
   return Object.values(stationCoordinates)
-    .map(station => ({
-      station,
-      dist: haversineMeters(coordinates, station.coordinates),
-    }))
+    .map(station => {
+      // Calculate distance to the closest exit from this station
+      const minDist = Math.min(
+        ...station.exits.map(exit => haversineMeters(coordinates, exit.coordinates))
+      );
+      return { station, dist: minDist };
+    })
     .filter(entry => entry.dist <= radiusMeters)
     .sort((a, b) => a.dist - b.dist)
     .map(entry => entry.station);
