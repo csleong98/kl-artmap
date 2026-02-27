@@ -1,7 +1,7 @@
 # KL Art Map - Claude Development Notes
 
 ## Project Overview
-A Next.js 14 application for discovering street art in Kuala Lumpur, featuring an interactive map powered by MapLibre GL JS and Maptiler tiles.
+A Next.js 14 application for discovering street art in Kuala Lumpur, featuring an interactive map powered by Mapbox GL JS.
 
 ## Communication Style with the user
 - **ALWAYS** suggest the way first and confirm with the user before acting on the decision
@@ -13,7 +13,7 @@ A Next.js 14 application for discovering street art in Kuala Lumpur, featuring a
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Components**: shadcn/ui
-- **Mapping**: MapLibre GL JS + Maptiler API
+- **Mapping**: Mapbox GL JS (v3.18.1)
 - **Package Manager**: npm
 
 ## Development Guidelines
@@ -24,9 +24,9 @@ A Next.js 14 application for discovering street art in Kuala Lumpur, featuring a
 
 ## Key Files
 - `src/app/page.tsx` - Main page with fullscreen map and floating panel
-- `src/components/ui/map.tsx` - MapLibre GL JS map component
-- `.env.local` - Contains Maptiler API key
-- `next.config.mjs` - Next.js configuration with MapLibre transpilation
+- `src/components/ui/map.tsx` - Mapbox GL JS map component with geolocation
+- `.env.local` - Contains Mapbox access token
+- `next.config.mjs` - Next.js configuration
 
 ## Development Commands
 ```bash
@@ -45,7 +45,7 @@ npm run lint
 
 ## Environment Variables
 ```bash
-NEXT_PUBLIC_MAPTILER_API_KEY=your_maptiler_api_key_here
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_access_token_here
 ```
 
 ## Project Structure
@@ -57,7 +57,9 @@ src/
 │   └── page.tsx          # Main fullscreen map page
 ├── components/
 │   └── ui/
-│       └── map.tsx       # MapLibre GL JS component
+│       └── map.tsx       # Mapbox GL JS component
+├── services/
+│   └── mapService.ts     # Map markers and location services
 └── types/
     └── index.ts          # TypeScript interfaces
 ```
@@ -65,8 +67,12 @@ src/
 ## Map Configuration
 - **Center**: Kuala Lumpur coordinates (101.6869, 3.1390)
 - **Zoom**: 11
-- **Style**: Maptiler Streets v2
-- **Features**: Navigation controls, dynamic loading for SSR compatibility
+- **Style**: `mapbox://styles/mapbox/streets-v12`
+- **Features**:
+  - Navigation controls (zoom, compass)
+  - Geolocation control (tracks user position)
+  - Coordinate display popup (click to copy coordinates)
+  - Dynamic loading for SSR compatibility
 
 ## UI Layout
 - **Fullscreen map**: Takes entire viewport
@@ -74,13 +80,15 @@ src/
 - **Responsive**: Panel adjusts on different screen sizes
 
 ## Known Issues & Solutions
-- **MapLibre SSR Issues**: Resolved with dynamic imports and `ssr: false`
+- **Mapbox GL JS SSR Issues**: Resolved with dynamic imports and `ssr: false`
 - **Dependency Conflicts**: Fixed with clean reinstall of node_modules
-- **Build Errors**: Transpiling maplibre-gl in next.config.mjs
+- **CSS Loading**: Mapbox GL CSS loaded dynamically in component
 
 ## Development Notes
 - Map component uses dynamic loading to prevent SSR issues
-- Maptiler API key is required for map tiles
+- Mapbox access token is required for map tiles
+- Geolocation control provides real-time user position tracking
+- Coordinate popup allows easy copying of lat/lng values
 - Clean dependency reinstall resolved initial compilation issues
 
 ## Claude Development Behavior
