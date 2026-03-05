@@ -63,7 +63,31 @@ export const mockLocations: Location[] = [
     address: '8, Jalan Scott, Brickfields, 50470 Kuala Lumpur',
     imageUrl: '/images/wei-ling-gallery.jpg',
     nearestStations:['Bandaraya LRT'],
-    admission: 'free'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Showcases Malaysia\'s economic and financial history through interactive exhibits, art collections, and educational displays.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '10am - 6pm',
+          wednesday: '10am - 6pm',
+          thursday: '10am - 6pm',
+          friday: '10am - 6pm',
+          saturday: '10am - 6pm',
+          sunday: 'Closed'
+        },
+        specialNote: 'Closed on public holidays'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: '2, Jalan Dato Onn, Kuala Lumpur, 50480 Kuala Lumpur',
+        website: 'https://www.bnm.gov.my/museum',
+        phone: '03-2698 8044'
+      }
+    }
   },
   {
     name: 'Ilham Gallery',
@@ -76,7 +100,31 @@ export const mockLocations: Location[] = [
     address: 'Kuala Lumpur City Centre, 50088 Kuala Lumpur',
     imageUrl: '/images/klcc-park.jpg',
     nearestStations:['KLCC', 'Ampang Park'],
-    admission: 'free'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Contemporary art gallery focusing on modern and emerging Southeast Asian artists with rotating exhibitions.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '11am - 7pm',
+          wednesday: '11am - 7pm',
+          thursday: '11am - 7pm',
+          friday: '11am - 7pm',
+          saturday: '11am - 7pm',
+          sunday: '11am - 7pm'
+        },
+        specialNote: 'Last admission 30 minutes before closing'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Level 5, Ilham Tower, 8 Jalan Binjai, 50450 Kuala Lumpur',
+        website: 'https://www.ilhamgallery.com',
+        phone: '03-2260 7901'
+      }
+    }
   },
   {
     name: 'Galeri Petronas',
@@ -89,7 +137,30 @@ export const mockLocations: Location[] = [
     address: 'Jalan Hang Kasturi, City Centre, 50050 Kuala Lumpur',
     imageUrl: '/images/central-market.jpg',
     nearestStations:['Pasar Seni', 'Masjid Jamek LRT'],
-    admission: 'free'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Premier art gallery showcasing Malaysian and international contemporary art, located at the iconic Petronas Twin Towers.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '10am - 8pm',
+          wednesday: '10am - 8pm',
+          thursday: '10am - 8pm',
+          friday: '10am - 8pm',
+          saturday: '10am - 8pm',
+          sunday: '10am - 8pm'
+        }
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Petronas Tower 3, KLCC, 50088 Kuala Lumpur',
+        website: 'https://www.galeripetronas.com.my',
+        phone: '03-2051 7770'
+      }
+    }
   },
   {
     name: 'Islamic Arts Museum Malaysia',
@@ -103,7 +174,31 @@ export const mockLocations: Location[] = [
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
-    admission: 'paid'
+    admission: 'paid',
+    details: {
+      overview: {
+        description: 'Southeast Asia\'s largest museum of Islamic arts, featuring over 7,000 artifacts from the Islamic world.',
+        admission: 'RM20 (Adults), RM10 (Students/Seniors)',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '10am - 6pm',
+          wednesday: '10am - 6pm',
+          thursday: '10am - 6pm',
+          friday: '10am - 6pm',
+          saturday: '10am - 6pm',
+          sunday: '10am - 6pm'
+        },
+        specialNote: 'Closed on first day of Hari Raya Aidilfitri and Hari Raya Aidiladha'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
+        website: 'https://www.iammuseum.org.my',
+        phone: '03-2274 2020'
+      }
+    }
   },
   {
     name: 'National Textile Museum',
@@ -117,11 +212,35 @@ export const mockLocations: Location[] = [
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
-    admission: 'paid'
+    admission: 'paid',
+    details: {
+      overview: {
+        description: 'Dedicated to preserving Malaysia\'s rich textile heritage, featuring traditional batik, songket, and weaving collections.',
+        admission: 'RM5 (Adults), RM2 (Children)',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '9am - 6pm',
+          wednesday: '9am - 6pm',
+          thursday: '9am - 6pm',
+          friday: '9am - 6pm',
+          saturday: '9am - 6pm',
+          sunday: '9am - 6pm'
+        },
+        specialNote: 'Closed on first day of Hari Raya Aidilfitri'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: '26, Jalan Sultan Hishamuddin, 50050 Kuala Lumpur',
+        website: 'https://www.muziumtekstilnegara.gov.my',
+        phone: '03-2694 3457'
+      }
+    }
   },
   {
     name: 'Sultan Abdul Samad Building',
-    type: 'art_museum',
+    type: 'monument',
     distance:'3km',
     walkTime:'35mins',
     openingHours: 'Reopens at 10am tomorrow',
@@ -131,7 +250,30 @@ export const mockLocations: Location[] = [
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
-    admission: 'paid'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Historic landmark and iconic Moorish architecture building, formerly housed colonial administrative offices.',
+        admission: 'Free (exterior viewing only)',
+        openingHours: {
+          monday: 'Open 24 hours',
+          tuesday: 'Open 24 hours',
+          wednesday: 'Open 24 hours',
+          thursday: 'Open 24 hours',
+          friday: 'Open 24 hours',
+          saturday: 'Open 24 hours',
+          sunday: 'Open 24 hours'
+        },
+        specialNote: 'Interior closed to public, exterior viewable anytime'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Jln Raja, Kuala Lumpur City Centre, 50050 Kuala Lumpur',
+        website: 'https://www.palangnegara.gov.my'
+      }
+    }
   },
   {
     name: 'Telekom Museum',
@@ -145,7 +287,31 @@ export const mockLocations: Location[] = [
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
     imageUrl: '/images/islamic-arts-museum.jpg',
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
-    admission: 'paid'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Traces the evolution of telecommunications in Malaysia from telegraphs to modern mobile networks.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '9am - 5pm',
+          wednesday: '9am - 5pm',
+          thursday: '9am - 5pm',
+          friday: 'Closed',
+          saturday: '9am - 5pm',
+          sunday: '9am - 5pm'
+        },
+        specialNote: 'Closed on public holidays'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Jalan Raja Chulan, 50200 Kuala Lumpur',
+        website: 'https://www.tm.com.my/museum',
+        phone: '03-2031 9966'
+      }
+    }
   },
   {
     name: 'UR-MU Bukit Bintang',
@@ -157,7 +323,31 @@ export const mockLocations: Location[] = [
     coordinates: [101.7117, 3.1462],
     address: '3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur',
     nearestStations:['Bukit Bintang MRT', 'Bukit Bintang Monorail'],
-    admission: 'paid'
+    admission: 'paid',
+    details: {
+      overview: {
+        description: 'Interactive digital art museum featuring immersive installations and futuristic exhibits perfect for social media.',
+        admission: 'RM49 (Adults), RM39 (Children)',
+        openingHours: {
+          monday: '10am - 10pm',
+          tuesday: '10am - 10pm',
+          wednesday: '10am - 10pm',
+          thursday: '10am - 10pm',
+          friday: '10am - 10pm',
+          saturday: '10am - 10pm',
+          sunday: '10am - 10pm'
+        },
+        specialNote: 'Last entry at 9:30pm'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Lot 10 Shopping Centre, 50 Jalan Sultan Ismail, 50250 Kuala Lumpur',
+        website: 'https://www.ur-mu.com',
+        phone: '03-2181 3399'
+      }
+    }
   },
   {
     name: 'UR-MU The Toffee',
@@ -169,7 +359,31 @@ export const mockLocations: Location[] = [
     coordinates: [101.7078, 3.1515],
     address: '2, Jalan Raja Chulan, City Centre, 50100 Kuala Lumpur',
     nearestStations:['Raja Chulan Monorail'],
-    admission: 'paid'
+    admission: 'paid',
+    details: {
+      overview: {
+        description: 'Modern immersive art space featuring interactive light installations and projection mapping experiences.',
+        admission: 'RM49 (Adults), RM39 (Children)',
+        openingHours: {
+          monday: '10am - 10pm',
+          tuesday: '10am - 10pm',
+          wednesday: '10am - 10pm',
+          thursday: '10am - 10pm',
+          friday: '10am - 10pm',
+          saturday: '10am - 10pm',
+          sunday: '10am - 10pm'
+        },
+        specialNote: 'Last entry at 9:30pm'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'The Toffee, 2 Jalan Raja Chulan, 50200 Kuala Lumpur',
+        website: 'https://www.ur-mu.com',
+        phone: '03-2181 3399'
+      }
+    }
   },
   {
     name: 'UR-MU Tun H.S. Lee',
@@ -181,7 +395,31 @@ export const mockLocations: Location[] = [
     coordinates: [101.6967, 3.1453],
     address: '131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur',
     nearestStations:['Pasar Seni LRT', 'Pasar Seni MRT'],
-    admission: 'paid'
+    admission: 'paid',
+    details: {
+      overview: {
+        description: 'Digital art museum in the heart of Chinatown, blending traditional heritage with modern technology.',
+        admission: 'RM49 (Adults), RM39 (Children)',
+        openingHours: {
+          monday: '10am - 10pm',
+          tuesday: '10am - 10pm',
+          wednesday: '10am - 10pm',
+          thursday: '10am - 10pm',
+          friday: '10am - 10pm',
+          saturday: '10am - 10pm',
+          sunday: '10am - 10pm'
+        },
+        specialNote: 'Last entry at 9:30pm'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: '131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur',
+        website: 'https://www.ur-mu.com',
+        phone: '03-2181 3399'
+      }
+    }
   },
   {
     name: 'Kwai Chai Hong',
@@ -193,6 +431,29 @@ export const mockLocations: Location[] = [
     coordinates: [101.6968, 3.1440],
     address: 'Lorong Panggung, 50000 Kuala Lumpur',
     nearestStations:['Pasar Seni LRT', 'Pasar Seni MRT'],
-    admission: 'free'
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'Historic alleyway transformed with vibrant murals depicting old Kuala Lumpur stories and local culture.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Open 24 hours',
+          tuesday: 'Open 24 hours',
+          wednesday: 'Open 24 hours',
+          thursday: 'Open 24 hours',
+          friday: 'Open 24 hours',
+          saturday: 'Open 24 hours',
+          sunday: 'Open 24 hours'
+        },
+        specialNote: 'Best visited during daylight hours for photography'
+      },
+      stationGuide: {
+        stations: []
+      },
+      contact: {
+        address: 'Lorong Panggung, 50000 Kuala Lumpur',
+        website: 'https://www.visitkl.gov.my/visitklv2/kwai-chai-hong'
+      }
+    }
   }
 ];

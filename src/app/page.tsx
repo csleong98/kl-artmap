@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { Drawer } from 'vaul';
 import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
@@ -15,8 +16,20 @@ function HomeContent() {
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
+  const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
-  const { routeData, isLoading: routesLoading, activeRouteId, fetchRoutes, clearRoutes, switchActiveRoute, getStationRouteInfo } = useWalkingRoutes();
+  const { routeData, isLoading: routesLoading, fetchRoutes, clearRoutes, getStationRouteInfo } = useWalkingRoutes();
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Refs for restoring state from URL on map load
   const initialLocationRef = useRef<Location | null>(null);
@@ -66,7 +79,7 @@ function HomeContent() {
         duration: 1500,
       });
       if (tab === 'station-guide') {
-        fetchRoutes(loc, map);
+        fetchRoutes(loc);
       }
       // Clear refs so this only runs once
       initialLocationRef.current = null;
@@ -75,8 +88,8 @@ function HomeContent() {
   }, [fetchRoutes]);
 
   const handleLocationSelect = useCallback((location: Location) => {
-    // Clean up any existing routes/markers from a previous selection
-    clearRoutes(mapRef.current);
+    // Clean up any existing routes from a previous selection
+    clearRoutes();
 
     setSelectedLocation(location);
     setInitialTab('about');
@@ -93,25 +106,19 @@ function HomeContent() {
   }, [updateUrl, clearRoutes]);
 
   const handleTabChange = useCallback((tab: string) => {
-    if (!selectedLocation || !mapRef.current) return;
+    if (!selectedLocation) return;
 
     updateUrl(selectedLocation.name, tab);
 
     if (tab === 'station-guide') {
-      fetchRoutes(selectedLocation, mapRef.current);
+      fetchRoutes(selectedLocation);
     } else {
-      clearRoutes(mapRef.current);
+      clearRoutes();
     }
   }, [selectedLocation, fetchRoutes, clearRoutes, updateUrl]);
 
-  const handleRouteSelect = useCallback((routeId: string) => {
-    if (mapRef.current && selectedLocation) {
-      switchActiveRoute(routeId, mapRef.current, selectedLocation.coordinates);
-    }
-  }, [selectedLocation, switchActiveRoute]);
-
   const handleBack = useCallback(() => {
-    clearRoutes(mapRef.current);
+    clearRoutes();
     unmuteAllMarkers();
     setSelectedLocation(null);
     setInitialTab(undefined);
@@ -119,28 +126,88 @@ function HomeContent() {
   }, [clearRoutes, updateUrl]);
 
   return (
-    <div className="grid grid-cols-12 gap-grid-gutter h-screen pl-grid-margin">
-      {/* Side Panel - 4 columns */}
-      <aside className="col-span-4 overflow-y-auto">
-        <SidePanel
-          selectedLocation={selectedLocation}
-          onLocationSelect={handleLocationSelect}
-          onBack={handleBack}
-          routeData={routeData}
-          routesLoading={routesLoading}
-          getStationRouteInfo={getStationRouteInfo}
-          onRouteSelect={handleRouteSelect}
-          onTabChange={handleTabChange}
-          initialTab={initialTab}
-          activeRouteId={activeRouteId}
-        />
-      </aside>
+    <>
+      {/* Desktop Layout - Grid */}
+      <div className="hidden md:grid grid-cols-12 gap-grid-gutter h-screen pl-grid-margin">
+        {/* Side Panel - 4 columns */}
+        <aside className="col-span-4 overflow-y-auto">
+          <SidePanel
+            selectedLocation={selectedLocation}
+            onLocationSelect={handleLocationSelect}
+            onBack={handleBack}
+            routeData={routeData}
+            routesLoading={routesLoading}
+            getStationRouteInfo={getStationRouteInfo}
+            onTabChange={handleTabChange}
+            initialTab={initialTab}
+          />
+        </aside>
 
-      {/* Map - 8 columns */}
-      <main className="col-span-8">
-        <Map className="w-full h-full" onMapLoad={handleMapLoad} />
-      </main>
-    </div>
+        {/* Map - 8 columns */}
+        <main className="col-span-8">
+          <Map className="w-full h-full" onMapLoad={handleMapLoad} />
+        </main>
+      </div>
+
+      {/* Mobile Layout - Fullscreen map + Drawer */}
+      {isMobile && (
+        <div className="md:hidden h-screen relative">
+          {/* Fullscreen Map */}
+          <Map className="w-full h-full" onMapLoad={handleMapLoad} />
+
+          {/* List View Drawer (always visible on mobile) */}
+          <Drawer.Root modal={false} open={true}>
+            <Drawer.Portal>
+              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[40vh] fixed bottom-0 left-0 right-0 shadow-xl">
+                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
+                <div className="flex-1 overflow-y-auto px-4">
+                  <SidePanel
+                    selectedLocation={selectedLocation}
+                    onLocationSelect={handleLocationSelect}
+                    onBack={handleBack}
+                    routeData={routeData}
+                    routesLoading={routesLoading}
+                    getStationRouteInfo={getStationRouteInfo}
+                    onTabChange={handleTabChange}
+                    initialTab={initialTab}
+                  />
+                </div>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
+
+          {/* Detail View Drawer (opens when location selected) */}
+          <Drawer.Root
+            open={selectedLocation !== null}
+            onOpenChange={(open) => {
+              if (!open) handleBack();
+            }}
+            dismissible={true}
+          >
+            <Drawer.Portal>
+              <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
+              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[90vh] mt-[10vh] fixed bottom-0 left-0 right-0 z-50">
+                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
+                <div className="flex-1 overflow-y-auto">
+                  {selectedLocation && (
+                    <SidePanel
+                      selectedLocation={selectedLocation}
+                      onLocationSelect={handleLocationSelect}
+                      onBack={handleBack}
+                      routeData={routeData}
+                      routesLoading={routesLoading}
+                      getStationRouteInfo={getStationRouteInfo}
+                      onTabChange={handleTabChange}
+                      initialTab={initialTab}
+                    />
+                  )}
+                </div>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
+        </div>
+      )}
+    </>
   );
 }
 
