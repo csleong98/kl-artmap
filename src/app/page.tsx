@@ -186,9 +186,9 @@ function HomeContent() {
           >
             <Drawer.Portal>
               <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[90vh] mt-[10vh] fixed bottom-0 left-0 right-0 z-50">
+              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[85vh] fixed bottom-0 left-0 right-0 z-50">
                 <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto px-6">
                   {selectedLocation && (
                     <SidePanel
                       selectedLocation={selectedLocation}
