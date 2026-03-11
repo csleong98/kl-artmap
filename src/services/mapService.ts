@@ -8,19 +8,40 @@ let activeMarkerState: {
   marker: any | null;
   defaultElement: HTMLElement | null;
   location: any | null;
+  label: HTMLElement | null;
 } = {
   marker: null,
   defaultElement: null,
-  location: null
+  location: null,
+  label: null
 };
+
+/**
+ * Get icon SVG path based on location type
+ * Using Lucide icon paths
+ */
+function getIconPath(locationType?: string, color: string = 'currentColor'): string {
+  // Replace currentColor with actual color
+  const paths = {
+    art_museum: '<path d="M3 21h18M6 21V7m12 14V7m-6 14V3m-1 0l-2 2m3-2l2 2M4 7h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+    art_gallery: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M6 12h12M2 22h20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M10 6v0M14 6v0M10 10v0M14 10v0M10 14v0M14 14v0M10 18v0M14 18v0" stroke-width="2.5" stroke-linecap="round"/>',
+    monument: '<path d="M2 22h20M4 22V10M20 22V10M7 22V7M17 22V7M4 10h16M7 7V4M17 7V4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="7" cy="4" r="1"/><circle cx="17" cy="4" r="1"/>',
+    street_art: '<rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="9" cy="9" r="2" stroke-width="2" fill="none"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+    default: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M6 12h12M2 22h20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M10 6v0M14 6v0M10 10v0M14 10v0M10 14v0M14 14v0M10 18v0M14 18v0" stroke-width="2.5" stroke-linecap="round"/>'
+  };
+
+  const selectedPath = paths[locationType as keyof typeof paths] || paths.default;
+  return selectedPath.replace(/stroke-width/g, `stroke="${color}" stroke-width`).replace(/fill="none"/g, `fill="none"`);
+}
 
 /**
  * Creates a simple circular pin marker (default state)
  * @param fillColor - The fill color of the circle
  * @param markerId - Optional ID for linking markers to list items
+ * @param locationType - Type of location for icon selection
  * @returns HTMLDivElement containing the SVG circle
  */
-function createDefaultPinElement(fillColor: string, markerId?: string): HTMLDivElement {
+function createDefaultPinElement(fillColor: string, markerId?: string, locationType?: string): HTMLDivElement {
   const el = document.createElement('div');
   el.style.width = '50px';
   el.style.height = '54px';
@@ -29,9 +50,10 @@ function createDefaultPinElement(fillColor: string, markerId?: string): HTMLDivE
   if (markerId) {
     el.setAttribute('data-marker-id', markerId);
     el.setAttribute('data-marker-color', fillColor);
+    el.setAttribute('data-location-type', locationType || '');
   }
 
-  el.innerHTML = getDefaultPinSVG(fillColor);
+  el.innerHTML = getDefaultPinSVG(fillColor, locationType);
 
   // Hover animation - scale the SVG inside, not the container
   const svg = el.querySelector('svg')!;
@@ -54,6 +76,59 @@ function adjustBrightness(color: string, amount: number): string {
   const g = Math.max(0, Math.min(255, parseInt(hex.slice(2, 4), 16) + amount));
   const b = Math.max(0, Math.min(255, parseInt(hex.slice(4, 6), 16) + amount));
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
+
+/**
+ * Creates a label element for the active pin
+ */
+function createLabelElement(location: any): HTMLDivElement {
+  const label = document.createElement('div');
+  label.className = 'pin-label';
+  label.style.cssText = `
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow:
+      -1px -1px 0 rgba(0,0,0,0.8),
+      1px -1px 0 rgba(0,0,0,0.8),
+      -1px 1px 0 rgba(0,0,0,0.8),
+      1px 1px 0 rgba(0,0,0,0.8),
+      0 0 4px rgba(0,0,0,0.6),
+      0 2px 8px rgba(0,0,0,0.4);
+    animation: labelFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+  `;
+
+  label.textContent = location.name;
+
+  // Add animation keyframes
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes labelFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+  `;
+  if (!document.head.querySelector('style[data-label-animation]')) {
+    style.setAttribute('data-label-animation', 'true');
+    document.head.appendChild(style);
+  }
+
+  return label;
 }
 
 /**
@@ -102,7 +177,7 @@ export function unmuteAllMarkers(): void {
  * Gets the default pin SVG content
  * Anchor point is at bottom center (25, 50)
  */
-function getDefaultPinSVG(fillColor: string): string {
+function getDefaultPinSVG(fillColor: string, locationType?: string): string {
   const gradientId = `circle-gradient-${Date.now()}`;
   const shineId = `shine-${Date.now()}`;
   const shadowId = `shadow-${Date.now()}`;
@@ -143,8 +218,10 @@ function getDefaultPinSVG(fillColor: string): string {
       <!-- Shine/highlight -->
       <ellipse cx="21" cy="20" rx="8" ry="9" fill="url(#${shineId})"/>
 
-      <!-- Inner icon circle -->
-      <circle cx="25" cy="25" r="5" fill="rgba(0,0,0,0.4)"/>
+      <!-- Icon from Lucide - centered at (25, 25) with 12px size -->
+      <g transform="translate(19, 19) scale(0.5)" stroke="rgba(0,0,0,0.5)" fill="rgba(0,0,0,0.5)">
+        ${getIconPath(locationType, 'rgba(0,0,0,0.5)')}
+      </g>
 
       <!-- Anchor dot at bottom with space for full circle -->
       <circle cx="25" cy="51" r="3" fill="${fillColor}" opacity="0.3"/>
@@ -157,7 +234,7 @@ function getDefaultPinSVG(fillColor: string): string {
  * Gets the active pin SVG content
  * Anchor point is at bottom center (30, 80)
  */
-function getActivePinSVG(location: any, fillColor: string): string {
+function getActivePinSVG(location: any, fillColor: string, locationType?: string): string {
   const clipId = `pin-clip-${Date.now()}`;
   const badgeGradientId = `badge-gradient-${Date.now()}`;
   const shineId = `shine-active-${Date.now()}`;
@@ -211,10 +288,15 @@ function getActivePinSVG(location: any, fillColor: string): string {
       <!-- White background for image/icon -->
       <circle cx="30" cy="30" r="21" fill="white" opacity="0.97"/>
 
-      <!-- Content: Image or icon -->
-      ${location.imageUrl
-        ? `<image href="${location.imageUrl}" x="10" y="10" width="40" height="40" clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"/>`
-        : `<circle cx="30" cy="30" r="7" fill="${fillColor}" opacity="0.7"/>`
+      <!-- Content: Icon as fallback background -->
+      <g transform="translate(21, 21) scale(0.75)" stroke="${fillColor}" fill="${fillColor}" opacity="0.7">
+        ${getIconPath(locationType, fillColor)}
+      </g>
+
+      <!-- Image overlay (if exists and loads successfully, will show over icon) -->
+      ${location.imageUrl && !location.imageUrl.startsWith('/images/')
+        ? `<image href="${location.imageUrl}" x="10" y="10" width="40" height="40" clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice" opacity="0" onload="this.setAttribute('opacity', '1')"/>`
+        : ''
       }
 
       <!-- Inner border for content -->
@@ -263,9 +345,10 @@ function activateMarker(_map: any, marker: any, location: any): void {
   // Get the marker element and swap its content
   const element = marker.getElement();
   const fillColor = element.getAttribute('data-marker-color') || '#E53E3E';
+  const locationType = element.getAttribute('data-location-type') || undefined;
 
   // Swap to active pin SVG
-  element.innerHTML = getActivePinSVG(location, fillColor);
+  element.innerHTML = getActivePinSVG(location, fillColor, locationType);
 
   // Update size for active state
   element.style.width = '60px';
@@ -275,6 +358,11 @@ function activateMarker(_map: any, marker: any, location: any): void {
   const svg = element.querySelector('svg')!;
   element.onmouseenter = () => { svg.style.transform = 'scale(1.1)'; };
   element.onmouseleave = () => { svg.style.transform = 'scale(1)'; };
+
+  // Create and add label
+  const labelElement = createLabelElement(location);
+  element.appendChild(labelElement);
+  activeMarkerState.label = labelElement;
 }
 
 /**
@@ -288,9 +376,10 @@ function deactivateMarker(): void {
   // Get the marker element
   const element = activeMarkerState.marker.getElement();
   const fillColor = element.getAttribute('data-marker-color') || '#E53E3E';
+  const locationType = element.getAttribute('data-location-type') || undefined;
 
   // Swap back to default pin SVG
-  element.innerHTML = getDefaultPinSVG(fillColor);
+  element.innerHTML = getDefaultPinSVG(fillColor, locationType);
 
   // Restore default size
   element.style.width = '50px';
@@ -301,11 +390,17 @@ function deactivateMarker(): void {
   element.onmouseenter = () => { svg.style.transform = 'scale(1.15)'; };
   element.onmouseleave = () => { svg.style.transform = 'scale(1)'; };
 
+  // Remove label if exists
+  if (activeMarkerState.label) {
+    activeMarkerState.label.remove();
+  }
+
   // Clear state
   activeMarkerState = {
     marker: null,
     defaultElement: null,
-    location: null
+    location: null,
+    label: null
   };
 }
 
@@ -326,7 +421,7 @@ export async function addAllMarkers(map: any): Promise<any[]> {
 
     // Add all venues with default circular pins
     mockLocations.forEach((location: any) => {
-      const el = createDefaultPinElement('#E53E3E', location.name);
+      const el = createDefaultPinElement('#E53E3E', location.name, location.type);
       const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);
