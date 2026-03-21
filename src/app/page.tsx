@@ -127,10 +127,17 @@ function HomeContent() {
 
   return (
     <>
-      {/* Desktop Layout - Grid */}
-      <div className="hidden md:grid grid-cols-12 gap-grid-gutter h-screen pl-grid-margin">
-        {/* Side Panel - 4 columns */}
-        <aside className="col-span-4 overflow-y-auto">
+      {/* Desktop Layout - Fullscreen Map with Floating Panel */}
+      <div className="hidden md:block relative h-screen">
+        {/* Fullscreen Map */}
+        <Map
+          className="w-full h-full"
+          onMapLoad={handleMapLoad}
+          mapPadding={{ left: 432, top: 16, right: 16, bottom: 16 }}
+        />
+
+        {/* Floating Side Panel */}
+        <aside className="absolute left-4 top-4 bottom-4 w-[400px] bg-white rounded-2xl shadow-lg overflow-y-auto z-10 p-4">
           <SidePanel
             selectedLocation={selectedLocation}
             onLocationSelect={handleLocationSelect}
@@ -142,11 +149,6 @@ function HomeContent() {
             initialTab={initialTab}
           />
         </aside>
-
-        {/* Map - 8 columns */}
-        <main className="col-span-8">
-          <Map className="w-full h-full" onMapLoad={handleMapLoad} />
-        </main>
       </div>
 
       {/* Mobile Layout - Fullscreen map + Drawer */}

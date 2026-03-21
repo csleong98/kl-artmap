@@ -6,9 +6,10 @@ import dynamic from 'next/dynamic';
 interface MapProps {
   className?: string;
   onMapLoad?: (map: any) => void;
+  mapPadding?: { left?: number; top?: number; right?: number; bottom?: number };
 }
 
-function MapComponent({ className, onMapLoad }: MapProps) {
+function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +46,11 @@ function MapComponent({ className, onMapLoad }: MapProps) {
 
         mapInstance.on('load', () => {
           setMapLoaded(true);
+
+          // Apply padding if provided
+          if (mapPadding) {
+            mapInstance.setPadding(mapPadding);
+          }
 
           // Add all location markers
           import('../../services/mapService').then(({ addAllMarkers }) => {

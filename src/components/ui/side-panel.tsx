@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter } from 'lucide-react';
+import { Search, ListFilter, LayoutGrid, List } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
@@ -21,6 +21,7 @@ interface SidePanelProps {
 
 export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   const filteredLocations = useMemo(() => {
     if (!searchQuery.trim()) return mockLocations;
@@ -56,7 +57,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
   // List view
   return (
-    <div className="flex flex-col pt-10">
+    <div className="flex flex-col">
       {/* Title + subtitle */}
       <div className="flex flex-col gap-4">
         <h1 className="text-[40px] font-semibold leading-[1.15] text-ds-text-primary">
@@ -84,31 +85,109 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
         </button>
       </div>
 
+      {/* View toggle */}
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-ds-text-secondary">
+          {filteredLocations.length} {filteredLocations.length === 1 ? 'location' : 'locations'}
+        </span>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode('list')}
+            className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors"
+          >
+            <List className="w-5 h-5 text-ds-text-primary" />
+          </button>
+          <button
+            onClick={() => setViewMode('grid')}
+            className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors"
+          >
+            <LayoutGrid className="w-5 h-5 text-ds-text-primary" />
+          </button>
+        </div>
+      </div>
+
       {/* Location list */}
-      <ul className="flex flex-col">
-        {filteredLocations.length === 0 ? (
-          <li className="py-6 text-sm text-ds-text-muted">No locations found</li>
-        ) : (
-          filteredLocations.map((location) => (
-            <li
-              key={location.name}
-              className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => onLocationSelect(location)}
-              onMouseEnter={() => handleLocationHover(location.name, true)}
-              onMouseLeave={() => handleLocationHover(location.name, false)}
-            >
-              <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                {location.name}
-              </h2>
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
-                  <span className="truncate">{location.address}</span>
+      {viewMode === 'list' ? (
+        <ul className="flex flex-col">
+          {filteredLocations.length === 0 ? (
+            <li className="py-6 text-sm text-ds-text-muted">No locations found</li>
+          ) : (
+            filteredLocations.map((location) => (
+              <li
+                key={location.name}
+                className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
+                onClick={() => onLocationSelect(location)}
+                onMouseEnter={() => handleLocationHover(location.name, true)}
+                onMouseLeave={() => handleLocationHover(location.name, false)}
+              >
+                <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
+                  {location.name}
+                </h2>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
+                    <span className="truncate">{location.address}</span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+              </li>
+            ))
+          )}
+        </ul>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 mt-6">
+          {filteredLocations.length === 0 ? (
+            <div className="col-span-2 py-6 text-sm text-ds-text-muted">No locations found</div>
+          ) : (
+            filteredLocations.map((location) => {
+              const typeLabel = location.type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+              return (
+                <div
+                  key={location.name}
+                  className="flex flex-col gap-3 p-3 border border-ds-border rounded-lg cursor-pointer hover:shadow-md transition-shadow bg-white"
+                  onClick={() => onLocationSelect(location)}
+                  onMouseEnter={() => handleLocationHover(location.name, true)}
+                  onMouseLeave={() => handleLocationHover(location.name, false)}
+                >
+                  {/* Image */}
+                  <div className="aspect-square w-full bg-ds-surface rounded-md overflow-hidden">
+                    {location.imageUrl ? (
+                      <img
+                        src={location.imageUrl}
+                        alt={location.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-ds-text-muted">
+                        No image
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="text-base font-medium leading-tight text-ds-text-primary line-clamp-2">
+                    {location.name}
+                  </h3>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-ds-surface text-ds-text-secondary">
+                      {typeLabel}
+                    </span>
+                    {location.admission && (
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        location.admission === 'free'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
+                        {location.admission === 'free' ? 'Free' : 'Paid'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
     </div>
   );
 }
