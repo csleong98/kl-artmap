@@ -73,9 +73,9 @@ function HomeContent() {
     if (loc) {
       muteOtherMarkers(loc.name);
       map.resize();
-      // Enable 3D buildings for initial location
+      // Enable 3D buildings (only near this location) for initial location
       if (map.enable3DBuildings) {
-        map.enable3DBuildings();
+        map.enable3DBuildings(loc.coordinates);
       }
 
       // Offset camera to stand opposite the building
@@ -111,9 +111,9 @@ function HomeContent() {
     muteOtherMarkers(location.name);
     if (mapRef.current) {
       mapRef.current.resize();
-      // Enable 3D buildings and fly to eye-level view
+      // Enable 3D buildings (only near this location) and fly to eye-level view
       if (mapRef.current.enable3DBuildings) {
-        mapRef.current.enable3DBuildings();
+        mapRef.current.enable3DBuildings(location.coordinates);
       }
 
       // Offset camera to stand opposite the building

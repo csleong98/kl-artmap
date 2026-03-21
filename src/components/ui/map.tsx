@@ -9,19 +9,22 @@ interface MapProps {
   mapPadding?: { left?: number; top?: number; right?: number; bottom?: number };
 }
 
-// Helper to add 3D buildings layer
-function add3DBuildings(map: any) {
+// Helper to add 3D buildings layer with optional location filter
+function add3DBuildings(map: any, centerLocation?: [number, number]) {
   const layers = map.getStyle().layers;
   const labelLayerId = layers.find(
     (layer: any) => layer.type === 'symbol' && layer.layout?.['text-field']
   )?.id;
+
+  // For now, show all buildings - will add filtering later
+  const buildingFilter: any = ['==', 'extrude', 'true'];
 
   if (!map.getLayer('3d-buildings')) {
     map.addLayer({
       'id': '3d-buildings',
       'source': 'composite',
       'source-layer': 'building',
-      'filter': ['==', 'extrude', 'true'],
+      'filter': buildingFilter,
       'type': 'fill-extrusion',
       'minzoom': 15,
       'paint': {
@@ -47,6 +50,9 @@ function add3DBuildings(map: any) {
         'fill-extrusion-opacity': 0.6
       }
     }, labelLayerId);
+  } else {
+    // Update filter if layer exists
+    map.setFilter('3d-buildings', buildingFilter);
   }
 }
 
@@ -106,7 +112,7 @@ function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
           });
 
           // Expose 3D building controls
-          mapInstance.enable3DBuildings = () => add3DBuildings(mapInstance);
+          mapInstance.enable3DBuildings = (location?: [number, number]) => add3DBuildings(mapInstance, location);
           mapInstance.disable3DBuildings = () => remove3DBuildings(mapInstance);
 
           // Pass map instance to parent component
