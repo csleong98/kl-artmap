@@ -9,6 +9,54 @@ interface MapProps {
   mapPadding?: { left?: number; top?: number; right?: number; bottom?: number };
 }
 
+// Helper to add 3D buildings layer
+function add3DBuildings(map: any) {
+  const layers = map.getStyle().layers;
+  const labelLayerId = layers.find(
+    (layer: any) => layer.type === 'symbol' && layer.layout?.['text-field']
+  )?.id;
+
+  if (!map.getLayer('3d-buildings')) {
+    map.addLayer({
+      'id': '3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': ['==', 'extrude', 'true'],
+      'type': 'fill-extrusion',
+      'minzoom': 15,
+      'paint': {
+        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.6
+      }
+    }, labelLayerId);
+  }
+}
+
+// Helper to remove 3D buildings layer
+function remove3DBuildings(map: any) {
+  if (map.getLayer('3d-buildings')) {
+    map.removeLayer('3d-buildings');
+  }
+}
+
 function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -56,6 +104,10 @@ function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
           import('../../services/mapService').then(({ addAllMarkers }) => {
             addAllMarkers(mapInstance);
           });
+
+          // Expose 3D building controls
+          mapInstance.enable3DBuildings = () => add3DBuildings(mapInstance);
+          mapInstance.disable3DBuildings = () => remove3DBuildings(mapInstance);
 
           // Pass map instance to parent component
           if (onMapLoad) {

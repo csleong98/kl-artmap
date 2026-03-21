@@ -73,9 +73,23 @@ function HomeContent() {
     if (loc) {
       muteOtherMarkers(loc.name);
       map.resize();
+      // Enable 3D buildings for initial location
+      if (map.enable3DBuildings) {
+        map.enable3DBuildings();
+      }
+
+      // Offset camera to stand opposite the building
+      const offsetDistance = 0.0001;
+      const offsetCenter: [number, number] = [
+        loc.coordinates[0],
+        loc.coordinates[1] - offsetDistance
+      ];
+
       map.flyTo({
-        center: loc.coordinates,
-        zoom: 15,
+        center: offsetCenter,
+        zoom: 18,
+        pitch: 80,
+        bearing: 0,
         duration: 1500,
       });
       if (tab === 'station-guide') {
@@ -97,10 +111,24 @@ function HomeContent() {
     muteOtherMarkers(location.name);
     if (mapRef.current) {
       mapRef.current.resize();
+      // Enable 3D buildings and fly to eye-level view
+      if (mapRef.current.enable3DBuildings) {
+        mapRef.current.enable3DBuildings();
+      }
+
+      // Offset camera to stand opposite the building
+      const offsetDistance = 0.0001; // Distance "across the street"
+      const offsetCenter: [number, number] = [
+        location.coordinates[0],
+        location.coordinates[1] - offsetDistance // Move camera south to look north at building
+      ];
+
       mapRef.current.flyTo({
-        center: location.coordinates,
-        zoom: 15,
-        duration: 1500,
+        center: offsetCenter,
+        zoom: 18,
+        pitch: 80,
+        bearing: 0, // Face north toward building
+        duration: 2000,
       });
     }
   }, [updateUrl, clearRoutes]);
@@ -123,6 +151,20 @@ function HomeContent() {
     setSelectedLocation(null);
     setInitialTab(undefined);
     updateUrl(null);
+
+    // Reset to flat 2D view and disable 3D buildings
+    if (mapRef.current) {
+      if (mapRef.current.disable3DBuildings) {
+        mapRef.current.disable3DBuildings();
+      }
+      mapRef.current.flyTo({
+        center: [101.6869, 3.1390],
+        zoom: 11,
+        pitch: 0,
+        bearing: 0,
+        duration: 1500,
+      });
+    }
   }, [clearRoutes, updateUrl]);
 
   return (
