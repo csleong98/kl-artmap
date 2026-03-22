@@ -179,17 +179,19 @@ function HomeContent() {
         />
 
         {/* Floating Side Panel */}
-        <aside className="absolute left-4 top-4 bottom-4 w-[450px] bg-white rounded-3xl shadow-lg overflow-y-auto z-10 p-4">
-          <SidePanel
-            selectedLocation={selectedLocation}
-            onLocationSelect={handleLocationSelect}
-            onBack={handleBack}
-            routeData={routeData}
-            routesLoading={routesLoading}
-            getStationRouteInfo={getStationRouteInfo}
-            onTabChange={handleTabChange}
-            initialTab={initialTab}
-          />
+        <aside className="absolute left-4 top-4 bottom-4 w-[450px] bg-white rounded-3xl shadow-lg overflow-hidden z-10">
+          <div className="h-full overflow-y-auto px-4 py-4 custom-scrollbar">
+            <SidePanel
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onBack={handleBack}
+              routeData={routeData}
+              routesLoading={routesLoading}
+              getStationRouteInfo={getStationRouteInfo}
+              onTabChange={handleTabChange}
+              initialTab={initialTab}
+            />
+          </div>
         </aside>
       </div>
 
