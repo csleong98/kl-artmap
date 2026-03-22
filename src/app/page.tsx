@@ -73,9 +73,9 @@ function HomeContent() {
     if (loc) {
       muteOtherMarkers(loc.name);
       map.resize();
-      // Enable 3D buildings (only near this location) for initial location
+      // Enable 3D buildings for initial location
       if (map.enable3DBuildings) {
-        map.enable3DBuildings(loc.coordinates);
+        map.enable3DBuildings();
       }
 
       // Offset camera to stand opposite the building
@@ -111,9 +111,9 @@ function HomeContent() {
     muteOtherMarkers(location.name);
     if (mapRef.current) {
       mapRef.current.resize();
-      // Enable 3D buildings (only near this location) and fly to eye-level view
+      // Enable 3D buildings and fly to eye-level view
       if (mapRef.current.enable3DBuildings) {
-        mapRef.current.enable3DBuildings(location.coordinates);
+        mapRef.current.enable3DBuildings();
       }
 
       // Offset camera to stand opposite the building
@@ -175,11 +175,11 @@ function HomeContent() {
         <Map
           className="w-full h-full"
           onMapLoad={handleMapLoad}
-          mapPadding={{ left: 432, top: 16, right: 16, bottom: 16 }}
+          mapPadding={{ left: 482, top: 16, right: 16, bottom: 16 }}
         />
 
         {/* Floating Side Panel */}
-        <aside className="absolute left-4 top-4 bottom-4 w-[400px] bg-white rounded-2xl shadow-lg overflow-y-auto z-10 p-4">
+        <aside className="absolute left-4 top-4 bottom-4 w-[450px] bg-white rounded-3xl shadow-lg overflow-y-auto z-10 p-4">
           <SidePanel
             selectedLocation={selectedLocation}
             onLocationSelect={handleLocationSelect}

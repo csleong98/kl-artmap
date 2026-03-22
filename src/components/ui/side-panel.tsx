@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter, LayoutGrid, List } from 'lucide-react';
+import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
+import StackedList from './stacked-list';
 
 interface SidePanelProps {
   selectedLocation: Location | null;
@@ -108,30 +109,42 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
       {/* Location list */}
       {viewMode === 'list' ? (
-        <ul className="flex flex-col">
+        <div className="flex flex-col gap-3 mt-6">
           {filteredLocations.length === 0 ? (
-            <li className="py-6 text-sm text-ds-text-muted">No locations found</li>
+            <div className="py-6 text-sm text-ds-text-muted">No locations found</div>
           ) : (
-            filteredLocations.map((location) => (
-              <li
-                key={location.name}
-                className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={() => onLocationSelect(location)}
-                onMouseEnter={() => handleLocationHover(location.name, true)}
-                onMouseLeave={() => handleLocationHover(location.name, false)}
-              >
-                <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                  {location.name}
-                </h2>
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
-                    <span className="truncate">{location.address}</span>
-                  </div>
-                </div>
-              </li>
-            ))
+            filteredLocations.map((location) => {
+              const stationCount = location.nearestStations?.length || 0;
+
+              return (
+                <StackedList
+                  key={location.name}
+                  title={location.name}
+                  subtitle={location.address}
+                  metadata={[
+                    {
+                      icon: <CircleDot className="w-3.5 h-3.5" />,
+                      label: location.status === 'open' ? 'Open' : 'Closed'
+                    },
+                    {
+                      icon: <Ticket className="w-3.5 h-3.5" />,
+                      label: location.admission === 'free' ? 'Free' : 'Paid'
+                    },
+                    {
+                      icon: <Train className="w-3.5 h-3.5" />,
+                      label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
+                    }
+                  ]}
+                  thumbnail={location.imageUrl}
+                  showThumbnail={true}
+                  onClick={() => onLocationSelect(location)}
+                  onMouseEnter={() => handleLocationHover(location.name, true)}
+                  onMouseLeave={() => handleLocationHover(location.name, false)}
+                />
+              );
+            })
           )}
-        </ul>
+        </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 mt-6">
           {filteredLocations.length === 0 ? (

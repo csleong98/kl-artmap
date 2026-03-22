@@ -49,6 +49,12 @@
     --ds-radius-input: 10px;
     --ds-grid-margin: 24px;
     --ds-grid-gutter: 24px;
+
+    /* Warm list item colors */
+    --list-item-bg: #faf8f5;
+    --list-item-bg-hover: #f5f1eb;
+    --list-item-bg-active: #efe9e0;
+    --list-item-border: #ede8e3;
   }
   .dark {
     --background: 0 0% 3.9%;
