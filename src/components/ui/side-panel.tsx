@@ -20,9 +20,10 @@ interface SidePanelProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
+  showBackground?: boolean;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab, showBackground = false }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
@@ -43,51 +44,65 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
     animate(svg, { scale: isEntering ? 1.3 : 1 }, { duration: 0.2 });
   }, []);
 
-  // Detail view
-  if (selectedLocation) {
-    return (
-      <div className="px-6">
-        <LocationDetail
-          location={selectedLocation}
-          onBack={onBack}
-          routeData={routeData}
-          routesLoading={routesLoading}
-          getStationRouteInfo={getStationRouteInfo}
-          onTabChange={onTabChange}
-          initialTab={initialTab}
-        />
-      </div>
-    );
-  }
-
-  // List view
+  // Root container with conditional background
   return (
-    <div className="flex flex-col px-6">
-      {/* Header */}
-      <PanelHeader
-        title="KL Art Map"
-        description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
-        buttons={[
-          {
-            icon: <MessageCircle className="w-5 h-5" />,
-            onClick: () => console.log('Chat clicked'),
-            ariaLabel: 'Open chat'
-          },
-          {
-            icon: <Share2 className="w-5 h-5" />,
-            onClick: () => console.log('Share clicked'),
-            ariaLabel: 'Share'
-          },
-          {
-            icon: <HelpCircle className="w-5 h-5" />,
-            onClick: () => console.log('Help clicked'),
-            ariaLabel: 'Help'
-          }
-        ]}
-      />
+    <div
+      className="flex flex-col h-full"
+      style={showBackground ? {
+        backgroundImage: 'url(/assets/header-bg-mural-artwork.svg)',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat'
+      } : undefined}
+    >
+      {selectedLocation ? (
+        // Detail view
+        <>
+          {/* Detail content - with white background */}
+          <div className="bg-white px-6">
+            <LocationDetail
+              location={selectedLocation}
+              onBack={onBack}
+              routeData={routeData}
+              routesLoading={routesLoading}
+              getStationRouteInfo={getStationRouteInfo}
+              onTabChange={onTabChange}
+              initialTab={initialTab}
+            />
+          </div>
+        </>
+      ) : (
+        // List view
+        <>
+          {/* Header Section - Transparent to show background */}
+          <div className="px-6 py-6">
+            <PanelHeader
+              title="KL Art Map"
+              description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
+              buttons={[
+                {
+                  icon: <MessageCircle className="w-5 h-5" />,
+                  onClick: () => console.log('Chat clicked'),
+                  ariaLabel: 'Open chat'
+                },
+                {
+                  icon: <Share2 className="w-5 h-5" />,
+                  onClick: () => console.log('Share clicked'),
+                  ariaLabel: 'Share'
+                },
+                {
+                  icon: <HelpCircle className="w-5 h-5" />,
+                  onClick: () => console.log('Help clicked'),
+                  ariaLabel: 'Help'
+                }
+              ]}
+            />
+          </div>
 
-      {/* Search + filter */}
-      <div className="flex gap-2 items-center mt-6">
+          {/* Content Section - White background with padding */}
+          <div className="flex-1 bg-white px-6 py-4">
+            {/* Search + filter */}
+            <div className="flex gap-2 items-center">
         <div className="flex flex-1 items-center gap-2 bg-ds-surface border border-ds-border-light rounded-input px-4 py-2.5">
           <Search className="w-5 h-5 text-ds-text-muted shrink-0" />
           <input
@@ -198,6 +213,9 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             })
           )}
         </div>
+      )}
+          </div>
+        </>
       )}
     </div>
   );
