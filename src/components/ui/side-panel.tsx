@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train, MessageCircle, Share2, HelpCircle } from 'lucide-react';
+import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
@@ -10,6 +10,12 @@ import LocationDetail from './location-detail';
 import StackedList from './stacked-list';
 import GridList from './grid-list';
 import PanelHeader from './panel-header';
+import { Button } from '@/components/ui/button';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group';
 
 interface SidePanelProps {
   selectedLocation: Location | null;
@@ -79,44 +85,28 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             <PanelHeader
               title="KL Art Map"
               description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
-              buttons={[
-                {
-                  icon: <MessageCircle className="w-5 h-5" />,
-                  onClick: () => console.log('Chat clicked'),
-                  ariaLabel: 'Open chat'
-                },
-                {
-                  icon: <Share2 className="w-5 h-5" />,
-                  onClick: () => console.log('Share clicked'),
-                  ariaLabel: 'Share'
-                },
-                {
-                  icon: <HelpCircle className="w-5 h-5" />,
-                  onClick: () => console.log('Help clicked'),
-                  ariaLabel: 'Help'
-                }
-              ]}
             />
           </div>
 
           {/* Content Section - White background with padding */}
           <div className="flex-1 bg-white px-6 py-4">
             {/* Search + filter */}
-            <div className="flex gap-2 items-center">
-        <div className="flex flex-1 items-center gap-2 bg-ds-surface border border-ds-border-light rounded-input px-4 py-2.5">
-          <Search className="w-5 h-5 text-ds-text-muted shrink-0" />
-          <input
-            type="text"
-            placeholder="Search places"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent text-base text-ds-text-primary placeholder:text-ds-text-muted focus:outline-none"
-          />
-        </div>
-        <button className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors">
-          <ListFilter className="w-5 h-5 text-ds-text-primary" />
-        </button>
-      </div>
+            <div className="flex gap-2 items-center w-full">
+              <InputGroup className="flex-1 h-10 rounded-xl [&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
+                <InputGroupAddon className="h-10">
+                  <Search className="w-5 h-5" />
+                </InputGroupAddon>
+                <InputGroupInput
+                  placeholder="Search places"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-10"
+                />
+              </InputGroup>
+              <Button variant="outline" size="icon" className="rounded-xl">
+                <ListFilter className="w-5 h-5" />
+              </Button>
+            </div>
 
       {/* View toggle */}
       <div className="flex justify-between items-center mt-4">
@@ -124,18 +114,22 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
           {filteredLocations.length} {filteredLocations.length === 1 ? 'location' : 'locations'}
         </span>
         <div className="flex gap-2">
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => setViewMode('list')}
-            className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors"
+            className="rounded-xl"
           >
-            <List className="w-5 h-5 text-ds-text-primary" />
-          </button>
-          <button
+            <List className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => setViewMode('grid')}
-            className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors"
+            className="rounded-xl"
           >
-            <LayoutGrid className="w-5 h-5 text-ds-text-primary" />
-          </button>
+            <LayoutGrid className="w-5 h-5" />
+          </Button>
         </div>
       </div>
 

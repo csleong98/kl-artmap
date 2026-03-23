@@ -2,23 +2,24 @@
 
 import React from 'react';
 import Image from 'next/image';
-
-interface HeaderButton {
-  icon: React.ReactNode;
-  onClick: () => void;
-  ariaLabel: string;
-}
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown, HelpCircle, MessageCircle } from 'lucide-react';
 
 interface PanelHeaderProps {
   title: string;
   description: string;
-  buttons?: HeaderButton[];
 }
 
 export default function PanelHeader({
   title,
   description,
-  buttons = [],
 }: PanelHeaderProps) {
   return (
     <div className="flex items-start justify-between gap-6">
@@ -67,21 +68,31 @@ export default function PanelHeader({
         </div>
       </div>
 
-      {/* Right Section - Ghost Buttons */}
-      {buttons.length > 0 && (
-        <div className="flex items-center gap-2 shrink-0">
-          {buttons.map((button, index) => (
-            <button
-              key={index}
-              onClick={button.onClick}
-              aria-label={button.ariaLabel}
-              className="p-2.5 text-ds-text-primary hover:text-ds-text-secondary transition-colors"
-            >
-              {button.icon}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Right Section - Button Group */}
+      <div className="shrink-0">
+        <ButtonGroup className="[&>*:first-child]:rounded-l-lg [&>*:last-child]:rounded-r-lg">
+          <Button variant="outline" onClick={() => console.log('Share clicked')}>
+            Share
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <ChevronDown className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuItem onClick={() => console.log('Help clicked')}>
+                <HelpCircle className="w-4 h-4" />
+                Help
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => console.log('Feedback clicked')}>
+                <MessageCircle className="w-4 h-4" />
+                Feedback
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </ButtonGroup>
+      </div>
     </div>
   );
 }
