@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train } from 'lucide-react';
+import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train, MessageCircle, Share2, HelpCircle } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
 import StackedList from './stacked-list';
+import GridList from './grid-list';
+import PanelHeader from './panel-header';
 
 interface SidePanelProps {
   selectedLocation: Location | null;
@@ -44,30 +46,45 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
   // Detail view
   if (selectedLocation) {
     return (
-      <LocationDetail
-        location={selectedLocation}
-        onBack={onBack}
-        routeData={routeData}
-        routesLoading={routesLoading}
-        getStationRouteInfo={getStationRouteInfo}
-        onTabChange={onTabChange}
-        initialTab={initialTab}
-      />
+      <div className="px-6">
+        <LocationDetail
+          location={selectedLocation}
+          onBack={onBack}
+          routeData={routeData}
+          routesLoading={routesLoading}
+          getStationRouteInfo={getStationRouteInfo}
+          onTabChange={onTabChange}
+          initialTab={initialTab}
+        />
+      </div>
     );
   }
 
   // List view
   return (
-    <div className="flex flex-col">
-      {/* Title + subtitle */}
-      <div className="flex flex-col gap-4">
-        <h1 className="text-[40px] font-semibold leading-[1.15] text-ds-text-primary">
-          KL Art Map
-        </h1>
-        <p className="text-base leading-[1.4] text-ds-text-secondary">
-          Explore artsy spots in the city of Kuala Lumpur that are also near the train stations.
-        </p>
-      </div>
+    <div className="flex flex-col px-6">
+      {/* Header */}
+      <PanelHeader
+        title="KL Art Map"
+        description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
+        buttons={[
+          {
+            icon: <MessageCircle className="w-5 h-5" />,
+            onClick: () => console.log('Chat clicked'),
+            ariaLabel: 'Open chat'
+          },
+          {
+            icon: <Share2 className="w-5 h-5" />,
+            onClick: () => console.log('Share clicked'),
+            ariaLabel: 'Share'
+          },
+          {
+            icon: <HelpCircle className="w-5 h-5" />,
+            onClick: () => console.log('Help clicked'),
+            ariaLabel: 'Help'
+          }
+        ]}
+      />
 
       {/* Search + filter */}
       <div className="flex gap-2 items-center mt-6">
@@ -151,51 +168,32 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             <div className="col-span-2 py-6 text-sm text-ds-text-muted">No locations found</div>
           ) : (
             filteredLocations.map((location) => {
-              const typeLabel = location.type.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+              const stationCount = location.nearestStations?.length || 0;
+
               return (
-                <div
+                <GridList
                   key={location.name}
-                  className="flex flex-col gap-3 p-3 border border-ds-border rounded-lg cursor-pointer hover:shadow-md transition-shadow bg-white"
+                  title={location.name}
+                  metadata={[
+                    {
+                      icon: <CircleDot className="w-3.5 h-3.5" />,
+                      label: location.status === 'open' ? 'Open' : 'Closed'
+                    },
+                    {
+                      icon: <Ticket className="w-3.5 h-3.5" />,
+                      label: location.admission === 'free' ? 'Free' : 'Paid'
+                    },
+                    {
+                      icon: <Train className="w-3.5 h-3.5" />,
+                      label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
+                    }
+                  ]}
+                  thumbnail={location.imageUrl}
+                  showThumbnail={true}
                   onClick={() => onLocationSelect(location)}
                   onMouseEnter={() => handleLocationHover(location.name, true)}
                   onMouseLeave={() => handleLocationHover(location.name, false)}
-                >
-                  {/* Image */}
-                  <div className="aspect-square w-full bg-ds-surface rounded-md overflow-hidden">
-                    {location.imageUrl ? (
-                      <img
-                        src={location.imageUrl}
-                        alt={location.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-ds-text-muted">
-                        No image
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Name */}
-                  <h3 className="text-base font-medium leading-tight text-ds-text-primary line-clamp-2">
-                    {location.name}
-                  </h3>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-ds-surface text-ds-text-secondary">
-                      {typeLabel}
-                    </span>
-                    {location.admission && (
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        location.admission === 'free'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-blue-100 text-blue-800'
-                      }`}>
-                        {location.admission === 'free' ? 'Free' : 'Paid'}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                />
               );
             })
           )}

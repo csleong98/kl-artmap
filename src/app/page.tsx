@@ -179,8 +179,8 @@ function HomeContent() {
         />
 
         {/* Floating Side Panel */}
-        <aside className="absolute left-4 top-4 bottom-4 w-[450px] bg-white rounded-3xl shadow-lg overflow-hidden z-10">
-          <div className="h-full overflow-y-auto px-4 py-4 custom-scrollbar">
+        <aside className="absolute left-4 top-4 bottom-4 w-[480px] bg-white rounded-3xl shadow-lg overflow-hidden z-10">
+          <div className="h-full overflow-y-auto py-6 custom-scrollbar">
             <SidePanel
               selectedLocation={selectedLocation}
               onLocationSelect={handleLocationSelect}
