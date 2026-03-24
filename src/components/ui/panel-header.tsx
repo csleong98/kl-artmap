@@ -59,7 +59,7 @@ export default function PanelHeader({
 
         {/* Title + Description */}
         <div className="flex flex-col gap-2">
-          <h1 className="text-[32px] font-medium leading-[1.15] text-ds-text-primary uppercase">
+          <h1 className="text-[32px] font-bold leading-[1.15] text-ds-text-primary uppercase">
             {title}
           </h1>
           <p className="text-base leading-[1.4] text-ds-text-secondary">
@@ -70,7 +70,7 @@ export default function PanelHeader({
 
       {/* Right Section - Button Group */}
       <div className="shrink-0">
-        <ButtonGroup className="[&>*:first-child]:rounded-l-lg [&>*:last-child]:rounded-r-lg">
+        <ButtonGroup className="[&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
           <Button variant="outline" onClick={() => console.log('Share clicked')}>
             Share
           </Button>

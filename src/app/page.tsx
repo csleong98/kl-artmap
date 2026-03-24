@@ -180,7 +180,7 @@ function HomeContent() {
 
         {/* Floating Side Panel */}
         <aside className="absolute left-4 top-4 bottom-4 w-[480px] bg-white rounded-3xl shadow-lg overflow-hidden z-10">
-          <div className="h-full overflow-y-auto custom-scrollbar">
+          <div className="h-full overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <SidePanel
               selectedLocation={selectedLocation}
               onLocationSelect={handleLocationSelect}

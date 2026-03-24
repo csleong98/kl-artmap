@@ -55,7 +55,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
     <div
       className="flex flex-col h-full"
       style={showBackground ? {
-        backgroundImage: 'url(/assets/header-bg-mural-artwork.svg)',
+        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url(/assets/header-bg-mural-artwork.svg)',
         backgroundSize: 'contain',
         backgroundPosition: 'center top',
         backgroundRepeat: 'no-repeat'
@@ -89,7 +89,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
           </div>
 
           {/* Content Section - White background with padding */}
-          <div className="flex-1 bg-white px-6 py-4">
+          <div className="flex-1 bg-white px-6 py-6">
             {/* Search + filter */}
             <div className="flex gap-2 items-center w-full">
               <InputGroup className="flex-1 h-10 rounded-xl [&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
@@ -135,7 +135,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
       {/* Location list */}
       {viewMode === 'list' ? (
-        <div className="flex flex-col gap-3 mt-6">
+        <div className="flex flex-col gap-3 mt-4">
           {filteredLocations.length === 0 ? (
             <div className="py-6 text-sm text-ds-text-muted">No locations found</div>
           ) : (
@@ -172,7 +172,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
           )}
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-4 mt-4">
           {filteredLocations.length === 0 ? (
             <div className="col-span-2 py-6 text-sm text-ds-text-muted">No locations found</div>
           ) : (
