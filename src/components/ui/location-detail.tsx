@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { X, DoorOpen, Route, Ticket, Info } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 
 interface LocationDetailProps {
   location: Location;
-  onBack: () => void;
+  onBack?: () => void;
   routeData?: WalkingRouteData[];
   routesLoading?: boolean;
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
@@ -49,43 +49,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
   };
 
   return (
-    <div className="flex flex-col pt-10">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4 mb-3">
-        <h2 className="text-2xl font-semibold text-[#2e2a31] leading-[1.15]">
-          {location.name}
-        </h2>
-        <button
-          onClick={onBack}
-          className="shrink-0 bg-white border border-[#e6e6e6] rounded-[10px] p-2 hover:bg-[#f7f7f7] transition-colors"
-        >
-          <X className="w-5 h-5 text-ds-text-primary" />
-        </button>
-      </div>
-
-      {/* Info chips */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
-          <DoorOpen className="w-3 h-3" />
-          {location.status === 'open' ? 'Open now' : 'Closed'}
-        </span>
-        <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
-          <Route className="w-3 h-3" />
-          {location.distance} away from you
-        </span>
-        <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
-          <Ticket className="w-3 h-3" />
-          {location.admission === 'free' ? 'Free' : 'Paid'}
-        </span>
-      </div>
-
-      {/* Description */}
-      {details?.overview?.description && (
-        <p className="text-base leading-[1.4] text-[#3f475a] mb-4">
-          {details.overview.description}
-        </p>
-      )}
-
+    <div className="flex flex-col">
       {/* Action Buttons - Open in Maps */}
       <div className="flex gap-4 mb-6">
         <a

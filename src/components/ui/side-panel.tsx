@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train } from 'lucide-react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train, DoorOpen } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
@@ -16,6 +16,75 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { useCarousel } from '@/components/ui/carousel';
+import Image from 'next/image';
+
+// Carousel Dots Component - tracks active slide
+function CarouselDots({ count }: { count: number }) {
+  const { api } = useCarousel();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on('select', () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  return (
+    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+      {Array.from({ length: count }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => api?.scrollTo(index)}
+          className={`w-1.5 h-1.5 rounded-full transition-all ${
+            index === current
+              ? 'bg-white w-6'
+              : 'bg-white/60 hover:bg-white/90'
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+// Test Image Carousel Component
+function ImageCarouselTest({ count }: { count: number }) {
+  return (
+    <div className="mb-6 relative">
+      <Carousel className="w-full">
+        <CarouselContent>
+          {Array.from({ length: count }).map((_, index) => (
+            <CarouselItem key={index}>
+              <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 flex items-center justify-center relative">
+                <div className="text-center">
+                  <div className="text-6xl mb-2">🖼️</div>
+                  <p className="text-gray-500 text-sm">Image {index + 1}</p>
+                </div>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        {/* Navigation buttons - positioned inside the frame */}
+        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
+        {/* Active dot indicators */}
+        <CarouselDots count={count} />
+      </Carousel>
+    </div>
+  );
+}
 
 interface SidePanelProps {
   selectedLocation: Location | null;
@@ -64,8 +133,41 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
       {selectedLocation ? (
         // Detail view
         <>
-          {/* Detail content - with white background */}
-          <div className="bg-white px-6">
+          {/* Header Section - Transparent to show background */}
+          <div className="px-6 py-6">
+            <PanelHeader
+              variant="details"
+              showSymbols={false}
+              title={selectedLocation.name}
+              description={selectedLocation.details?.overview?.description || ''}
+              tags={
+                <>
+                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
+                    <DoorOpen className="w-3 h-3" />
+                    {selectedLocation.status === 'open' ? 'Open now' : 'Closed'}
+                  </span>
+                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
+                    <Ticket className="w-3 h-3" />
+                    {selectedLocation.admission === 'free' ? 'Free' : 'Paid'}
+                  </span>
+                </>
+              }
+              onShare={() => {
+                const url = `${window.location.origin}?location=${encodeURIComponent(selectedLocation.name)}&tab=${initialTab || 'about'}`;
+                navigator.clipboard.writeText(url);
+                console.log('URL copied to clipboard:', url);
+              }}
+              onBack={onBack}
+            />
+          </div>
+
+          {/* Content Section - White background */}
+          <div className="flex-1 bg-white px-6 py-6">
+            {/* Image Carousel - TEST with 3 placeholder images */}
+            {selectedLocation.imageUrl && (
+              <ImageCarouselTest count={3} />
+            )}
+
             <LocationDetail
               location={selectedLocation}
               onBack={onBack}
