@@ -59,33 +59,6 @@ function CarouselDots({ count }: { count: number }) {
   );
 }
 
-// Test Image Carousel Component
-function ImageCarouselTest({ count }: { count: number }) {
-  return (
-    <div className="mb-6 relative">
-      <Carousel className="w-full">
-        <CarouselContent>
-          {Array.from({ length: count }).map((_, index) => (
-            <CarouselItem key={index}>
-              <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 flex items-center justify-center relative">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">🖼️</div>
-                  <p className="text-gray-500 text-sm">Image {index + 1}</p>
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        {/* Navigation buttons - positioned inside the frame */}
-        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
-        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
-        {/* Active dot indicators */}
-        <CarouselDots count={count} />
-      </Carousel>
-    </div>
-  );
-}
-
 interface SidePanelProps {
   selectedLocation: Location | null;
   onLocationSelect: (location: Location) => void;
@@ -163,9 +136,42 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
           {/* Content Section - White background */}
           <div className="flex-1 bg-white px-6 py-6">
-            {/* Image Carousel - TEST with 3 placeholder images */}
-            {selectedLocation.imageUrl && (
-              <ImageCarouselTest count={3} />
+            {/* Image Section - Conditional rendering based on image count */}
+            {selectedLocation.images && selectedLocation.images.length > 0 && (
+              <div className="mb-6">
+                {selectedLocation.images.length === 1 ? (
+                  // Single image - static display
+                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
+                    <Image
+                      src={selectedLocation.images[0]}
+                      alt={selectedLocation.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  // Multiple images - carousel
+                  <Carousel className="w-full">
+                    <CarouselContent>
+                      {selectedLocation.images.map((image, index) => (
+                        <CarouselItem key={index}>
+                          <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
+                            <Image
+                              src={image}
+                              alt={`${selectedLocation.name} - Image ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+                    <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
+                    <CarouselDots count={selectedLocation.images.length} />
+                  </Carousel>
+                )}
+              </div>
             )}
 
             <LocationDetail
@@ -263,7 +269,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                       label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
                     }
                   ]}
-                  thumbnail={location.imageUrl}
+                  thumbnail={location.images?.[0]}
                   showThumbnail={true}
                   onClick={() => onLocationSelect(location)}
                   onMouseEnter={() => handleLocationHover(location.name, true)}
@@ -299,7 +305,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                       label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
                     }
                   ]}
-                  thumbnail={location.imageUrl}
+                  thumbnail={location.images?.[0]}
                   showThumbnail={true}
                   onClick={() => onLocationSelect(location)}
                   onMouseEnter={() => handleLocationHover(location.name, true)}
