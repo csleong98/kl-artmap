@@ -1,12 +1,63 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { Search, ListFilter } from 'lucide-react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train, DoorOpen } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
+import StackedList from './stacked-list';
+import GridList from './grid-list';
+import PanelHeader from './panel-header';
+import { Button } from '@/components/ui/button';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from '@/components/ui/input-group';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { useCarousel } from '@/components/ui/carousel';
+import Image from 'next/image';
+
+// Carousel Dots Component - tracks active slide
+function CarouselDots({ count }: { count: number }) {
+  const { api } = useCarousel();
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on('select', () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  return (
+    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+      {Array.from({ length: count }).map((_, index) => (
+        <button
+          key={index}
+          onClick={() => api?.scrollTo(index)}
+          className={`w-1.5 h-1.5 rounded-full transition-all ${
+            index === current
+              ? 'bg-white w-6'
+              : 'bg-white/60 hover:bg-white/90'
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))}
+    </div>
+  );
+}
 
 interface SidePanelProps {
   selectedLocation: Location | null;
@@ -17,10 +68,12 @@ interface SidePanelProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
+  showBackground?: boolean;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab, showBackground = false }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
   const filteredLocations = useMemo(() => {
     if (!searchQuery.trim()) return mockLocations;
@@ -39,76 +92,233 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
     animate(svg, { scale: isEntering ? 1.3 : 1 }, { duration: 0.2 });
   }, []);
 
-  // Detail view
-  if (selectedLocation) {
-    return (
-      <LocationDetail
-        location={selectedLocation}
-        onBack={onBack}
-        routeData={routeData}
-        routesLoading={routesLoading}
-        getStationRouteInfo={getStationRouteInfo}
-        onTabChange={onTabChange}
-        initialTab={initialTab}
-      />
-    );
-  }
-
-  // List view
+  // Root container with conditional background
   return (
-    <div className="flex flex-col pt-10">
-      {/* Title + subtitle */}
-      <div className="flex flex-col gap-4">
-        <h1 className="text-[40px] font-semibold leading-[1.15] text-ds-text-primary">
-          KL Art Map
-        </h1>
-        <p className="text-base leading-[1.4] text-ds-text-secondary">
-          Explore artsy spots in the city of Kuala Lumpur that are also near the train stations.
-        </p>
-      </div>
+    <div
+      className="flex flex-col h-full"
+      style={showBackground ? {
+        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url(/assets/header-bg-mural-artwork.svg)',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat'
+      } : undefined}
+    >
+      {selectedLocation ? (
+        // Detail view
+        <>
+          {/* Header Section - Transparent to show background */}
+          <div className="px-6 py-6">
+            <PanelHeader
+              variant="details"
+              showSymbols={false}
+              title={selectedLocation.name}
+              description={selectedLocation.details?.overview?.description || ''}
+              tags={
+                <>
+                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
+                    <DoorOpen className="w-3 h-3" />
+                    {selectedLocation.status === 'open' ? 'Open now' : 'Closed'}
+                  </span>
+                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
+                    <Ticket className="w-3 h-3" />
+                    {selectedLocation.admission === 'free' ? 'Free' : 'Paid'}
+                  </span>
+                </>
+              }
+              onShare={() => {
+                const url = `${window.location.origin}?location=${encodeURIComponent(selectedLocation.name)}&tab=${initialTab || 'about'}`;
+                navigator.clipboard.writeText(url);
+                console.log('URL copied to clipboard:', url);
+              }}
+              onBack={onBack}
+            />
+          </div>
 
-      {/* Search + filter */}
-      <div className="flex gap-2 items-center mt-6">
-        <div className="flex flex-1 items-center gap-2 bg-ds-surface border border-ds-border-light rounded-input px-4 py-2.5">
-          <Search className="w-5 h-5 text-ds-text-muted shrink-0" />
-          <input
-            type="text"
-            placeholder="Search places"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent text-base text-ds-text-primary placeholder:text-ds-text-muted focus:outline-none"
-          />
+          {/* Content Section - White background */}
+          <div className="flex-1 bg-white px-6 py-6">
+            {/* Image Section - Conditional rendering based on image count */}
+            {selectedLocation.images && selectedLocation.images.length > 0 && (
+              <div className="mb-6">
+                {selectedLocation.images.length === 1 ? (
+                  // Single image - static display
+                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
+                    <Image
+                      src={selectedLocation.images[0]}
+                      alt={selectedLocation.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  // Multiple images - carousel
+                  <Carousel className="w-full">
+                    <CarouselContent>
+                      {selectedLocation.images.map((image, index) => (
+                        <CarouselItem key={index}>
+                          <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
+                            <Image
+                              src={image}
+                              alt={`${selectedLocation.name} - Image ${index + 1}`}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                    <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
+                    <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
+                    <CarouselDots count={selectedLocation.images.length} />
+                  </Carousel>
+                )}
+              </div>
+            )}
+
+            <LocationDetail
+              location={selectedLocation}
+              onBack={onBack}
+              routeData={routeData}
+              routesLoading={routesLoading}
+              getStationRouteInfo={getStationRouteInfo}
+              onTabChange={onTabChange}
+              initialTab={initialTab}
+            />
+          </div>
+        </>
+      ) : (
+        // List view
+        <>
+          {/* Header Section - Transparent to show background */}
+          <div className="px-6 py-6">
+            <PanelHeader
+              title="KL Art Map"
+              description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
+            />
+          </div>
+
+          {/* Content Section - White background with padding */}
+          <div className="flex-1 bg-white px-6 py-6">
+            {/* Search + filter */}
+            <div className="flex gap-2 items-center w-full">
+              <InputGroup className="flex-1 h-10 rounded-xl [&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
+                <InputGroupAddon className="h-10">
+                  <Search className="w-5 h-5" />
+                </InputGroupAddon>
+                <InputGroupInput
+                  placeholder="Search places"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-10"
+                />
+              </InputGroup>
+              <Button variant="outline" size="icon" className="rounded-xl">
+                <ListFilter className="w-5 h-5" />
+              </Button>
+            </div>
+
+      {/* View toggle */}
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-sm text-ds-text-secondary">
+          {filteredLocations.length} {filteredLocations.length === 1 ? 'location' : 'locations'}
+        </span>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setViewMode('list')}
+            className="rounded-xl"
+          >
+            <List className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setViewMode('grid')}
+            className="rounded-xl"
+          >
+            <LayoutGrid className="w-5 h-5" />
+          </Button>
         </div>
-        <button className="border border-ds-border-light rounded-input p-2.5 bg-white hover:bg-ds-surface transition-colors">
-          <ListFilter className="w-5 h-5 text-ds-text-primary" />
-        </button>
       </div>
 
       {/* Location list */}
-      <ul className="flex flex-col">
-        {filteredLocations.length === 0 ? (
-          <li className="py-6 text-sm text-ds-text-muted">No locations found</li>
-        ) : (
-          filteredLocations.map((location) => (
-            <li
-              key={location.name}
-              className="flex flex-col gap-3 py-6 border-b border-ds-border cursor-pointer hover:opacity-80 transition-opacity"
-              onClick={() => onLocationSelect(location)}
-              onMouseEnter={() => handleLocationHover(location.name, true)}
-              onMouseLeave={() => handleLocationHover(location.name, false)}
-            >
-              <h2 className="text-2xl font-medium leading-[1.15] text-ds-text-primary">
-                {location.name}
-              </h2>
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-1.5 items-center text-sm leading-none text-ds-text-secondary">
-                  <span className="truncate">{location.address}</span>
-                </div>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
+      {viewMode === 'list' ? (
+        <div className="flex flex-col gap-3 mt-4">
+          {filteredLocations.length === 0 ? (
+            <div className="py-6 text-sm text-ds-text-muted">No locations found</div>
+          ) : (
+            filteredLocations.map((location) => {
+              const stationCount = location.nearestStations?.length || 0;
+
+              return (
+                <StackedList
+                  key={location.name}
+                  title={location.name}
+                  subtitle={location.address}
+                  metadata={[
+                    {
+                      icon: <CircleDot className="w-3.5 h-3.5" />,
+                      label: location.status === 'open' ? 'Open' : 'Closed'
+                    },
+                    {
+                      icon: <Ticket className="w-3.5 h-3.5" />,
+                      label: location.admission === 'free' ? 'Free' : 'Paid'
+                    },
+                    {
+                      icon: <Train className="w-3.5 h-3.5" />,
+                      label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
+                    }
+                  ]}
+                  thumbnail={location.images?.[0]}
+                  showThumbnail={true}
+                  onClick={() => onLocationSelect(location)}
+                  onMouseEnter={() => handleLocationHover(location.name, true)}
+                  onMouseLeave={() => handleLocationHover(location.name, false)}
+                />
+              );
+            })
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          {filteredLocations.length === 0 ? (
+            <div className="col-span-2 py-6 text-sm text-ds-text-muted">No locations found</div>
+          ) : (
+            filteredLocations.map((location) => {
+              const stationCount = location.nearestStations?.length || 0;
+
+              return (
+                <GridList
+                  key={location.name}
+                  title={location.name}
+                  metadata={[
+                    {
+                      icon: <CircleDot className="w-3.5 h-3.5" />,
+                      label: location.status === 'open' ? 'Open' : 'Closed'
+                    },
+                    {
+                      icon: <Ticket className="w-3.5 h-3.5" />,
+                      label: location.admission === 'free' ? 'Free' : 'Paid'
+                    },
+                    {
+                      icon: <Train className="w-3.5 h-3.5" />,
+                      label: `${stationCount} ${stationCount === 1 ? 'station' : 'stations'}`
+                    }
+                  ]}
+                  thumbnail={location.images?.[0]}
+                  showThumbnail={true}
+                  onClick={() => onLocationSelect(location)}
+                  onMouseEnter={() => handleLocationHover(location.name, true)}
+                  onMouseLeave={() => handleLocationHover(location.name, false)}
+                />
+              );
+            })
+          )}
+        </div>
+      )}
+          </div>
+        </>
+      )}
     </div>
   );
 }

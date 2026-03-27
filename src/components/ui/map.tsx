@@ -6,9 +6,64 @@ import dynamic from 'next/dynamic';
 interface MapProps {
   className?: string;
   onMapLoad?: (map: any) => void;
+  mapPadding?: { left?: number; top?: number; right?: number; bottom?: number };
 }
 
-function MapComponent({ className, onMapLoad }: MapProps) {
+// Helper to add 3D buildings layer
+function add3DBuildings(map: any) {
+  const layers = map.getStyle().layers;
+  const labelLayerId = layers.find(
+    (layer: any) => layer.type === 'symbol' && layer.layout?.['text-field']
+  )?.id;
+
+  // For now, show all buildings - will add filtering later
+  const buildingFilter: any = ['==', 'extrude', 'true'];
+
+  if (!map.getLayer('3d-buildings')) {
+    map.addLayer({
+      'id': '3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': buildingFilter,
+      'type': 'fill-extrusion',
+      'minzoom': 15,
+      'paint': {
+        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.6
+      }
+    }, labelLayerId);
+  } else {
+    // Update filter if layer exists
+    map.setFilter('3d-buildings', buildingFilter);
+  }
+}
+
+// Helper to remove 3D buildings layer
+function remove3DBuildings(map: any) {
+  if (map.getLayer('3d-buildings')) {
+    map.removeLayer('3d-buildings');
+  }
+}
+
+function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,10 +101,19 @@ function MapComponent({ className, onMapLoad }: MapProps) {
         mapInstance.on('load', () => {
           setMapLoaded(true);
 
+          // Apply padding if provided
+          if (mapPadding) {
+            mapInstance.setPadding(mapPadding);
+          }
+
           // Add all location markers
           import('../../services/mapService').then(({ addAllMarkers }) => {
             addAllMarkers(mapInstance);
           });
+
+          // Expose 3D building controls
+          mapInstance.enable3DBuildings = () => add3DBuildings(mapInstance);
+          mapInstance.disable3DBuildings = () => remove3DBuildings(mapInstance);
 
           // Pass map instance to parent component
           if (onMapLoad) {

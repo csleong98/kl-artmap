@@ -10,8 +10,7 @@ export const mockLocations: Location[] = [
     status: 'open',
     coordinates: [101.6874, 3.1376], // Actual National Art Gallery location at Jalan Temerloh
     address: 'Jalan Temerloh, Titiwangsa, 53200 Kuala Lumpur',
-    imageUrl: '/images/national-art-gallery.jpg',
-    images: ['/images/national-art-gallery-1.jpg', '/images/national-art-gallery-2.jpg', '/images/national-art-gallery-3.jpg', '/images/national-art-gallery-4.jpg'],
+    images: ['/images/locations/National Art Gallery/1.jpg'],
     nearestStations:['KLCC', 'Ampang Park', 'Persiaran KLCC'],
     admission: 'free',
     details: {
@@ -98,7 +97,7 @@ export const mockLocations: Location[] = [
     status: 'open',
     coordinates: [101.7187, 3.1590],
     address: 'Kuala Lumpur City Centre, 50088 Kuala Lumpur',
-    imageUrl: '/images/klcc-park.jpg',
+    images: ['/images/locations/Ilham tower/1.jpg'],
     nearestStations:['KLCC', 'Ampang Park'],
     admission: 'free',
     details: {
@@ -210,7 +209,7 @@ export const mockLocations: Location[] = [
     reopenTime: '10am tomorrow',
     coordinates: [101.6941, 3.1467],
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
-    imageUrl: '/images/islamic-arts-museum.jpg',
+    images: ['/images/locations/Textile museum/1.jpg'],
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
     admission: 'paid',
     details: {
@@ -248,7 +247,7 @@ export const mockLocations: Location[] = [
     reopenTime: '10am tomorrow',
     coordinates: [101.6942, 3.1487],
     address: 'Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur',
-    imageUrl: '/images/islamic-arts-museum.jpg',
+    images: ['/images/locations/bsas/1.jpg'],
     nearestStations:['KL Sentral', 'Muzium Negara MRT'],
     admission: 'free',
     details: {
@@ -394,6 +393,7 @@ export const mockLocations: Location[] = [
     status: 'open',
     coordinates: [101.6967, 3.1453],
     address: '131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur',
+    images: ['/images/locations/UR-MU Tun HS Lee/1.jpg'],
     nearestStations:['Pasar Seni LRT', 'Pasar Seni MRT'],
     admission: 'paid',
     details: {
