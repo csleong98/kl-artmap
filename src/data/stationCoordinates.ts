@@ -178,6 +178,18 @@ export const stationCoordinates: Record<string, StationData> = {
     ],
     lines: ['KL Monorail'],
     type: 'Monorail'
+  },
+  'Maharajalela': {
+    name: 'Maharajalela',
+    exits: [
+      {
+        exitName: 'Main Exit',
+        coordinates: [101.6974, 3.1382],
+        description: 'Near Jalan Tun Sambanthan'
+      }
+    ],
+    lines: ['KL Monorail'],
+    type: 'Monorail'
   }
 };
 

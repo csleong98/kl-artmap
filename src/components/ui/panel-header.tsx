@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
@@ -31,6 +31,8 @@ export default function PanelHeader({
   onShare,
   onBack,
 }: PanelHeaderProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const handleShare = () => {
     if (onShare) {
       onShare();
@@ -92,9 +94,21 @@ export default function PanelHeader({
             </div>
           )}
 
-          <p className="text-base leading-[1.4] text-ds-text-secondary">
-            {description}
-          </p>
+          <div className="flex flex-col gap-1">
+            <p className={`text-base leading-[1.4] text-ds-text-secondary ${
+              !isExpanded ? 'line-clamp-3' : ''
+            }`}>
+              {description}
+            </p>
+            {description && description.length > 150 && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-sm text-blue-600 hover:text-blue-800 self-start font-medium"
+              >
+                {isExpanded ? 'View Less' : 'View More'}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

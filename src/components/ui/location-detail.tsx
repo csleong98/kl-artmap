@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Info } from 'lucide-react';
+import { Info, MapPin } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
+import { Button } from '@/components/ui/button';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 
@@ -49,31 +50,29 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       {/* Action Buttons - Open in Maps */}
-      <div className="flex gap-4 mb-6">
-        <a
-          href={`https://maps.apple.com/?q=${location.coordinates[1]},${location.coordinates[0]}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-[#f7f7f7] border border-[#a6a6a6] rounded-[10px] px-4 py-2.5 text-base text-[#2e2a31] hover:bg-[#efefef] transition-colors"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 0C7.79 0 6 1.79 6 4c0 2.21 4 9 4 9s4-6.79 4-9c0-2.21-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-          </svg>
-          Open in Apple Maps
-        </a>
-        <a
-          href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-[#f7f7f7] border border-[#a6a6a6] rounded-[10px] px-4 py-2.5 text-base text-[#2e2a31] hover:bg-[#efefef] transition-colors"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 0C7.79 0 6 1.79 6 4c0 2.21 4 9 4 9s4-6.79 4-9c0-2.21-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-          </svg>
-          Open in Google Maps
-        </a>
+      <div className="flex gap-3 mb-6 w-full">
+        <Button variant="outline" size="lg" className="flex-1 min-w-0 rounded-xl" asChild>
+          <a
+            href={`https://maps.apple.com/?q=${location.coordinates[1]},${location.coordinates[0]}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MapPin className="w-4 h-4" />
+            <span className="truncate">Apple Maps</span>
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" className="flex-1 min-w-0 rounded-xl" asChild>
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MapPin className="w-4 h-4" />
+            <span className="truncate">Google Maps</span>
+          </a>
+        </Button>
       </div>
 
       {/* Tabs */}

@@ -455,5 +455,48 @@ export const mockLocations: Location[] = [
         website: 'https://www.visitkl.gov.my/visitklv2/kwai-chai-hong'
       }
     }
+  },
+  {
+    name: 'Zhongshan Building',
+    type: 'art_gallery',
+    distance:'2.5km',
+    walkTime:'20mins',
+    openingHours: 'Closes at 8pm today',
+    status: 'open',
+    coordinates: [101.69716477094327, 3.137803887112592],
+    address: '80-84, Jalan Rotan, Kampung Attap, 50460 Kuala Lumpur',
+    images: ['/images/locations/Zhongshan building/1.JPEG', '/images/locations/Zhongshan building/2.JPEG'],
+    nearestStations:['Maharajalela Monorail'],
+    admission: 'free',
+    details: {
+      overview: {
+        description: 'A vibrant 4-storey arts and creative hub housed in 1950s heritage shophouses, featuring independent galleries, artisan cafes, bookstores, vintage music stores, and a hidden rooftop with city views. Home to a lively community of artists, crafters, and independent brands.',
+        admission: 'Free',
+        openingHours: {
+          monday: 'Closed',
+          tuesday: '2pm - 8pm',
+          wednesday: '2pm - 8pm',
+          thursday: '11am - 8pm',
+          friday: '11am - 8pm',
+          saturday: '11am - 8pm',
+          sunday: '11am - 8pm'
+        },
+        specialNote: 'Former Selangor Zhongshan Association building, now a cultural landmark in Kampung Attap'
+      },
+      stationGuide: {
+        stations: [
+          {
+            name: 'Maharajalela',
+            line: 'Monorail',
+            walkTime: 5,
+            walkDistance: '0.4km'
+          }
+        ]
+      },
+      contact: {
+        address: '80-84, Jalan Rotan, Kampung Attap, 50460 Kuala Lumpur',
+        website: 'https://www.facebook.com/thezhongshanbuilding/'
+      }
+    }
   }
 ];
