@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Search, ListFilter, LayoutGrid, List, CircleDot, Ticket, Train, DoorOpen } from 'lucide-react';
+import { Search, LayoutGrid, List, CircleDot, Ticket, Train, DoorOpen, Rows, Grid2x2 } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
@@ -92,12 +92,12 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
     animate(svg, { scale: isEntering ? 1.3 : 1 }, { duration: 0.2 });
   }, []);
 
-  // Root container with conditional background
+  // Root container with beige background and optional pattern
   return (
     <div
-      className="flex flex-col h-full"
+      className="flex flex-col h-full bg-[#f6f3ee]"
       style={showBackground ? {
-        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)), url(/assets/header-bg-mural-artwork.svg)',
+        backgroundImage: 'url(/assets/header-bg-mural-artwork.svg)',
         backgroundSize: 'contain',
         backgroundPosition: 'center top',
         backgroundRepeat: 'no-repeat'
@@ -198,47 +198,43 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
           {/* Content Section - White background with padding */}
           <div className="flex-1 bg-white px-6 py-6">
-            {/* Search + filter */}
-            <div className="flex gap-2 items-center w-full">
-              <InputGroup className="flex-1 h-10 rounded-xl [&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
-                <InputGroupAddon className="h-10">
+            {/* Search + view toggles */}
+            <div className="flex gap-3 items-center w-full">
+              <InputGroup className="flex-1 h-10 rounded-full [&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
+                <InputGroupAddon>
                   <Search className="w-5 h-5" />
                 </InputGroupAddon>
                 <InputGroupInput
                   placeholder="Search places"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-10"
                 />
               </InputGroup>
-              <Button variant="outline" size="icon" className="rounded-xl">
-                <ListFilter className="w-5 h-5" />
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setViewMode('list')}
+                  className="rounded-full"
+                >
+                  <Rows className="w-5 h-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setViewMode('grid')}
+                  className="rounded-full"
+                >
+                  <Grid2x2 className="w-5 h-5" />
+                </Button>
+              </div>
             </div>
 
-      {/* View toggle */}
+      {/* Location counter */}
       <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-ds-text-secondary">
-          {filteredLocations.length} {filteredLocations.length === 1 ? 'location' : 'locations'}
+          Showing {filteredLocations.length} {filteredLocations.length === 1 ? 'place' : 'places'}
         </span>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setViewMode('list')}
-            className="rounded-xl"
-          >
-            <List className="w-5 h-5" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setViewMode('grid')}
-            className="rounded-xl"
-          >
-            <LayoutGrid className="w-5 h-5" />
-          </Button>
-        </div>
       </div>
 
       {/* Location list */}

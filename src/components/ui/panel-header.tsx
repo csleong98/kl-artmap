@@ -116,9 +116,9 @@ export default function PanelHeader({
       <div className="shrink-0">
         {variant === 'main' ? (
           // Main variant: Share + Dropdown
-          <ButtonGroup className="[&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
+          <ButtonGroup className="[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
             <Button variant="outline" onClick={handleShare}>
-              Share
+              Share site
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -140,9 +140,9 @@ export default function PanelHeader({
           </ButtonGroup>
         ) : (
           // Details variant: Share + Back button
-          <ButtonGroup className="[&>*:first-child]:rounded-l-xl [&>*:last-child]:rounded-r-xl">
+          <ButtonGroup className="[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
             <Button variant="outline" onClick={handleShare}>
-              Share
+              Share site
             </Button>
             <Button variant="outline" size="icon" onClick={onBack}>
               <X className="w-5 h-5" />
