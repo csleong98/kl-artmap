@@ -241,7 +241,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                 <StackedList
                   key={location.name}
                   title={location.name}
-                  subtitle={location.address}
+                  subtitle={location.details?.overview?.description || location.address}
                   metadata={[
                     {
                       icon: <CircleDot className="w-3.5 h-3.5" />,

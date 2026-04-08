@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Badge } from './badge';
 
 interface MetadataItem {
   icon?: React.ReactNode;
@@ -69,19 +68,18 @@ export default function StackedList({
   return (
     <div
       className="
-        flex items-center gap-4 p-4
-        bg-[var(--list-item-bg)]
-        border border-[var(--list-item-border)]
-        rounded-2xl
+        flex items-stretch gap-4 p-6
+        bg-white
+        border border-[#ececec]
+        rounded-[24px]
         cursor-pointer
         transition-all duration-200
-        hover:bg-[var(--list-item-bg-hover)]
-        active:bg-[var(--list-item-bg-active)]
+        hover:bg-gray-50
+        active:bg-gray-100
         focus-visible:outline-none
         focus-visible:ring-2
         focus-visible:ring-offset-2
-        focus-visible:ring-[var(--list-item-border)]
-        min-h-[120px]
+        focus-visible:ring-[#ececec]
       "
       onClick={onClick}
       onMouseEnter={onMouseEnter}
@@ -96,56 +94,44 @@ export default function StackedList({
       }}
     >
       {/* Left Content */}
-      <div className="flex-1 flex flex-col gap-2 min-w-0">
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-ds-text-primary leading-tight line-clamp-2">
-          {title}
-        </h3>
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Title + Subtitle Section */}
+        <div className="flex flex-col gap-1">
+          <h3 className="text-base font-semibold text-[#282828] leading-normal">
+            {title}
+          </h3>
+          {subtitle && (
+            <p className="text-base text-[#595959] line-clamp-1 overflow-hidden text-ellipsis">
+              {subtitle}
+            </p>
+          )}
+        </div>
 
-        {/* Subtitle */}
-        {subtitle && (
-          <p className="text-sm text-ds-text-secondary line-clamp-1">
-            {subtitle}
-          </p>
-        )}
+        {/* Spacer that grows to fill available space */}
+        <div className="flex-1"></div>
 
-        {/* Metadata Row */}
-        {metadata && metadata.length > 0 && (
-          <div className="flex items-center gap-3 flex-wrap">
-            {metadata.map((item, index) => (
-              <div key={index} className="flex items-center gap-1.5 text-xs text-ds-text-muted">
-                {item.icon && <span className="shrink-0">{item.icon}</span>}
-                <span className="truncate">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        )}
+        {/* Information Chips Section */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Metadata chips */}
+          {metadata && metadata.length > 0 && metadata.map((item, index) => (
+            <div key={index} className="flex items-center gap-1.5 py-1">
+              {item.icon && <span className="shrink-0 w-3 h-3 text-[#424242]">{item.icon}</span>}
+              <span className="text-xs text-[#424242] leading-none">{item.label}</span>
+            </div>
+          ))}
 
-        {/* Badge Row */}
-        {badges && badges.length > 0 && (
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {badges.map((badge, index) => (
-              <Badge
-                key={index}
-                variant={badge.variant === 'success' ? 'default' : 'secondary'}
-                className={`text-xs ${
-                  badge.variant === 'success'
-                    ? 'bg-green-100 text-green-800 hover:bg-green-100'
-                    : badge.variant === 'warning'
-                    ? 'bg-blue-100 text-blue-800 hover:bg-blue-100'
-                    : ''
-                }`}
-              >
-                {badge.label}
-              </Badge>
-            ))}
-          </div>
-        )}
+          {/* Badge chips (if any) */}
+          {badges && badges.length > 0 && badges.map((badge, index) => (
+            <div key={index} className="flex items-center gap-1.5 py-1">
+              <span className="text-xs text-[#424242] leading-none">{badge.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Right Thumbnail */}
       {showThumbnail && (
-        <div className="shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-ds-surface">
+        <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
           {imageLoaded && !imageError ? (
             <img
               src={thumbnail}
