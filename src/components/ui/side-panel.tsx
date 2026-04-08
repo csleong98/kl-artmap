@@ -68,10 +68,9 @@ interface SidePanelProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
-  showBackground?: boolean;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab, showBackground = false }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
@@ -92,17 +91,9 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
     animate(svg, { scale: isEntering ? 1.3 : 1 }, { duration: 0.2 });
   }, []);
 
-  // Root container with beige background and optional pattern
+  // Root container with beige background
   return (
-    <div
-      className="flex flex-col h-full bg-[#f6f3ee]"
-      style={showBackground ? {
-        backgroundImage: 'url(/assets/header-bg-mural-artwork.svg)',
-        backgroundSize: 'contain',
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'no-repeat'
-      } : undefined}
-    >
+    <div className="flex flex-col h-full bg-[#FBFAF8]">
       {selectedLocation ? (
         // Detail view
         <>
@@ -134,8 +125,8 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             />
           </div>
 
-          {/* Content Section - White background */}
-          <div className="flex-1 bg-white px-6 py-6">
+          {/* Content Section */}
+          <div className="flex-1 px-6 py-6">
             {/* Image Section - Conditional rendering based on image count */}
             {selectedLocation.images && selectedLocation.images.length > 0 && (
               <div className="mb-6">
@@ -196,8 +187,8 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             />
           </div>
 
-          {/* Content Section - White background with padding */}
-          <div className="flex-1 bg-white px-6 py-6">
+          {/* Content Section with padding */}
+          <div className="flex-1 px-6 py-6">
             {/* Search + view toggles */}
             <div className="flex gap-3 items-center w-full">
               <InputGroup className="flex-1 h-10 rounded-full [&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">

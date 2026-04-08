@@ -165,7 +165,6 @@ function HomeContent() {
               getStationRouteInfo={getStationRouteInfo}
               onTabChange={handleTabChange}
               initialTab={initialTab}
-              showBackground={true}
             />
           </div>
         </aside>

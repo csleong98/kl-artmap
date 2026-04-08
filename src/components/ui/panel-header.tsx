@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, HelpCircle, MessageCircle, X } from 'lucide-react';
+import { MuralArtwork } from '@/components/MuralArtwork';
 
 interface PanelHeaderProps {
   title: string;
@@ -42,9 +43,18 @@ export default function PanelHeader({
   };
 
   return (
-    <div className="flex items-start justify-between gap-6">
-      {/* Left Section */}
-      <div className="flex flex-col gap-4">
+    <div className="relative overflow-hidden -mx-6 -mt-6 -mb-6 px-6 pt-6 pb-6">
+      {/* Mural Artwork Background */}
+      <MuralArtwork
+        className="absolute top-0 left-0 right-0 h-[400px] z-0"
+        gradientStartColor="#EBDBC1"
+        gradientEndColor="rgba(240, 228, 208, 0)"
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex items-start justify-between gap-6">
+        {/* Left Section */}
+        <div className="flex flex-col gap-4">
         {/* Symbols Row - Only show if enabled */}
         {showSymbols && variant === 'main' && (
           <div className="flex items-center">
@@ -149,6 +159,7 @@ export default function PanelHeader({
             </Button>
           </ButtonGroup>
         )}
+      </div>
       </div>
     </div>
   );
