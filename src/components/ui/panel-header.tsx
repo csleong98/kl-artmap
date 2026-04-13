@@ -91,18 +91,13 @@ export default function PanelHeader({
 
         {/* Title + Tags + Description */}
         <div className="flex flex-col gap-3">
-          <h1 className={`font-bold leading-[1.15] text-ds-text-primary ${
-            variant === 'main' ? 'text-[32px] uppercase' : 'text-2xl'
+          <h1 className={`text-ds-text-primary ${
+            variant === 'main'
+              ? 'text-[32px] uppercase font-bold leading-[1.15]'
+              : 'text-[32px] font-medium leading-[1.05]'
           }`}>
             {title}
           </h1>
-
-          {/* Tags for details variant */}
-          {tags && variant === 'details' && (
-            <div className="flex flex-wrap gap-2">
-              {tags}
-            </div>
-          )}
 
           <div className="flex flex-col gap-1">
             <p className={`text-base leading-[1.4] text-ds-text-secondary ${
@@ -149,15 +144,15 @@ export default function PanelHeader({
             </DropdownMenu>
           </ButtonGroup>
         ) : (
-          // Details variant: Share + Back button
-          <ButtonGroup className="[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
-            <Button variant="outline" onClick={handleShare}>
-              Share site
-            </Button>
-            <Button variant="outline" size="icon" onClick={onBack}>
-              <X className="w-5 h-5" />
-            </Button>
-          </ButtonGroup>
+          // Details variant: Single circular close button
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onBack}
+            className="rounded-full size-11 shadow-md bg-white"
+          >
+            <X className="w-5 h-5" />
+          </Button>
         )}
       </div>
       </div>
