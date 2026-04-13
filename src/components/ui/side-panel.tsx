@@ -32,8 +32,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useCarousel } from '@/components/ui/carousel';
 import Image from 'next/image';
@@ -54,15 +52,15 @@ function CarouselDots({ count }: { count: number }) {
   }, [api]);
 
   return (
-    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 z-10">
+    <div className="flex justify-center gap-1.5 mt-4">
       {Array.from({ length: count }).map((_, index) => (
         <button
           key={index}
           onClick={() => api?.scrollTo(index)}
           className={`w-1.5 h-1.5 rounded-full transition-all ${
             index === current
-              ? 'bg-white w-6'
-              : 'bg-white/60 hover:bg-white/90'
+              ? 'bg-[#140f00] w-6'
+              : 'bg-gray-400 hover:bg-gray-500'
           }`}
           aria-label={`Go to slide ${index + 1}`}
         />
@@ -205,40 +203,55 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
 
             {/* Image Section - Conditional rendering based on image count */}
             {selectedLocation.images && selectedLocation.images.length > 0 && (
-              <div className="mb-6">
+              <>
                 {selectedLocation.images.length === 1 ? (
                   // Single image - static display
-                  <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
-                    <Image
-                      src={selectedLocation.images[0]}
-                      alt={selectedLocation.name}
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="mb-6">
+                    <div className="w-full aspect-square rounded-[24px] overflow-hidden bg-gray-200 relative">
+                      <Image
+                        src={selectedLocation.images[0]}
+                        alt={selectedLocation.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                   </div>
                 ) : (
-                  // Multiple images - carousel
-                  <Carousel className="w-full">
-                    <CarouselContent>
-                      {selectedLocation.images.map((image, index) => (
-                        <CarouselItem key={index}>
-                          <div className="w-full aspect-square rounded-xl overflow-hidden bg-gray-200 relative">
-                            <Image
-                              src={image}
-                              alt={`${selectedLocation.name} - Image ${index + 1}`}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                    <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 z-10" />
-                    <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 z-10" />
-                    <CarouselDots count={selectedLocation.images.length} />
-                  </Carousel>
+                  // Multiple images - carousel with peek effect
+                  <div className="mb-6 -mx-6">
+                    <Carousel
+                      className="w-full cursor-grab active:cursor-grabbing"
+                      opts={{
+                        align: "start",
+                        slidesToScroll: 1,
+                      }}
+                    >
+                      <CarouselContent className="ml-0 pl-6">
+                        {selectedLocation.images.map((image, index) => (
+                          <CarouselItem
+                            key={index}
+                            className="basis-[85%] pl-0"
+                          >
+                            <div className="pr-4">
+                              <div className="w-full aspect-square rounded-[24px] overflow-hidden bg-gray-200 relative">
+                                <Image
+                                  src={image}
+                                  alt={`${selectedLocation.name} - Image ${index + 1}`}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            </div>
+                          </CarouselItem>
+                        ))}
+                        {/* Spacer for right padding on last slide */}
+                        <div className="shrink-0 w-6" aria-hidden="true" />
+                      </CarouselContent>
+                      <CarouselDots count={selectedLocation.images.length} />
+                    </Carousel>
+                  </div>
                 )}
-              </div>
+              </>
             )}
 
             <LocationDetail
