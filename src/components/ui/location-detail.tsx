@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Info, MapPin } from 'lucide-react';
+import { Info } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
-import { Button } from '@/components/ui/button';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 
@@ -50,30 +49,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
   };
 
   return (
-    <div className="flex flex-col w-full">
-      {/* Action Buttons - Open in Maps */}
-      <div className="flex gap-3 mb-6 w-full">
-        <Button variant="outline" size="lg" className="flex-1 min-w-0 rounded-xl" asChild>
-          <a
-            href={`https://maps.apple.com/?q=${location.coordinates[1]},${location.coordinates[0]}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MapPin className="w-4 h-4" />
-            <span className="truncate">Apple Maps</span>
-          </a>
-        </Button>
-        <Button variant="outline" size="lg" className="flex-1 min-w-0 rounded-xl" asChild>
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MapPin className="w-4 h-4" />
-            <span className="truncate">Google Maps</span>
-          </a>
-        </Button>
-      </div>
+      <div className="flex flex-col w-full">
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={handleTabValueChange}>
@@ -288,6 +264,6 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
           )}
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
   );
 }

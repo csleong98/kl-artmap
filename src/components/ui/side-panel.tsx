@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import { Search, LayoutGrid, List, CircleDot, Ticket, Train, DoorOpen, Rows, Grid2x2 } from 'lucide-react';
+import { Search, LayoutGrid, List, CircleDot, Ticket, Train, Rows, Grid2x2, Share2, Mail, MapPin } from 'lucide-react';
 import { animate } from 'motion';
 import { mockLocations } from '@/data/mockLocations';
 import { Location } from '@/types';
@@ -16,6 +16,18 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   Carousel,
   CarouselContent,
@@ -104,29 +116,93 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
               showSymbols={false}
               title={selectedLocation.name}
               description={selectedLocation.details?.overview?.description || ''}
-              tags={
-                <>
-                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
-                    <DoorOpen className="w-3 h-3" />
-                    {selectedLocation.status === 'open' ? 'Open now' : 'Closed'}
-                  </span>
-                  <span className="flex items-center gap-1.5 bg-[#f2f2f2] rounded-[24px] pl-1.5 pr-2 py-1 text-sm text-[#2e2a31]">
-                    <Ticket className="w-3 h-3" />
-                    {selectedLocation.admission === 'free' ? 'Free' : 'Paid'}
-                  </span>
-                </>
-              }
-              onShare={() => {
-                const url = `${window.location.origin}?location=${encodeURIComponent(selectedLocation.name)}&tab=${initialTab || 'about'}`;
-                navigator.clipboard.writeText(url);
-                console.log('URL copied to clipboard:', url);
-              }}
               onBack={onBack}
             />
           </div>
 
           {/* Content Section */}
           <div className="flex-1 px-6 py-6">
+            {/* Action Buttons */}
+            <TooltipProvider>
+              <div className="flex gap-4 mb-6 w-full">
+                {/* Get Directions Dropdown Button */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="lg"
+                      className="flex-1 bg-[#140f00] text-white hover:bg-[#140f00]/90 rounded-[40px] px-4 py-3.5 font-medium"
+                    >
+                      Get directions
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuItem asChild>
+                      <a
+                        href={`https://maps.apple.com/?q=${selectedLocation.coordinates[1]},${selectedLocation.coordinates[0]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        Apple Maps
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${selectedLocation.coordinates[1]},${selectedLocation.coordinates[0]}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        Google Maps
+                      </a>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {/* Icon Buttons Group */}
+                <div className="flex gap-4 items-center">
+                  {/* Share Button with Tooltip */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          const url = `${window.location.origin}?location=${encodeURIComponent(selectedLocation.name)}`;
+                          navigator.clipboard.writeText(url);
+                        }}
+                        className="size-12 p-3 rounded-[24px] bg-white"
+                      >
+                        <Share2 className="size-6" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Share this place</p>
+                    </TooltipContent>
+                  </Tooltip>
+
+                  {/* Feedback Button with Tooltip */}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => window.open('mailto:feedback@example.com?subject=KL Art Map Feedback', '_blank')}
+                        className="size-12 p-3 rounded-[24px] bg-white"
+                      >
+                        <Mail className="size-6" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Send feedback to developer</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            </TooltipProvider>
+
             {/* Image Section - Conditional rendering based on image count */}
             {selectedLocation.images && selectedLocation.images.length > 0 && (
               <div className="mb-6">
