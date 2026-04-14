@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Info } from 'lucide-react';
+import { Info, Bus } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
@@ -52,24 +52,17 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
       <div className="flex flex-col w-full">
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={handleTabValueChange}>
-        <TabsList className="w-full bg-[#f2f2f2] rounded-[10px] p-[3px]">
-          <TabsTrigger
-            value="about"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
+      <Tabs value={activeTab} onValueChange={handleTabValueChange} className="-mx-6">
+        <TabsList>
+          <TabsTrigger value="about" className="flex-1">
+            <Info className="w-4 h-4" />
             About
           </TabsTrigger>
-          <TabsTrigger
-            value="station-guide"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
+          <TabsTrigger value="station-guide" className="flex-1">
+            <Bus className="w-4 h-4" />
             Nearby stations
           </TabsTrigger>
-          <TabsTrigger
-            value="contact"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
+          <TabsTrigger value="contact" className="flex-1">
             Contact
           </TabsTrigger>
         </TabsList>
