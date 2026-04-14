@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Info, Bus } from 'lucide-react';
+import { Info, Bus, Copy, Link as LinkIcon, Phone } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
+import ContentContainer from './content-container';
+import SectionHeader from './section-header';
+import { Button } from '@/components/ui/button';
 
 interface LocationDetailProps {
   location: Location;
@@ -62,33 +65,26 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             <Bus className="w-4 h-4" />
             Nearby stations
           </TabsTrigger>
-          <TabsTrigger value="contact" className="flex-1">
-            Contact
-          </TabsTrigger>
         </TabsList>
 
         {/* About tab */}
-        <TabsContent value="about" className="mt-6 flex flex-col gap-6">
+        <TabsContent value="about" className="mt-6 flex flex-col gap-4">
           {details?.overview ? (
             <>
-              {/* Admission */}
-              <div>
-                <h3 className="text-base font-semibold text-[#191919] mb-3">
-                  Admission
-                </h3>
-                <p className="text-base text-[#1a1a1a]">
+              {/* Admission Section */}
+              <ContentContainer>
+                <SectionHeader title="Admission" />
+                <p className="text-base text-[#282828]">
                   {details.overview.admission}
                 </p>
-              </div>
+              </ContentContainer>
 
-              {/* Opening hours */}
-              <div>
-                <h3 className="text-base font-semibold text-[#191919] mb-3">
-                  Opening hours
-                </h3>
+              {/* Opening Hours Section */}
+              <ContentContainer>
+                <SectionHeader title="Opening hours" />
 
                 {details.overview.specialNote && (
-                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2 mb-3">
+                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
                     <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
                     <div className="flex flex-col gap-1.5">
                       <p className="text-sm text-[#15171e] font-medium">
@@ -102,28 +98,142 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                 )}
 
                 <div className="flex flex-col">
-                  {daysOfWeek.map((day, i) => (
-                    <div
-                      key={day.key}
-                      className={`flex justify-between px-4 py-2 ${
-                        i % 2 === 0 ? 'bg-[#f2f2f2]' : 'bg-white'
-                      }`}
-                    >
-                      <span className="text-base text-[#2a2f3c]">
-                        {day.label === 'Mon' ? 'Monday' :
-                         day.label === 'Tue' ? 'Tuesday' :
-                         day.label === 'Wed' ? 'Wednesday' :
-                         day.label === 'Thu' ? 'Thursday' :
-                         day.label === 'Fri' ? 'Friday' :
-                         day.label === 'Sat' ? 'Saturday' : 'Sunday'}
-                      </span>
-                      <span className="text-base text-[#1a1a1a]">
-                        {details.overview.openingHours[day.key]}
-                      </span>
-                    </div>
-                  ))}
+                  {daysOfWeek.map((day, i) => {
+                    const dayName = day.label === 'Mon' ? 'Monday' :
+                                    day.label === 'Tue' ? 'Tuesday' :
+                                    day.label === 'Wed' ? 'Wednesday' :
+                                    day.label === 'Thu' ? 'Thursday' :
+                                    day.label === 'Fri' ? 'Friday' :
+                                    day.label === 'Sat' ? 'Saturday' : 'Sunday';
+                    const hours = details.overview.openingHours[day.key];
+                    const isClosed = hours?.toLowerCase() === 'closed';
+
+                    return (
+                      <div
+                        key={day.key}
+                        className={`flex justify-between px-4 py-2 ${
+                          i % 2 === 0 ? 'bg-[#f6f3ee]' : 'bg-white'
+                        }`}
+                      >
+                        <span className={`text-base ${isClosed ? 'text-[#e73d3d]' : 'text-[#2a2f3c]'}`}>
+                          {dayName}
+                        </span>
+                        <span className={`text-base ${isClosed ? 'text-[#e73d3d]' : 'text-[#1a1a1a]'}`}>
+                          {hours}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
+              </ContentContainer>
+
+              {/* Contact Details Section */}
+              <ContentContainer>
+                <SectionHeader title="Contact details" />
+
+                {details.contact ? (
+                  <>
+                    {/* Address */}
+                    <div className="flex flex-col gap-[6px]">
+                      <p className="text-[14px] font-semibold text-[#757575]">
+                        Address
+                      </p>
+                      <div className="flex gap-3 items-start">
+                        <p className="flex-1 text-base text-[#282828] leading-normal">
+                          {details.contact.address}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-[10px] shrink-0 size-9"
+                          onClick={() => navigator.clipboard.writeText(details.contact.address || '')}
+                        >
+                          <Copy className="w-5 h-5" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Website */}
+                    {details.contact.website && (
+                      <div className="flex flex-col gap-[6px]">
+                        <p className="text-[14px] font-semibold text-[#757575]">
+                          Official website
+                        </p>
+                        <div className="flex gap-3 items-start">
+                          <p className="flex-1 text-base text-[#282828] leading-normal break-all">
+                            {details.contact.website}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => window.open(details.contact.website, '_blank')}
+                          >
+                            <LinkIcon className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => navigator.clipboard.writeText(details.contact.website || '')}
+                          >
+                            <Copy className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Phone */}
+                    {details.contact.phone && (
+                      <div className="flex flex-col gap-[6px]">
+                        <p className="text-[14px] font-semibold text-[#757575]">
+                          Phone number
+                        </p>
+                        <div className="flex gap-3 items-center">
+                          <p className="flex-1 text-base text-[#282828]">
+                            {details.contact.phone}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => window.location.href = `tel:${details.contact.phone}`}
+                          >
+                            <Phone className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => navigator.clipboard.writeText(details.contact.phone)}
+                          >
+                            <Copy className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-[6px]">
+                    <p className="text-[14px] font-semibold text-[#757575]">
+                      Address
+                    </p>
+                    <div className="flex gap-3 items-start">
+                      <p className="flex-1 text-base text-[#282828] leading-normal">
+                        {location.address}
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-[10px] shrink-0 size-9"
+                        onClick={() => navigator.clipboard.writeText(location.address)}
+                      >
+                        <Copy className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </ContentContainer>
             </>
           ) : (
             <div className="text-sm text-ds-text-muted py-4">
@@ -201,59 +311,6 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             <p className="text-sm text-ds-text-muted py-4">
               No nearby stations available
             </p>
-          )}
-        </TabsContent>
-
-        {/* Contact tab */}
-        <TabsContent value="contact" className="mt-6">
-          {details?.contact ? (
-            <div className="flex flex-col gap-4">
-              <div>
-                <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                  Address
-                </h3>
-                <p className="text-base text-[#3f475a] leading-[1.4]">
-                  {details.contact.address}
-                </p>
-              </div>
-              {details.contact.website && (
-                <div>
-                  <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                    Website
-                  </h3>
-                  <a
-                    href={details.contact.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base text-blue-600 hover:underline break-all"
-                  >
-                    {details.contact.website}
-                  </a>
-                </div>
-              )}
-              {details.contact.phone && (
-                <div>
-                  <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                    Phone
-                  </h3>
-                  <a
-                    href={`tel:${details.contact.phone}`}
-                    className="text-base text-[#3f475a] hover:underline"
-                  >
-                    {details.contact.phone}
-                  </a>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                Address
-              </h3>
-              <p className="text-base text-[#3f475a] leading-[1.4]">
-                {location.address}
-              </p>
-            </div>
           )}
         </TabsContent>
       </Tabs>
