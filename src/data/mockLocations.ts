@@ -177,7 +177,17 @@ export const mockLocations: Location[] = [
     details: {
       overview: {
         description: 'Southeast Asia\'s largest museum of Islamic arts, featuring over 7,000 artifacts from the Islamic world.',
-        admission: 'RM20 (Adults), RM10 (Students/Seniors)',
+        admission: 'Paid admission required',
+        pricing: {
+          ticketInfo: 'Walk-in and online purchase available',
+          ticketUrl: 'https://www.iammuseum.org.my/tickets',
+          prices: [
+            { category: 'Adults', price: 'RM 20' },
+            { category: 'Students (with valid ID)', price: 'RM 10' },
+            { category: 'Seniors (60 years and above)', price: 'RM 10' },
+            { category: 'Children (12 years and below)', price: 'FREE' }
+          ]
+        },
         openingHours: {
           monday: 'Closed',
           tuesday: '10am - 6pm',
@@ -215,7 +225,13 @@ export const mockLocations: Location[] = [
     details: {
       overview: {
         description: 'Dedicated to preserving Malaysia\'s rich textile heritage, featuring traditional batik, songket, and weaving collections.',
-        admission: 'RM5 (Adults), RM2 (Children)',
+        admission: 'Paid admission required',
+        pricing: {
+          prices: [
+            { category: 'Adults', price: 'RM 5' },
+            { category: 'Children (12 years and below)', price: 'RM 2' }
+          ]
+        },
         openingHours: {
           monday: 'Closed',
           tuesday: '9am - 6pm',
@@ -326,7 +342,15 @@ export const mockLocations: Location[] = [
     details: {
       overview: {
         description: 'Interactive digital art museum featuring immersive installations and futuristic exhibits perfect for social media.',
-        admission: 'RM49 (Adults), RM39 (Children)',
+        admission: 'Paid admission required',
+        pricing: {
+          ticketInfo: 'Online booking recommended',
+          ticketUrl: 'https://www.ur-mu.com/tickets',
+          prices: [
+            { category: 'Adults', price: 'RM 49' },
+            { category: 'Children', price: 'RM 39' }
+          ]
+        },
         openingHours: {
           monday: '10am - 10pm',
           tuesday: '10am - 10pm',
@@ -362,7 +386,15 @@ export const mockLocations: Location[] = [
     details: {
       overview: {
         description: 'Modern immersive art space featuring interactive light installations and projection mapping experiences.',
-        admission: 'RM49 (Adults), RM39 (Children)',
+        admission: 'Paid admission required',
+        pricing: {
+          ticketInfo: 'Online booking recommended',
+          ticketUrl: 'https://www.ur-mu.com/tickets',
+          prices: [
+            { category: 'Adults', price: 'RM 49' },
+            { category: 'Children', price: 'RM 39' }
+          ]
+        },
         openingHours: {
           monday: '10am - 10pm',
           tuesday: '10am - 10pm',
@@ -399,7 +431,15 @@ export const mockLocations: Location[] = [
     details: {
       overview: {
         description: 'Digital art museum in the heart of Chinatown, blending traditional heritage with modern technology.',
-        admission: 'RM49 (Adults), RM39 (Children)',
+        admission: 'Paid admission required',
+        pricing: {
+          ticketInfo: 'Online booking recommended',
+          ticketUrl: 'https://www.ur-mu.com/tickets',
+          prices: [
+            { category: 'Adults', price: 'RM 49' },
+            { category: 'Children', price: 'RM 39' }
+          ]
+        },
         openingHours: {
           monday: '10am - 10pm',
           tuesday: '10am - 10pm',

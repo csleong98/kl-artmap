@@ -74,9 +74,46 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
               {/* Admission Section */}
               <ContentContainer>
                 <SectionHeader title="Admission" />
-                <p className="text-base text-[#282828]">
-                  {details.overview.admission}
-                </p>
+
+                {details.overview.pricing ? (
+                  <>
+                    {/* Ticket Info Box (Optional) */}
+                    {details.overview.pricing.ticketInfo && (
+                      <div className="flex gap-3 items-center w-full border border-[#adadad] rounded-[32px] px-3 py-2">
+                        <p className="flex-1 text-[14px] font-medium text-[#15171e]">
+                          {details.overview.pricing.ticketInfo}
+                        </p>
+                        {details.overview.pricing.ticketUrl && (
+                          <button
+                            onClick={() => window.open(details.overview.pricing.ticketUrl, '_blank')}
+                            className="bg-[#140f00] text-white px-[14px] py-[6px] rounded-[16px] text-[14px] font-medium shrink-0"
+                          >
+                            Get tickets
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Pricing Table */}
+                    <div className="flex flex-col gap-3 w-full">
+                      {details.overview.pricing.prices.map((item: any, index: number) => (
+                        <div key={index} className="flex gap-2 items-center w-full">
+                          <span className="text-base text-[#282828] shrink-0">
+                            {item.category}
+                          </span>
+                          <div className="flex-1 border-b border-[#d4d4d4]" />
+                          <span className="text-base font-medium text-[#282828] text-right shrink-0 w-14">
+                            {item.price}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-base text-[#282828]">
+                    {details.overview.admission}
+                  </p>
+                )}
               </ContentContainer>
 
               {/* Opening Hours Section */}
@@ -205,7 +242,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                             variant="outline"
                             size="icon"
                             className="rounded-[10px] shrink-0 size-9"
-                            onClick={() => navigator.clipboard.writeText(details.contact.phone)}
+                            onClick={() => navigator.clipboard.writeText(details.contact.phone || '')}
                           >
                             <Copy className="w-5 h-5" />
                           </Button>

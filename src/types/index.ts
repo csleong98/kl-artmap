@@ -13,6 +13,14 @@ export interface LocationDetails {
   overview: {
     description: string;
     admission: string;
+    pricing?: {
+      ticketInfo?: string;
+      ticketUrl?: string;
+      prices: Array<{
+        category: string;
+        price: string;
+      }>;
+    };
     openingHours: {
       monday: string;
       tuesday: string;
