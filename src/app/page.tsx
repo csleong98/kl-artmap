@@ -8,7 +8,9 @@ import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
 import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
-import { mockLocations } from '@/data/mockLocations';
+import { getAllLocations } from '@/data/helpers';
+
+const mockLocations = getAllLocations();
 
 function HomeContent() {
   const searchParams = useSearchParams();

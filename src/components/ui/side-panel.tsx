@@ -3,8 +3,10 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Search, LayoutGrid, List, CircleDot, Ticket, Train, Rows, Grid2x2, Share2, Mail, MapPin } from 'lucide-react';
 import { animate } from 'motion';
-import { mockLocations } from '@/data/mockLocations';
+import { getAllLocations } from '@/data/helpers';
 import { Location } from '@/types';
+
+const mockLocations = getAllLocations();
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
 import StackedList from './stacked-list';
