@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Info } from 'lucide-react';
+import { Info, Bus, Copy, Link as LinkIcon, Phone } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
 import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
+import ContentContainer from './content-container';
+import SectionHeader from './section-header';
+import { Button } from '@/components/ui/button';
 
 interface LocationDetailProps {
   location: Location;
@@ -49,78 +52,76 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
   };
 
   return (
-    <div className="flex flex-col">
-      {/* Action Buttons - Open in Maps */}
-      <div className="flex gap-4 mb-6">
-        <a
-          href={`https://maps.apple.com/?q=${location.coordinates[1]},${location.coordinates[0]}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-[#f7f7f7] border border-[#a6a6a6] rounded-[10px] px-4 py-2.5 text-base text-[#2e2a31] hover:bg-[#efefef] transition-colors"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 0C7.79 0 6 1.79 6 4c0 2.21 4 9 4 9s4-6.79 4-9c0-2.21-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-          </svg>
-          Open in Apple Maps
-        </a>
-        <a
-          href={`https://www.google.com/maps/search/?api=1&query=${location.coordinates[1]},${location.coordinates[0]}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 bg-[#f7f7f7] border border-[#a6a6a6] rounded-[10px] px-4 py-2.5 text-base text-[#2e2a31] hover:bg-[#efefef] transition-colors"
-        >
-          <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 0C7.79 0 6 1.79 6 4c0 2.21 4 9 4 9s4-6.79 4-9c0-2.21-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-          </svg>
-          Open in Google Maps
-        </a>
-      </div>
+      <div className="flex flex-col w-full">
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={handleTabValueChange}>
-        <TabsList className="w-full bg-[#f2f2f2] rounded-[10px] p-[3px]">
-          <TabsTrigger
-            value="about"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
+      <Tabs value={activeTab} onValueChange={handleTabValueChange} className="-mx-6">
+        <TabsList>
+          <TabsTrigger value="about" className="flex-1">
+            <Info className="w-4 h-4" />
             About
           </TabsTrigger>
-          <TabsTrigger
-            value="station-guide"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
+          <TabsTrigger value="station-guide" className="flex-1">
+            <Bus className="w-4 h-4" />
             Nearby stations
-          </TabsTrigger>
-          <TabsTrigger
-            value="contact"
-            className="flex-1 rounded-[8px] text-sm data-[state=active]:bg-[#d4d4d4] data-[state=active]:border data-[state=active]:border-[#a5adc0] data-[state=active]:shadow-none data-[state=active]:text-[#2a2f3c] text-[#2a2f3c]"
-          >
-            Contact
           </TabsTrigger>
         </TabsList>
 
         {/* About tab */}
-        <TabsContent value="about" className="mt-6 flex flex-col gap-6">
+        <TabsContent value="about" className="mt-6 flex flex-col gap-4">
           {details?.overview ? (
             <>
-              {/* Admission */}
-              <div>
-                <h3 className="text-base font-semibold text-[#191919] mb-3">
-                  Admission
-                </h3>
-                <p className="text-base text-[#1a1a1a]">
-                  {details.overview.admission}
-                </p>
-              </div>
+              {/* Admission Section */}
+              <ContentContainer>
+                <SectionHeader title="Admission" />
 
-              {/* Opening hours */}
-              <div>
-                <h3 className="text-base font-semibold text-[#191919] mb-3">
-                  Opening hours
-                </h3>
+                {details.overview.pricing ? (
+                  <>
+                    {/* Ticket Info Box (Optional) */}
+                    {details.overview.pricing?.ticketInfo && (
+                      <div className="flex gap-3 items-center w-full border border-[#adadad] rounded-[32px] px-3 py-2">
+                        <p className="flex-1 text-[14px] font-medium text-[#15171e]">
+                          {details.overview.pricing.ticketInfo}
+                        </p>
+                        {details.overview.pricing.ticketUrl && (
+                          <button
+                            onClick={() => window.open(details.overview.pricing!.ticketUrl!, '_blank')}
+                            className="bg-[#140f00] text-white px-[14px] py-[6px] rounded-[16px] text-[14px] font-medium shrink-0"
+                          >
+                            Get tickets
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Pricing Table */}
+                    <div className="flex flex-col gap-3 w-full">
+                      {details.overview.pricing?.prices.map((item: any, index: number) => (
+                        <div key={index} className="flex gap-2 items-center w-full">
+                          <span className="text-base text-[#282828] shrink-0">
+                            {item.category}
+                          </span>
+                          <div className="flex-1 border-b border-[#d4d4d4]" />
+                          <span className="text-base font-medium text-[#282828] text-right shrink-0 w-14">
+                            {item.price}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-base text-[#282828]">
+                    {details.overview.admission}
+                  </p>
+                )}
+              </ContentContainer>
+
+              {/* Opening Hours Section */}
+              <ContentContainer>
+                <SectionHeader title="Opening hours" />
 
                 {details.overview.specialNote && (
-                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2 mb-3">
+                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
                     <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
                     <div className="flex flex-col gap-1.5">
                       <p className="text-sm text-[#15171e] font-medium">
@@ -134,28 +135,142 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                 )}
 
                 <div className="flex flex-col">
-                  {daysOfWeek.map((day, i) => (
-                    <div
-                      key={day.key}
-                      className={`flex justify-between px-4 py-2 ${
-                        i % 2 === 0 ? 'bg-[#f2f2f2]' : 'bg-white'
-                      }`}
-                    >
-                      <span className="text-base text-[#2a2f3c]">
-                        {day.label === 'Mon' ? 'Monday' :
-                         day.label === 'Tue' ? 'Tuesday' :
-                         day.label === 'Wed' ? 'Wednesday' :
-                         day.label === 'Thu' ? 'Thursday' :
-                         day.label === 'Fri' ? 'Friday' :
-                         day.label === 'Sat' ? 'Saturday' : 'Sunday'}
-                      </span>
-                      <span className="text-base text-[#1a1a1a]">
-                        {details.overview.openingHours[day.key]}
-                      </span>
-                    </div>
-                  ))}
+                  {daysOfWeek.map((day, i) => {
+                    const dayName = day.label === 'Mon' ? 'Monday' :
+                                    day.label === 'Tue' ? 'Tuesday' :
+                                    day.label === 'Wed' ? 'Wednesday' :
+                                    day.label === 'Thu' ? 'Thursday' :
+                                    day.label === 'Fri' ? 'Friday' :
+                                    day.label === 'Sat' ? 'Saturday' : 'Sunday';
+                    const hours = details.overview.openingHours[day.key];
+                    const isClosed = hours?.toLowerCase() === 'closed';
+
+                    return (
+                      <div
+                        key={day.key}
+                        className={`flex justify-between px-4 py-2 ${
+                          i % 2 === 0 ? 'bg-[#f6f3ee]' : 'bg-white'
+                        }`}
+                      >
+                        <span className={`text-base ${isClosed ? 'text-[#e73d3d]' : 'text-[#2a2f3c]'}`}>
+                          {dayName}
+                        </span>
+                        <span className={`text-base ${isClosed ? 'text-[#e73d3d]' : 'text-[#1a1a1a]'}`}>
+                          {hours}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
+              </ContentContainer>
+
+              {/* Contact Details Section */}
+              <ContentContainer>
+                <SectionHeader title="Contact details" />
+
+                {details.contact ? (
+                  <>
+                    {/* Address */}
+                    <div className="flex flex-col gap-[6px]">
+                      <p className="text-[14px] font-semibold text-[#757575]">
+                        Address
+                      </p>
+                      <div className="flex gap-3 items-start">
+                        <p className="flex-1 text-base text-[#282828] leading-normal">
+                          {details.contact.address}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-[10px] shrink-0 size-9"
+                          onClick={() => navigator.clipboard.writeText(details.contact.address || '')}
+                        >
+                          <Copy className="w-5 h-5" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Website */}
+                    {details.contact.website && (
+                      <div className="flex flex-col gap-[6px]">
+                        <p className="text-[14px] font-semibold text-[#757575]">
+                          Official website
+                        </p>
+                        <div className="flex gap-3 items-start">
+                          <p className="flex-1 text-base text-[#282828] leading-normal break-all">
+                            {details.contact.website}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => window.open(details.contact.website, '_blank')}
+                          >
+                            <LinkIcon className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => navigator.clipboard.writeText(details.contact.website || '')}
+                          >
+                            <Copy className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Phone */}
+                    {details.contact.phone && (
+                      <div className="flex flex-col gap-[6px]">
+                        <p className="text-[14px] font-semibold text-[#757575]">
+                          Phone number
+                        </p>
+                        <div className="flex gap-3 items-center">
+                          <p className="flex-1 text-base text-[#282828]">
+                            {details.contact.phone}
+                          </p>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => window.location.href = `tel:${details.contact.phone}`}
+                          >
+                            <Phone className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => navigator.clipboard.writeText(details.contact.phone || '')}
+                          >
+                            <Copy className="w-5 h-5" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-[6px]">
+                    <p className="text-[14px] font-semibold text-[#757575]">
+                      Address
+                    </p>
+                    <div className="flex gap-3 items-start">
+                      <p className="flex-1 text-base text-[#282828] leading-normal">
+                        {location.address}
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="rounded-[10px] shrink-0 size-9"
+                        onClick={() => navigator.clipboard.writeText(location.address)}
+                      >
+                        <Copy className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </ContentContainer>
             </>
           ) : (
             <div className="text-sm text-ds-text-muted py-4">
@@ -235,60 +350,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             </p>
           )}
         </TabsContent>
-
-        {/* Contact tab */}
-        <TabsContent value="contact" className="mt-6">
-          {details?.contact ? (
-            <div className="flex flex-col gap-4">
-              <div>
-                <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                  Address
-                </h3>
-                <p className="text-base text-[#3f475a] leading-[1.4]">
-                  {details.contact.address}
-                </p>
-              </div>
-              {details.contact.website && (
-                <div>
-                  <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                    Website
-                  </h3>
-                  <a
-                    href={details.contact.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-base text-blue-600 hover:underline break-all"
-                  >
-                    {details.contact.website}
-                  </a>
-                </div>
-              )}
-              {details.contact.phone && (
-                <div>
-                  <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                    Phone
-                  </h3>
-                  <a
-                    href={`tel:${details.contact.phone}`}
-                    className="text-base text-[#3f475a] hover:underline"
-                  >
-                    {details.contact.phone}
-                  </a>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div>
-              <h3 className="text-sm font-semibold text-[#191919] mb-2">
-                Address
-              </h3>
-              <p className="text-base text-[#3f475a] leading-[1.4]">
-                {location.address}
-              </p>
-            </div>
-          )}
-        </TabsContent>
       </Tabs>
-    </div>
+      </div>
   );
 }

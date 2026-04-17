@@ -8,7 +8,9 @@ import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
 import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
-import { mockLocations } from '@/data/mockLocations';
+import { getAllLocations } from '@/data/helpers';
+
+const mockLocations = getAllLocations();
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -73,22 +75,11 @@ function HomeContent() {
     if (loc) {
       muteOtherMarkers(loc.name);
       map.resize();
-      // Enable 3D buildings for initial location
-      if (map.enable3DBuildings) {
-        map.enable3DBuildings();
-      }
-
-      // Offset camera to stand opposite the building
-      const offsetDistance = 0.0001;
-      const offsetCenter: [number, number] = [
-        loc.coordinates[0],
-        loc.coordinates[1] - offsetDistance
-      ];
 
       map.flyTo({
-        center: offsetCenter,
-        zoom: 18,
-        pitch: 80,
+        center: loc.coordinates,
+        zoom: 17,
+        pitch: 0,
         bearing: 0,
         duration: 1500,
       });
@@ -111,23 +102,12 @@ function HomeContent() {
     muteOtherMarkers(location.name);
     if (mapRef.current) {
       mapRef.current.resize();
-      // Enable 3D buildings and fly to eye-level view
-      if (mapRef.current.enable3DBuildings) {
-        mapRef.current.enable3DBuildings();
-      }
-
-      // Offset camera to stand opposite the building
-      const offsetDistance = 0.0001; // Distance "across the street"
-      const offsetCenter: [number, number] = [
-        location.coordinates[0],
-        location.coordinates[1] - offsetDistance // Move camera south to look north at building
-      ];
 
       mapRef.current.flyTo({
-        center: offsetCenter,
-        zoom: 18,
-        pitch: 80,
-        bearing: 0, // Face north toward building
+        center: location.coordinates,
+        zoom: 17,
+        pitch: 0,
+        bearing: 0,
         duration: 2000,
       });
     }
@@ -152,11 +132,8 @@ function HomeContent() {
     setInitialTab(undefined);
     updateUrl(null);
 
-    // Reset to flat 2D view and disable 3D buildings
+    // Reset to overview
     if (mapRef.current) {
-      if (mapRef.current.disable3DBuildings) {
-        mapRef.current.disable3DBuildings();
-      }
       mapRef.current.flyTo({
         center: [101.6869, 3.1390],
         zoom: 11,
@@ -190,7 +167,6 @@ function HomeContent() {
               getStationRouteInfo={getStationRouteInfo}
               onTabChange={handleTabChange}
               initialTab={initialTab}
-              showBackground={true}
             />
           </div>
         </aside>

@@ -1,12 +1,11 @@
 import { useState, useRef, useCallback } from 'react';
 import { Location } from '@/types';
-import { getStationsWithinRadius } from '@/data/stationCoordinates';
+import { getStationsWithinRadius, findRelevantIndoorConnections } from '@/data/helpers';
 import {
   fetchDirectionsRoute,
   formatDistance,
   formatDuration,
 } from '@/services/routeService';
-import { findRelevantIndoorConnections } from '@/data/indoorConnections';
 
 export interface WalkingRouteData {
   stationName: string;
