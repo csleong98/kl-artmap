@@ -417,7 +417,8 @@ export async function addAllMarkers(map: any): Promise<any[]> {
 
   try {
     const mapboxgl = (await import('mapbox-gl')).default;
-    const { mockLocations } = require('../data/mockLocations');
+    const { getAllLocations } = await import('../data/helpers');
+    const mockLocations = getAllLocations();
 
     // Add all venues with default circular pins
     mockLocations.forEach((location: any) => {
