@@ -78,14 +78,14 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
                 {details.overview.pricing ? (
                   <>
                     {/* Ticket Info Box (Optional) */}
-                    {details.overview.pricing.ticketInfo && (
+                    {details.overview.pricing?.ticketInfo && (
                       <div className="flex gap-3 items-center w-full border border-[#adadad] rounded-[32px] px-3 py-2">
                         <p className="flex-1 text-[14px] font-medium text-[#15171e]">
                           {details.overview.pricing.ticketInfo}
                         </p>
                         {details.overview.pricing.ticketUrl && (
                           <button
-                            onClick={() => window.open(details.overview.pricing.ticketUrl, '_blank')}
+                            onClick={() => window.open(details.overview.pricing!.ticketUrl!, '_blank')}
                             className="bg-[#140f00] text-white px-[14px] py-[6px] rounded-[16px] text-[14px] font-medium shrink-0"
                           >
                             Get tickets
@@ -96,7 +96,7 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
 
                     {/* Pricing Table */}
                     <div className="flex flex-col gap-3 w-full">
-                      {details.overview.pricing.prices.map((item: any, index: number) => (
+                      {details.overview.pricing?.prices.map((item: any, index: number) => (
                         <div key={index} className="flex gap-2 items-center w-full">
                           <span className="text-base text-[#282828] shrink-0">
                             {item.category}
