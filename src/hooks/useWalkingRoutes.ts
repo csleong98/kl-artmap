@@ -127,6 +127,10 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
           // Hospital Kuala Lumpur to National Art Gallery: 7 mins, 450m
           distance = 450;
           duration = 420; // 7 minutes in seconds
+        } else if (station.code === 'PY27' && location.name === 'Istana Budaya (National Theater)') {
+          // Hospital Kuala Lumpur to Istana Budaya: 3 mins, 150m
+          distance = 150;
+          duration = 180; // 3 minutes in seconds
         } else {
           // Calculate straight-line distance as estimate
           distance = Math.round(

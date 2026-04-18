@@ -8,8 +8,7 @@
     "status": "open",
     "coordinates": [101.7052281988475, 3.1737653613452355],
     "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
-    "images": ["/images/locations/National Art Gallery/1.jpg"],
-    "nearestStations": ["Hospital Kuala Lumpur"],
+    "nearestStations": ["PY27"],
     "admission": "free",
     "details": {
       "overview": {
@@ -33,6 +32,43 @@
         "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
         "website": "https://www.artgallery.gov.my/",
         "phone": "03-4025 4990"
+      }
+    }
+  },
+  {
+    "name": "Istana Budaya (National Theater)",
+    "type": "theater",
+    "distance": "1km",
+    "walkTime": "15mins",
+    "openingHours": "Varies by performance",
+    "status": "open",
+    "coordinates": [101.70442501774133, 3.174501865435276],
+    "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
+    "images": ["/images/locations/Istana Budaya/1.jpg"],
+    "nearestStations": ["PY27"],
+    "admission": "paid",
+    "details": {
+      "overview": {
+        "description": "Malaysia's premier performing arts venue, Istana Budaya hosts world-class theater, dance, and musical performances.",
+        "admission": "Varies by performance",
+        "openingHours": {
+          "monday": "Varies",
+          "tuesday": "Varies",
+          "wednesday": "Varies",
+          "thursday": "Varies",
+          "friday": "Varies",
+          "saturday": "Varies",
+          "sunday": "Varies"
+        },
+        "specialNote": "Check performance schedule online"
+      },
+      "stationGuide": {
+        "stations": []
+      },
+      "contact": {
+        "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
+        "website": "https://www.istanabudaya.gov.my/",
+        "phone": "03-4026 5555"
       }
     }
   },
