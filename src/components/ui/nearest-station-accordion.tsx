@@ -56,8 +56,14 @@ export default function NearestStationAccordion({
               <p className="font-semibold text-[16px] text-[#282828]">
                 {station.name}
               </p>
-              <div className="bg-[#cde9d2] px-1 py-0.5 rounded-md">
-                <p className="text-[12px] font-medium text-[#398145]">
+              <div
+                className="px-1 py-0.5 rounded-md"
+                style={{ backgroundColor: `${lineColor}20` }}
+              >
+                <p
+                  className="text-[12px] font-medium"
+                  style={{ color: lineColor, filter: 'brightness(0.7)' }}
+                >
                   {station.lineType}
                 </p>
               </div>
@@ -129,8 +135,14 @@ export default function NearestStationAccordion({
                       >
                         {stop.name}
                       </p>
-                      <div className="bg-[#cde9d2] px-1 py-0.5 rounded-md">
-                        <p className="text-[12px] font-medium text-[#398145]">
+                      <div
+                        className="px-1 py-0.5 rounded-md"
+                        style={{ backgroundColor: `${lineColor}20` }}
+                      >
+                        <p
+                          className="text-[12px] font-medium"
+                          style={{ color: lineColor, filter: 'brightness(0.7)' }}
+                        >
                           {stop.code}
                         </p>
                       </div>
@@ -158,7 +170,7 @@ export default function NearestStationAccordion({
                 </div>
 
                 {/* Connecting Line */}
-                {!isLastStop && (
+                {!isLastStop && !(isCurrentStation && interchangeInfo) && (
                   <div className="flex gap-5 h-6 items-start pl-[7px] w-full">
                     <div className="w-px h-full bg-[#C4C4C4]" />
                   </div>
@@ -166,8 +178,8 @@ export default function NearestStationAccordion({
 
                 {/* Interchange Info Card */}
                 {isCurrentStation && interchangeInfo && (
-                  <div className="flex gap-5 items-start pl-[7px] w-full mb-2">
-                    <div className="w-px h-6 bg-[#C4C4C4]" />
+                  <div className="flex gap-5 items-start pl-[7px] w-full">
+                    <div className="w-px self-stretch bg-[#C4C4C4]" />
                     <div className="flex-1 bg-[#fbfaf8] border border-[#ececec] rounded-xl p-4 flex flex-col gap-2">
                       <p className="text-[14px] text-[#595959]">
                         This is an interchange station to{' '}

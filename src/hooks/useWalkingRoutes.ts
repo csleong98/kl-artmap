@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Location } from '@/types';
-import { getStationWithMetadata, haversineMeters } from '@/data/helpers';
+import { getStationWithMetadata, getStationByCode, haversineMeters } from '@/data/helpers';
 import {
   formatDistance,
   formatDuration,
@@ -45,10 +45,41 @@ function resolveStations(location: Location) {
   }
 
   const stations = location.nearestStations
-    .map(stationName => {
-      console.log('🔎 Looking up station:', stationName);
-      const result = getStationWithMetadata(stationName);
-      console.log('✅ Result:', result ? result.name : 'NULL');
+    .map(stationIdentifier => {
+      console.log('🔎 Looking up station:', stationIdentifier);
+
+      // Check if it's a station code (e.g., "AG06", "SP06", "PY27")
+      const isStationCode = /^[A-Z]{2,4}\d{2}$/.test(stationIdentifier);
+
+      let result;
+      if (isStationCode) {
+        // Look up by code
+        const stationData = getStationByCode(stationIdentifier);
+        if (stationData) {
+          // Convert to StationWithMetadata format
+          result = {
+            name: stationData.name,
+            code: stationData.code,
+            coordinates: stationData.coordinates,
+            exits: stationData.exits || [{
+              exitName: 'Main Exit',
+              coordinates: stationData.coordinates,
+              description: 'Main station exit'
+            }],
+            lines: [stationData.lineName],
+            type: stationData.lineType,
+            lineId: stationData.lineId,
+            lineName: stationData.lineName,
+            lineColor: stationData.lineColor,
+            interchangeLines: stationData.interchangeLines
+          };
+        }
+      } else {
+        // Look up by name
+        result = getStationWithMetadata(stationIdentifier);
+      }
+
+      console.log('✅ Result:', result ? `${result.name} (${result.code})` : 'NULL');
       return result;
     })
     .filter((station): station is NonNullable<typeof station> => station !== null);

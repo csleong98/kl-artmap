@@ -46,7 +46,7 @@
     "coordinates": [101.6905, 3.1572],
     "address": "8, Jalan Scott, Brickfields, 50470 Kuala Lumpur",
     "imageUrl": "/images/wei-ling-gallery.jpg",
-    "nearestStations": ["Bandaraya LRT"],
+    "nearestStations": ["AG06", "SP06"],
     "admission": "free",
     "details": {
       "overview": {

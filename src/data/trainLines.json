@@ -812,7 +812,8 @@
               "coordinates": [101.6944, 3.1557],
               "description": "Bandaraya area"
             }
-          ]
+          ],
+          "interchangeLines": ["lrt-sri-petaling"]
         },
         {
           "code": "AG07",
