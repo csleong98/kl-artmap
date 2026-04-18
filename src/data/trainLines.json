@@ -10,66 +10,105 @@
         {
           "code": "SBK01",
           "name": "Sungai Buloh",
-          "coordinates": [101.5729, 3.1984]
+          "coordinates": [
+            101.5729,
+            3.1984
+          ]
         },
         {
           "code": "SBK02",
           "name": "Kampung Selamat",
-          "coordinates": [101.5850, 3.1950]
+          "coordinates": [
+            101.585,
+            3.195
+          ]
         },
         {
           "code": "SBK03",
           "name": "Kwasa Damansara",
-          "coordinates": [101.5995, 3.1897]
+          "coordinates": [
+            101.5995,
+            3.1897
+          ]
         },
         {
           "code": "SBK04",
           "name": "Kwasa Sentral",
-          "coordinates": [101.6090, 3.1847]
+          "coordinates": [
+            101.609,
+            3.1847
+          ]
         },
         {
           "code": "SBK05",
           "name": "Kota Damansara",
-          "coordinates": [101.6180, 3.1736]
+          "coordinates": [
+            101.618,
+            3.1736
+          ]
         },
         {
           "code": "SBK06",
           "name": "Surian",
-          "coordinates": [101.6280, 3.1665]
+          "coordinates": [
+            101.628,
+            3.1665
+          ]
         },
         {
           "code": "SBK07",
           "name": "Mutiara Damansara",
-          "coordinates": [101.6367, 3.1581]
+          "coordinates": [
+            101.6367,
+            3.1581
+          ]
         },
         {
           "code": "SBK08",
           "name": "Bandar Utama",
-          "coordinates": [101.6466, 3.1502]
+          "coordinates": [
+            101.6466,
+            3.1502
+          ]
         },
         {
           "code": "SBK09",
           "name": "TTDI",
-          "coordinates": [101.6527, 3.1427]
+          "coordinates": [
+            101.6527,
+            3.1427
+          ]
         },
         {
           "code": "SBK10",
           "name": "Phileo Damansara",
-          "coordinates": [101.6593, 3.1372]
+          "coordinates": [
+            101.6593,
+            3.1372
+          ]
         },
         {
           "code": "SBK11",
           "name": "Pusat Bandar Damansara",
-          "coordinates": [101.6651, 3.1329]
+          "coordinates": [
+            101.6651,
+            3.1329
+          ]
         },
         {
           "code": "SBK12",
           "name": "Semantan",
-          "coordinates": [101.6756, 3.1328],
+          "coordinates": [
+            101.6756,
+            3.1328
+          ],
           "exits": [
             {
               "exitName": "Exit A",
-              "coordinates": [101.6756, 3.1328],
+              "coordinates": [
+                101.6756,
+                3.1328
+              ],
               "description": "Main exit"
             }
           ]
@@ -77,136 +116,220 @@
         {
           "code": "SBK13",
           "name": "Muzium Negara",
-          "coordinates": [101.6878, 3.1375],
+          "coordinates": [
+            101.6878,
+            3.1375
+          ],
           "exits": [
             {
               "exitName": "Exit A",
-              "coordinates": [101.6878, 3.1375],
+              "coordinates": [
+                101.6878,
+                3.1375
+              ],
               "description": "Main exit"
             },
             {
               "exitName": "Exit C",
-              "coordinates": [101.6878, 3.1375],
+              "coordinates": [
+                101.6878,
+                3.1375
+              ],
               "description": "Connected to NU Sentral via covered walkway"
             }
           ],
-          "interchangeLines": ["ktm-port-klang", "ktm-skypark", "klia-transit", "lrt-kelana-jaya"]
+          "interchangeLines": [
+            "ktm-port-klang",
+            "ktm-skypark",
+            "klia-transit",
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "SBK14",
           "name": "Pasar Seni",
-          "coordinates": [101.6947, 3.1419],
+          "coordinates": [
+            101.6947,
+            3.1419
+          ],
           "exits": [
             {
               "exitName": "Entrance A",
-              "coordinates": [101.6947, 3.1419],
+              "coordinates": [
+                101.6947,
+                3.1419
+              ],
               "description": "Central Market side"
             },
             {
               "exitName": "Entrance B",
-              "coordinates": [101.6951, 3.1428],
+              "coordinates": [
+                101.6951,
+                3.1428
+              ],
               "description": "Petaling Street/Chinatown side"
             },
             {
               "exitName": "Entrance D",
-              "coordinates": [101.6959, 3.1425],
+              "coordinates": [
+                101.6959,
+                3.1425
+              ],
               "description": "Kasturi Walk side"
             }
           ],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "SBK15",
           "name": "Merdeka",
-          "coordinates": [101.6946, 3.1492]
+          "coordinates": [
+            101.6946,
+            3.1492
+          ]
         },
         {
           "code": "SBK16",
           "name": "Bukit Bintang",
-          "coordinates": [101.7100, 3.1468],
+          "coordinates": [
+            101.71,
+            3.1468
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7100, 3.1468],
+              "coordinates": [
+                101.71,
+                3.1468
+              ],
               "description": "Bukit Bintang shopping district"
             }
           ],
-          "interchangeLines": ["monorail"]
+          "interchangeLines": [
+            "monorail"
+          ]
         },
         {
           "code": "SBK17",
           "name": "Tun Razak Exchange",
-          "coordinates": [101.7163, 3.1431]
+          "coordinates": [
+            101.7163,
+            3.1431
+          ]
         },
         {
           "code": "SBK18",
           "name": "Cochrane",
-          "coordinates": [101.7151, 3.1309]
+          "coordinates": [
+            101.7151,
+            3.1309
+          ]
         },
         {
           "code": "SBK19",
           "name": "Maluri",
-          "coordinates": [101.7305, 3.1269]
+          "coordinates": [
+            101.7305,
+            3.1269
+          ]
         },
         {
           "code": "SBK20",
           "name": "Taman Pertama",
-          "coordinates": [101.7381, 3.1262]
+          "coordinates": [
+            101.7381,
+            3.1262
+          ]
         },
         {
           "code": "SBK21",
           "name": "Taman Midah",
-          "coordinates": [101.7446, 3.1216]
+          "coordinates": [
+            101.7446,
+            3.1216
+          ]
         },
         {
           "code": "SBK22",
           "name": "Taman Mutiara",
-          "coordinates": [101.7512, 3.1162]
+          "coordinates": [
+            101.7512,
+            3.1162
+          ]
         },
         {
           "code": "SBK23",
           "name": "Taman Connaught",
-          "coordinates": [101.7606, 3.1114]
+          "coordinates": [
+            101.7606,
+            3.1114
+          ]
         },
         {
           "code": "SBK24",
           "name": "Taman Suntex",
-          "coordinates": [101.7702, 3.1032]
+          "coordinates": [
+            101.7702,
+            3.1032
+          ]
         },
         {
           "code": "SBK25",
           "name": "Sri Raya",
-          "coordinates": [101.7747, 3.0971]
+          "coordinates": [
+            101.7747,
+            3.0971
+          ]
         },
         {
           "code": "SBK26",
           "name": "Bandar Tun Hussein Onn",
-          "coordinates": [101.7806, 3.0867]
+          "coordinates": [
+            101.7806,
+            3.0867
+          ]
         },
         {
           "code": "SBK27",
           "name": "Batu Sebelas Cheras",
-          "coordinates": [101.7868, 3.0746]
+          "coordinates": [
+            101.7868,
+            3.0746
+          ]
         },
         {
           "code": "SBK28",
           "name": "Bukit Dukung",
-          "coordinates": [101.7889, 3.0623]
+          "coordinates": [
+            101.7889,
+            3.0623
+          ]
         },
         {
           "code": "SBK29",
           "name": "Serdang Raya Selatan",
-          "coordinates": [101.7915, 3.0514]
+          "coordinates": [
+            101.7915,
+            3.0514
+          ]
         },
         {
           "code": "SBK30",
           "name": "Serdang Raya Utara",
-          "coordinates": [101.7928, 3.0420]
+          "coordinates": [
+            101.7928,
+            3.042
+          ]
         },
         {
           "code": "SBK31",
           "name": "Kajang",
-          "coordinates": [101.7889, 3.0103]
+          "coordinates": [
+            101.7889,
+            3.0103
+          ]
         }
       ]
     },
@@ -220,154 +343,264 @@
         {
           "code": "PY01",
           "name": "Kwasa Damansara",
-          "coordinates": [101.5995, 3.1897],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.5995,
+            3.1897
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY02",
           "name": "Kampung Batu",
-          "coordinates": [101.6117, 3.1952]
+          "coordinates": [
+            101.6117,
+            3.1952
+          ]
         },
         {
           "code": "PY03",
           "name": "Metro Prima",
-          "coordinates": [101.6250, 3.1987]
+          "coordinates": [
+            101.625,
+            3.1987
+          ]
         },
         {
           "code": "PY04",
           "name": "Kepong Baru",
-          "coordinates": [101.6372, 3.2011]
+          "coordinates": [
+            101.6372,
+            3.2011
+          ]
         },
         {
           "code": "PY05",
           "name": "Jinjang",
-          "coordinates": [101.6498, 3.2015]
+          "coordinates": [
+            101.6498,
+            3.2015
+          ]
         },
         {
           "code": "PY06",
           "name": "Sungai Buloh Hospital",
-          "coordinates": [101.6612, 3.1986]
+          "coordinates": [
+            101.6612,
+            3.1986
+          ]
         },
         {
           "code": "PY07",
           "name": "Kwasa Sentral",
-          "coordinates": [101.6090, 3.1847],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.609,
+            3.1847
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY08",
           "name": "Kota Damansara",
-          "coordinates": [101.6180, 3.1736],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.618,
+            3.1736
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY09",
           "name": "Surian",
-          "coordinates": [101.6280, 3.1665],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.628,
+            3.1665
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY10",
           "name": "Mutiara Damansara",
-          "coordinates": [101.6367, 3.1581],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.6367,
+            3.1581
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY11",
           "name": "Bandar Utama",
-          "coordinates": [101.6466, 3.1502],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.6466,
+            3.1502
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY12",
           "name": "Kota Damansara",
-          "coordinates": [101.6666, 3.1892]
+          "coordinates": [
+            101.6666,
+            3.1892
+          ]
         },
         {
           "code": "PY13",
           "name": "Sri Damansara Barat",
-          "coordinates": [101.6724, 3.1873]
+          "coordinates": [
+            101.6724,
+            3.1873
+          ]
         },
         {
           "code": "PY14",
           "name": "Sri Damansara Sentral",
-          "coordinates": [101.6783, 3.1816]
+          "coordinates": [
+            101.6783,
+            3.1816
+          ]
         },
         {
           "code": "PY15",
           "name": "Sri Damansara Timur",
-          "coordinates": [101.6847, 3.1761]
+          "coordinates": [
+            101.6847,
+            3.1761
+          ]
         },
         {
           "code": "PY16",
           "name": "Cochrane",
-          "coordinates": [101.7151, 3.1309],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7151,
+            3.1309
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY17",
           "name": "Maluri",
-          "coordinates": [101.7305, 3.1269],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7305,
+            3.1269
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY18",
           "name": "Taman Pertama",
-          "coordinates": [101.7381, 3.1262],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7381,
+            3.1262
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY19",
           "name": "Taman Midah",
-          "coordinates": [101.7446, 3.1216],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7446,
+            3.1216
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY20",
           "name": "Taman Mutiara",
-          "coordinates": [101.7512, 3.1162],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7512,
+            3.1162
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY21",
           "name": "Taman Connaught",
-          "coordinates": [101.7606, 3.1114],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7606,
+            3.1114
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY22",
           "name": "Taman Putra Permai",
-          "coordinates": [101.6900, 3.1684]
+          "coordinates": [
+            101.69,
+            3.1684
+          ]
         },
         {
           "code": "PY23",
           "name": "Kampung Selamat",
-          "coordinates": [101.6965, 3.1637]
+          "coordinates": [
+            101.6965,
+            3.1637
+          ]
         },
         {
           "code": "PY24",
           "name": "Jalan Ipoh",
-          "coordinates": [101.6927, 3.1728]
+          "coordinates": [
+            101.6927,
+            3.1728
+          ]
         },
         {
           "code": "PY25",
           "name": "Sentul Barat",
-          "coordinates": [101.6869, 3.1689]
+          "coordinates": [
+            101.6869,
+            3.1689
+          ]
         },
         {
           "code": "PY26",
           "name": "Titiwangsa",
-          "coordinates": [101.6943, 3.1697],
-          "interchangeLines": ["monorail"]
+          "coordinates": [
+            101.6943,
+            3.1697
+          ],
+          "interchangeLines": [
+            "monorail"
+          ]
         },
         {
           "code": "PY27",
           "name": "Hospital Kuala Lumpur",
-          "coordinates": [101.7001, 3.1669],
+          "coordinates": [
+            101.7001,
+            3.1669
+          ],
           "exits": [
             {
               "exitName": "Gate B",
-              "coordinates": [101.7042, 3.1715],
+              "coordinates": [
+                101.7042,
+                3.1715
+              ],
               "description": "Gate B"
             }
           ]
@@ -375,24 +608,38 @@
         {
           "code": "PY28",
           "name": "Ampang Park",
-          "coordinates": [101.7183, 3.1588],
+          "coordinates": [
+            101.7183,
+            3.1588
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7183, 3.1588],
+              "coordinates": [
+                101.7183,
+                3.1588
+              ],
               "description": "Ampang Park area"
             }
           ],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "PY29",
           "name": "Persiaran KLCC",
-          "coordinates": [101.7184, 3.1573],
+          "coordinates": [
+            101.7184,
+            3.1573
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7184, 3.1573],
+              "coordinates": [
+                101.7184,
+                3.1573
+              ],
               "description": "KLCC area"
             }
           ]
@@ -400,39 +647,64 @@
         {
           "code": "PY30",
           "name": "Conlay",
-          "coordinates": [101.7158, 3.1525]
+          "coordinates": [
+            101.7158,
+            3.1525
+          ]
         },
         {
           "code": "PY31",
           "name": "TRX",
-          "coordinates": [101.7163, 3.1431],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7163,
+            3.1431
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "PY32",
           "name": "Chan Sow Lin",
-          "coordinates": [101.7278, 3.1202],
-          "interchangeLines": ["lrt-sri-petaling"]
+          "coordinates": [
+            101.7278,
+            3.1202
+          ],
+          "interchangeLines": [
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "PY33",
           "name": "Bandar Malaysia Utara",
-          "coordinates": [101.6942, 3.1224]
+          "coordinates": [
+            101.6942,
+            3.1224
+          ]
         },
         {
           "code": "PY34",
           "name": "Bandar Malaysia Selatan",
-          "coordinates": [101.6918, 3.1167]
+          "coordinates": [
+            101.6918,
+            3.1167
+          ]
         },
         {
           "code": "PY35",
           "name": "Kuchai Lama",
-          "coordinates": [101.6801, 3.1063]
+          "coordinates": [
+            101.6801,
+            3.1063
+          ]
         },
         {
           "code": "PY36",
           "name": "Putrajaya Sentral",
-          "coordinates": [101.6434, 2.9264]
+          "coordinates": [
+            101.6434,
+            2.9264
+          ]
         }
       ]
     },
@@ -446,238 +718,394 @@
         {
           "code": "KJ01",
           "name": "Gombak",
-          "coordinates": [101.7205, 3.2244]
+          "coordinates": [
+            101.7205,
+            3.2244
+          ]
         },
         {
           "code": "KJ02",
           "name": "Taman Melati",
-          "coordinates": [101.7149, 3.2121]
+          "coordinates": [
+            101.7149,
+            3.2121
+          ]
         },
         {
           "code": "KJ03",
           "name": "Wangsa Maju",
-          "coordinates": [101.7057, 3.2000]
+          "coordinates": [
+            101.7057,
+            3.2
+          ]
         },
         {
           "code": "KJ04",
           "name": "Sri Rampai",
-          "coordinates": [101.6970, 3.1895]
+          "coordinates": [
+            101.697,
+            3.1895
+          ]
         },
         {
           "code": "KJ05",
           "name": "Setiawangsa",
-          "coordinates": [101.7011, 3.1754]
+          "coordinates": [
+            101.7011,
+            3.1754
+          ]
         },
         {
           "code": "KJ06",
           "name": "Jelatek",
-          "coordinates": [101.7116, 3.1707]
+          "coordinates": [
+            101.7116,
+            3.1707
+          ]
         },
         {
           "code": "KJ07",
           "name": "Dato Keramat",
-          "coordinates": [101.7188, 3.1657]
+          "coordinates": [
+            101.7188,
+            3.1657
+          ]
         },
         {
           "code": "KJ08",
           "name": "Damai",
-          "coordinates": [101.7230, 3.1623]
+          "coordinates": [
+            101.723,
+            3.1623
+          ]
         },
         {
-          "code": "KJ09",
+          "code": "KJ9",
+          "name": "Ampang Park",
+          "coordinates": [
+            101.7183,
+            3.1588
+          ],
+          "interchangeLines": [
+            "mrt-putrajaya"
+          ]
+        },
+        {
+          "code": "KJ10",
           "name": "KLCC",
-          "coordinates": [101.7140, 3.1593],
+          "coordinates": [
+            101.714,
+            3.1593
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7140, 3.1593],
+              "coordinates": [
+                101.714,
+                3.1593
+              ],
               "description": "KLCC area"
             }
           ]
         },
         {
-          "code": "KJ10",
-          "name": "Kampung Baru",
-          "coordinates": [101.7052, 3.1581]
-        },
-        {
           "code": "KJ11",
-          "name": "Dang Wangi",
-          "coordinates": [101.7010, 3.1567]
+          "name": "Kampung Baru",
+          "coordinates": [
+            101.7052,
+            3.1581
+          ]
         },
         {
           "code": "KJ12",
-          "name": "Masjid Jamek",
-          "coordinates": [101.6965, 3.1497],
-          "exits": [
-            {
-              "exitName": "Main Exit",
-              "coordinates": [101.6965, 3.1497],
-              "description": "Main station exit"
-            }
-          ],
-          "interchangeLines": ["lrt-ampang", "lrt-sri-petaling"]
+          "name": "Dang Wangi",
+          "coordinates": [
+            101.701,
+            3.1567
+          ]
         },
         {
           "code": "KJ13",
+          "name": "Masjid Jamek",
+          "coordinates": [
+            101.6965,
+            3.1497
+          ],
+          "exits": [
+            {
+              "exitName": "Main Exit",
+              "coordinates": [
+                101.6965,
+                3.1497
+              ],
+              "description": "Main station exit"
+            }
+          ],
+          "interchangeLines": [
+            "lrt-ampang",
+            "lrt-sri-petaling"
+          ]
+        },
+        {
+          "code": "KJ14",
           "name": "Pasar Seni",
-          "coordinates": [101.6947, 3.1419],
+          "coordinates": [
+            101.6947,
+            3.1419
+          ],
           "exits": [
             {
               "exitName": "Entrance A",
-              "coordinates": [101.6947, 3.1419],
+              "coordinates": [
+                101.6947,
+                3.1419
+              ],
               "description": "Central Market side"
             },
             {
               "exitName": "Entrance B",
-              "coordinates": [101.6951, 3.1428],
+              "coordinates": [
+                101.6951,
+                3.1428
+              ],
               "description": "Petaling Street/Chinatown side"
             },
             {
               "exitName": "Entrance D",
-              "coordinates": [101.6959, 3.1425],
+              "coordinates": [
+                101.6959,
+                3.1425
+              ],
               "description": "Kasturi Walk side"
             }
           ],
-          "interchangeLines": ["mrt-kajang"]
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
-          "code": "KJ14",
+          "code": "KJ15",
           "name": "KL Sentral",
-          "coordinates": [101.6869, 3.1334],
+          "coordinates": [
+            101.6869,
+            3.1334
+          ],
           "exits": [
             {
               "exitName": "Exit A - Street Level",
-              "coordinates": [101.6852, 3.1337],
+              "coordinates": [
+                101.6852,
+                3.1337
+              ],
               "description": "Jalan Stesen Sentral, near taxi stand"
             },
             {
               "exitName": "NU Sentral Mall",
-              "coordinates": [101.6869, 3.1334],
+              "coordinates": [
+                101.6869,
+                3.1334
+              ],
               "description": "Direct access to NU Sentral Shopping Centre"
             },
             {
               "exitName": "Hilton Hotel Exit",
-              "coordinates": [101.6855, 3.1348],
+              "coordinates": [
+                101.6855,
+                3.1348
+              ],
               "description": "Nearest to Hilton KL and office towers"
             }
           ],
-          "interchangeLines": ["ktm-port-klang", "ktm-skypark", "klia-transit", "mrt-kajang"]
-        },
-        {
-          "code": "KJ15",
-          "name": "Bangsar",
-          "coordinates": [101.6766, 3.1289]
+          "interchangeLines": [
+            "ktm-port-klang",
+            "ktm-skypark",
+            "klia-transit",
+            "mrt-kajang"
+          ]
         },
         {
           "code": "KJ16",
-          "name": "Abdullah Hukum",
-          "coordinates": [101.6741, 3.1218]
+          "name": "Bangsar",
+          "coordinates": [
+            101.6766,
+            3.1289
+          ]
         },
         {
           "code": "KJ17",
-          "name": "Kerinchi",
-          "coordinates": [101.6721, 3.1120]
+          "name": "Abdullah Hukum",
+          "coordinates": [
+            101.6741,
+            3.1218
+          ]
         },
         {
           "code": "KJ18",
-          "name": "Universiti",
-          "coordinates": [101.6564, 3.1125]
+          "name": "Kerinchi",
+          "coordinates": [
+            101.6721,
+            3.112
+          ]
         },
         {
           "code": "KJ19",
-          "name": "Taman Jaya",
-          "coordinates": [101.6460, 3.1210]
+          "name": "Universiti",
+          "coordinates": [
+            101.6564,
+            3.1125
+          ]
         },
         {
           "code": "KJ20",
-          "name": "Asia Jaya",
-          "coordinates": [101.6378, 3.1173]
+          "name": "Taman Jaya",
+          "coordinates": [
+            101.646,
+            3.121
+          ]
         },
         {
           "code": "KJ21",
-          "name": "Taman Paramount",
-          "coordinates": [101.6259, 3.1129]
+          "name": "Asia Jaya",
+          "coordinates": [
+            101.6378,
+            3.1173
+          ]
         },
         {
           "code": "KJ22",
-          "name": "Taman Bahagia",
-          "coordinates": [101.6163, 3.1103]
+          "name": "Taman Paramount",
+          "coordinates": [
+            101.6259,
+            3.1129
+          ]
         },
         {
           "code": "KJ23",
-          "name": "Kelana Jaya",
-          "coordinates": [101.6041, 3.1103]
+          "name": "Taman Bahagia",
+          "coordinates": [
+            101.6163,
+            3.1103
+          ]
         },
         {
           "code": "KJ24",
-          "name": "Lembah Subang",
-          "coordinates": [101.5978, 3.1129]
+          "name": "Kelana Jaya",
+          "coordinates": [
+            101.6041,
+            3.1103
+          ]
         },
         {
           "code": "KJ25",
-          "name": "Ara Damansara",
-          "coordinates": [101.5812, 3.1175]
+          "name": "Lembah Subang",
+          "coordinates": [
+            101.5978,
+            3.1129
+          ]
         },
         {
           "code": "KJ26",
-          "name": "Glenmarie",
-          "coordinates": [101.5757, 3.1240]
+          "name": "Ara Damansara",
+          "coordinates": [
+            101.5812,
+            3.1175
+          ]
         },
         {
           "code": "KJ27",
-          "name": "Subang Jaya",
-          "coordinates": [101.5710, 3.1310]
+          "name": "Glenmarie",
+          "coordinates": [
+            101.5757,
+            3.124
+          ]
         },
         {
           "code": "KJ28",
-          "name": "SS15",
-          "coordinates": [101.5896, 3.0702]
+          "name": "Subang Jaya",
+          "coordinates": [
+            101.571,
+            3.131
+          ]
         },
         {
           "code": "KJ29",
-          "name": "USJ7",
-          "coordinates": [101.5823, 3.0492]
+          "name": "SS15",
+          "coordinates": [
+            101.5896,
+            3.0702
+          ]
         },
         {
           "code": "KJ30",
-          "name": "Taipan",
-          "coordinates": [101.5740, 3.0373]
+          "name": "USJ7",
+          "coordinates": [
+            101.5823,
+            3.0492
+          ]
         },
         {
           "code": "KJ31",
-          "name": "Wawasan",
-          "coordinates": [101.5652, 3.0329]
+          "name": "Taipan",
+          "coordinates": [
+            101.574,
+            3.0373
+          ]
         },
         {
           "code": "KJ32",
-          "name": "USJ21",
-          "coordinates": [101.5574, 3.0269]
+          "name": "Wawasan",
+          "coordinates": [
+            101.5652,
+            3.0329
+          ]
         },
         {
           "code": "KJ33",
-          "name": "Alam Megah",
-          "coordinates": [101.5465, 3.0241]
+          "name": "USJ21",
+          "coordinates": [
+            101.5574,
+            3.0269
+          ]
         },
         {
           "code": "KJ34",
-          "name": "Subang Alam",
-          "coordinates": [101.5309, 3.0264]
+          "name": "Alam Megah",
+          "coordinates": [
+            101.5465,
+            3.0241
+          ]
         },
         {
           "code": "KJ35",
-          "name": "Putra Heights",
-          "coordinates": [101.6019, 3.0475]
+          "name": "Subang Alam",
+          "coordinates": [
+            101.5309,
+            3.0264
+          ]
         },
         {
           "code": "KJ36",
-          "name": "Bandar Puteri",
-          "coordinates": [101.6146, 3.0437]
+          "name": "Putra Heights",
+          "coordinates": [
+            101.6019,
+            3.0475
+          ]
         },
         {
           "code": "KJ37",
+          "name": "Bandar Puteri",
+          "coordinates": [
+            101.6146,
+            3.0437
+          ]
+        },
+        {
+          "code": "KJ38",
           "name": "Bandar Puchong Jaya",
-          "coordinates": [101.6258, 3.0382]
+          "coordinates": [
+            101.6258,
+            3.0382
+          ]
         }
       ]
     },
@@ -691,22 +1119,40 @@
         {
           "code": "MR01",
           "name": "KL Sentral",
-          "coordinates": [101.6869, 3.1334],
-          "interchangeLines": ["lrt-kelana-jaya", "ktm-port-klang", "ktm-skypark", "klia-transit", "mrt-kajang"]
+          "coordinates": [
+            101.6869,
+            3.1334
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya",
+            "ktm-port-klang",
+            "ktm-skypark",
+            "klia-transit",
+            "mrt-kajang"
+          ]
         },
         {
           "code": "MR02",
           "name": "Tun Sambanthan",
-          "coordinates": [101.6883, 3.1281]
+          "coordinates": [
+            101.6883,
+            3.1281
+          ]
         },
         {
           "code": "MR03",
           "name": "Maharajalela",
-          "coordinates": [101.6974, 3.1382],
+          "coordinates": [
+            101.6974,
+            3.1382
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.6974, 3.1382],
+              "coordinates": [
+                101.6974,
+                3.1382
+              ],
               "description": "Near Jalan Tun Sambanthan"
             }
           ]
@@ -714,34 +1160,54 @@
         {
           "code": "MR04",
           "name": "Hang Tuah",
-          "coordinates": [101.7037, 3.1401]
+          "coordinates": [
+            101.7037,
+            3.1401
+          ]
         },
         {
           "code": "MR05",
           "name": "Imbi",
-          "coordinates": [101.7086, 3.1426]
+          "coordinates": [
+            101.7086,
+            3.1426
+          ]
         },
         {
           "code": "MR06",
           "name": "Bukit Bintang",
-          "coordinates": [101.7111, 3.1458],
+          "coordinates": [
+            101.7111,
+            3.1458
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7111, 3.1458],
+              "coordinates": [
+                101.7111,
+                3.1458
+              ],
               "description": "Bukit Bintang shopping district"
             }
           ],
-          "interchangeLines": ["mrt-kajang"]
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "MR07",
           "name": "Raja Chulan",
-          "coordinates": [101.7104, 3.1508],
+          "coordinates": [
+            101.7104,
+            3.1508
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.7104, 3.1508],
+              "coordinates": [
+                101.7104,
+                3.1508
+              ],
               "description": "Raja Chulan area"
             }
           ]
@@ -749,23 +1215,37 @@
         {
           "code": "MR08",
           "name": "Bukit Nanas",
-          "coordinates": [101.7063, 3.1537]
+          "coordinates": [
+            101.7063,
+            3.1537
+          ]
         },
         {
           "code": "MR09",
           "name": "Medan Tuanku",
-          "coordinates": [101.7002, 3.1592]
+          "coordinates": [
+            101.7002,
+            3.1592
+          ]
         },
         {
           "code": "MR10",
           "name": "Chow Kit",
-          "coordinates": [101.6962, 3.1635]
+          "coordinates": [
+            101.6962,
+            3.1635
+          ]
         },
         {
           "code": "MR11",
           "name": "Titiwangsa",
-          "coordinates": [101.6943, 3.1697],
-          "interchangeLines": ["mrt-putrajaya"]
+          "coordinates": [
+            101.6943,
+            3.1697
+          ],
+          "interchangeLines": [
+            "mrt-putrajaya"
+          ]
         }
       ]
     },
@@ -779,105 +1259,178 @@
         {
           "code": "AG01",
           "name": "Sentul Timur",
-          "coordinates": [101.6968, 3.1761]
+          "coordinates": [
+            101.6968,
+            3.1761
+          ]
         },
         {
           "code": "AG02",
           "name": "Sentul",
-          "coordinates": [101.6932, 3.1719]
+          "coordinates": [
+            101.6932,
+            3.1719
+          ]
         },
         {
           "code": "AG03",
           "name": "Titiwangsa",
-          "coordinates": [101.6943, 3.1697],
-          "interchangeLines": ["monorail", "mrt-putrajaya"]
+          "coordinates": [
+            101.6943,
+            3.1697
+          ],
+          "interchangeLines": [
+            "monorail",
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "AG04",
           "name": "PWTC",
-          "coordinates": [101.6964, 3.1637]
+          "coordinates": [
+            101.6964,
+            3.1637
+          ]
         },
         {
           "code": "AG05",
           "name": "Sultan Ismail",
-          "coordinates": [101.7013, 3.1578]
+          "coordinates": [
+            101.7013,
+            3.1578
+          ]
         },
         {
           "code": "AG06",
           "name": "Bandaraya",
-          "coordinates": [101.6944, 3.1557],
+          "coordinates": [
+            101.6944,
+            3.1557
+          ],
           "exits": [
             {
               "exitName": "Main Exit",
-              "coordinates": [101.6944, 3.1557],
+              "coordinates": [
+                101.6944,
+                3.1557
+              ],
               "description": "Bandaraya area"
             }
           ],
-          "interchangeLines": ["lrt-sri-petaling"]
+          "interchangeLines": [
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "AG07",
           "name": "Masjid Jamek",
-          "coordinates": [101.6965, 3.1497],
-          "interchangeLines": ["lrt-kelana-jaya", "lrt-sri-petaling"]
+          "coordinates": [
+            101.6965,
+            3.1497
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya",
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "AG08",
           "name": "Plaza Rakyat",
-          "coordinates": [101.7028, 3.1443]
+          "coordinates": [
+            101.7028,
+            3.1443
+          ]
         },
         {
           "code": "AG09",
           "name": "Hang Tuah",
-          "coordinates": [101.7037, 3.1401],
-          "interchangeLines": ["monorail"]
+          "coordinates": [
+            101.7037,
+            3.1401
+          ],
+          "interchangeLines": [
+            "monorail"
+          ]
         },
         {
           "code": "AG10",
           "name": "Pudu",
-          "coordinates": [101.7102, 3.1360]
+          "coordinates": [
+            101.7102,
+            3.136
+          ]
         },
         {
           "code": "AG11",
           "name": "Chan Sow Lin",
-          "coordinates": [101.7278, 3.1202],
-          "interchangeLines": ["lrt-sri-petaling", "mrt-putrajaya"]
+          "coordinates": [
+            101.7278,
+            3.1202
+          ],
+          "interchangeLines": [
+            "lrt-sri-petaling",
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "AG12",
           "name": "Miharja",
-          "coordinates": [101.7382, 3.1133]
+          "coordinates": [
+            101.7382,
+            3.1133
+          ]
         },
         {
           "code": "AG13",
           "name": "Maluri",
-          "coordinates": [101.7305, 3.1269],
-          "interchangeLines": ["mrt-kajang", "mrt-putrajaya"]
+          "coordinates": [
+            101.7305,
+            3.1269
+          ],
+          "interchangeLines": [
+            "mrt-kajang",
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "AG14",
           "name": "Pandan Jaya",
-          "coordinates": [101.7526, 3.1176]
+          "coordinates": [
+            101.7526,
+            3.1176
+          ]
         },
         {
           "code": "AG15",
           "name": "Pandan Indah",
-          "coordinates": [101.7609, 3.1190]
+          "coordinates": [
+            101.7609,
+            3.119
+          ]
         },
         {
           "code": "AG16",
           "name": "Cempaka",
-          "coordinates": [101.7692, 3.1201]
+          "coordinates": [
+            101.7692,
+            3.1201
+          ]
         },
         {
           "code": "AG17",
           "name": "Cahaya",
-          "coordinates": [101.7773, 3.1220]
+          "coordinates": [
+            101.7773,
+            3.122
+          ]
         },
         {
           "code": "AG18",
           "name": "Ampang",
-          "coordinates": [101.7652, 3.1504]
+          "coordinates": [
+            101.7652,
+            3.1504
+          ]
         }
       ]
     },
@@ -891,164 +1444,291 @@
         {
           "code": "SP01",
           "name": "Sentul Timur",
-          "coordinates": [101.6968, 3.1761],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.6968,
+            3.1761
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP02",
           "name": "Sentul",
-          "coordinates": [101.6932, 3.1719],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.6932,
+            3.1719
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP03",
           "name": "Titiwangsa",
-          "coordinates": [101.6943, 3.1697],
-          "interchangeLines": ["monorail", "mrt-putrajaya", "lrt-ampang"]
+          "coordinates": [
+            101.6943,
+            3.1697
+          ],
+          "interchangeLines": [
+            "monorail",
+            "mrt-putrajaya",
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP04",
           "name": "PWTC",
-          "coordinates": [101.6964, 3.1637],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.6964,
+            3.1637
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP05",
           "name": "Sultan Ismail",
-          "coordinates": [101.7013, 3.1578],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.7013,
+            3.1578
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP06",
           "name": "Bandaraya",
-          "coordinates": [101.6944, 3.1557],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.6944,
+            3.1557
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP07",
           "name": "Masjid Jamek",
-          "coordinates": [101.6965, 3.1497],
-          "interchangeLines": ["lrt-kelana-jaya", "lrt-ampang"]
+          "coordinates": [
+            101.6965,
+            3.1497
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya",
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP08",
           "name": "Plaza Rakyat",
-          "coordinates": [101.7028, 3.1443],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.7028,
+            3.1443
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP09",
           "name": "Hang Tuah",
-          "coordinates": [101.7037, 3.1401],
-          "interchangeLines": ["monorail", "lrt-ampang"]
+          "coordinates": [
+            101.7037,
+            3.1401
+          ],
+          "interchangeLines": [
+            "monorail",
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP10",
           "name": "Pudu",
-          "coordinates": [101.7102, 3.1360],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.7102,
+            3.136
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP11",
           "name": "Chan Sow Lin",
-          "coordinates": [101.7278, 3.1202],
-          "interchangeLines": ["lrt-ampang", "mrt-putrajaya"]
+          "coordinates": [
+            101.7278,
+            3.1202
+          ],
+          "interchangeLines": [
+            "lrt-ampang",
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "SP12",
           "name": "Miharja",
-          "coordinates": [101.7382, 3.1133],
-          "interchangeLines": ["lrt-ampang"]
+          "coordinates": [
+            101.7382,
+            3.1133
+          ],
+          "interchangeLines": [
+            "lrt-ampang"
+          ]
         },
         {
           "code": "SP13",
           "name": "Salak Selatan",
-          "coordinates": [101.7139, 3.0975]
+          "coordinates": [
+            101.7139,
+            3.0975
+          ]
         },
         {
           "code": "SP14",
           "name": "Bandar Tasik Selatan",
-          "coordinates": [101.7080, 3.0800],
-          "interchangeLines": ["ktm-port-klang", "ktm-skypark"]
+          "coordinates": [
+            101.708,
+            3.08
+          ],
+          "interchangeLines": [
+            "ktm-port-klang",
+            "ktm-skypark"
+          ]
         },
         {
           "code": "SP15",
           "name": "Sungai Besi",
-          "coordinates": [101.7011, 3.0708]
+          "coordinates": [
+            101.7011,
+            3.0708
+          ]
         },
         {
           "code": "SP16",
           "name": "Serdang",
-          "coordinates": [101.6971, 3.0450]
+          "coordinates": [
+            101.6971,
+            3.045
+          ]
         },
         {
           "code": "SP17",
           "name": "Kajang",
-          "coordinates": [101.7889, 3.0103],
-          "interchangeLines": ["mrt-kajang"]
+          "coordinates": [
+            101.7889,
+            3.0103
+          ],
+          "interchangeLines": [
+            "mrt-kajang"
+          ]
         },
         {
           "code": "SP18",
           "name": "Bukit Jalil",
-          "coordinates": [101.6863, 3.0534]
+          "coordinates": [
+            101.6863,
+            3.0534
+          ]
         },
         {
           "code": "SP19",
           "name": "Awan Besar",
-          "coordinates": [101.6762, 3.0642]
+          "coordinates": [
+            101.6762,
+            3.0642
+          ]
         },
         {
           "code": "SP20",
           "name": "Muhibbah",
-          "coordinates": [101.6694, 3.0732]
+          "coordinates": [
+            101.6694,
+            3.0732
+          ]
         },
         {
           "code": "SP21",
           "name": "Alam Sutera",
-          "coordinates": [101.6584, 3.0798]
+          "coordinates": [
+            101.6584,
+            3.0798
+          ]
         },
         {
           "code": "SP22",
           "name": "Kinrara BK5",
-          "coordinates": [101.6522, 3.0601]
+          "coordinates": [
+            101.6522,
+            3.0601
+          ]
         },
         {
           "code": "SP23",
           "name": "Puchong Prima",
-          "coordinates": [101.6455, 3.0433]
+          "coordinates": [
+            101.6455,
+            3.0433
+          ]
         },
         {
           "code": "SP24",
           "name": "Puchong Perdana",
-          "coordinates": [101.6378, 3.0383]
+          "coordinates": [
+            101.6378,
+            3.0383
+          ]
         },
         {
           "code": "SP25",
           "name": "Puchong Jaya",
-          "coordinates": [101.6258, 3.0382],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "coordinates": [
+            101.6258,
+            3.0382
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "SP26",
           "name": "IOI Puchong Jaya",
-          "coordinates": [101.6190, 3.0415]
+          "coordinates": [
+            101.619,
+            3.0415
+          ]
         },
         {
           "code": "SP27",
           "name": "Taman Perindustrian Puchong",
-          "coordinates": [101.6087, 3.0489]
+          "coordinates": [
+            101.6087,
+            3.0489
+          ]
         },
         {
           "code": "SP28",
           "name": "Bandar Puteri",
-          "coordinates": [101.6146, 3.0437],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "coordinates": [
+            101.6146,
+            3.0437
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "SP29",
           "name": "Putra Heights",
-          "coordinates": [101.6019, 3.0475],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "coordinates": [
+            101.6019,
+            3.0475
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         }
       ]
     },
@@ -1062,144 +1742,240 @@
         {
           "code": "KA01",
           "name": "Batu Caves",
-          "coordinates": [101.6837, 3.2376]
+          "coordinates": [
+            101.6837,
+            3.2376
+          ]
         },
         {
           "code": "KA02",
           "name": "Taman Wahyu",
-          "coordinates": [101.6812, 3.2216]
+          "coordinates": [
+            101.6812,
+            3.2216
+          ]
         },
         {
           "code": "KA03",
           "name": "Kampung Batu",
-          "coordinates": [101.6117, 3.1952],
-          "interchangeLines": ["mrt-putrajaya"]
+          "coordinates": [
+            101.6117,
+            3.1952
+          ],
+          "interchangeLines": [
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "KA04",
           "name": "Batu Kentonmen",
-          "coordinates": [101.6898, 3.1921]
+          "coordinates": [
+            101.6898,
+            3.1921
+          ]
         },
         {
           "code": "KA05",
           "name": "Sentul",
-          "coordinates": [101.6932, 3.1719],
-          "interchangeLines": ["lrt-ampang", "lrt-sri-petaling"]
+          "coordinates": [
+            101.6932,
+            3.1719
+          ],
+          "interchangeLines": [
+            "lrt-ampang",
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "KA06",
           "name": "Putra",
-          "coordinates": [101.6920, 3.1636]
+          "coordinates": [
+            101.692,
+            3.1636
+          ]
         },
         {
           "code": "KA07",
           "name": "Bank Negara",
-          "coordinates": [101.6918, 3.1578]
+          "coordinates": [
+            101.6918,
+            3.1578
+          ]
         },
         {
           "code": "KA08",
           "name": "Kuala Lumpur",
-          "coordinates": [101.6889, 3.1480]
+          "coordinates": [
+            101.6889,
+            3.148
+          ]
         },
         {
           "code": "KA09",
           "name": "KL Sentral",
-          "coordinates": [101.6869, 3.1334],
+          "coordinates": [
+            101.6869,
+            3.1334
+          ],
           "exits": [
             {
               "exitName": "Exit A - Street Level",
-              "coordinates": [101.6852, 3.1337],
+              "coordinates": [
+                101.6852,
+                3.1337
+              ],
               "description": "Jalan Stesen Sentral, near taxi stand"
             },
             {
               "exitName": "NU Sentral Mall",
-              "coordinates": [101.6869, 3.1334],
+              "coordinates": [
+                101.6869,
+                3.1334
+              ],
               "description": "Direct access to NU Sentral Shopping Centre"
             },
             {
               "exitName": "Hilton Hotel Exit",
-              "coordinates": [101.6855, 3.1348],
+              "coordinates": [
+                101.6855,
+                3.1348
+              ],
               "description": "Nearest to Hilton KL and office towers"
             }
           ],
-          "interchangeLines": ["lrt-kelana-jaya", "ktm-skypark", "klia-transit", "mrt-kajang", "monorail"]
+          "interchangeLines": [
+            "lrt-kelana-jaya",
+            "ktm-skypark",
+            "klia-transit",
+            "mrt-kajang",
+            "monorail"
+          ]
         },
         {
           "code": "KA10",
           "name": "Abdullah Hukum",
-          "coordinates": [101.6741, 3.1218],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "coordinates": [
+            101.6741,
+            3.1218
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "KA11",
           "name": "Angkasapuri",
-          "coordinates": [101.6667, 3.1181]
+          "coordinates": [
+            101.6667,
+            3.1181
+          ]
         },
         {
           "code": "KA12",
           "name": "Pantai Dalam",
-          "coordinates": [101.6587, 3.1094]
+          "coordinates": [
+            101.6587,
+            3.1094
+          ]
         },
         {
           "code": "KA13",
           "name": "Petaling",
-          "coordinates": [101.6387, 3.0957]
+          "coordinates": [
+            101.6387,
+            3.0957
+          ]
         },
         {
           "code": "KA14",
           "name": "Jalan Templer",
-          "coordinates": [101.6314, 3.0823]
+          "coordinates": [
+            101.6314,
+            3.0823
+          ]
         },
         {
           "code": "KA15",
           "name": "Setia Jaya",
-          "coordinates": [101.5910, 3.0653]
+          "coordinates": [
+            101.591,
+            3.0653
+          ]
         },
         {
           "code": "KA16",
           "name": "Subang Jaya",
-          "coordinates": [101.5710, 3.1310],
-          "interchangeLines": ["lrt-kelana-jaya"]
+          "coordinates": [
+            101.571,
+            3.131
+          ],
+          "interchangeLines": [
+            "lrt-kelana-jaya"
+          ]
         },
         {
           "code": "KA17",
           "name": "Batu Tiga",
-          "coordinates": [101.5399, 3.0624]
+          "coordinates": [
+            101.5399,
+            3.0624
+          ]
         },
         {
           "code": "KA18",
           "name": "Shah Alam",
-          "coordinates": [101.5146, 3.0733]
+          "coordinates": [
+            101.5146,
+            3.0733
+          ]
         },
         {
           "code": "KA19",
           "name": "Padang Jawa",
-          "coordinates": [101.4974, 3.0755]
+          "coordinates": [
+            101.4974,
+            3.0755
+          ]
         },
         {
           "code": "KA20",
           "name": "Bukit Badak",
-          "coordinates": [101.4755, 3.0811]
+          "coordinates": [
+            101.4755,
+            3.0811
+          ]
         },
         {
           "code": "KA21",
           "name": "Klang",
-          "coordinates": [101.4478, 3.0341]
+          "coordinates": [
+            101.4478,
+            3.0341
+          ]
         },
         {
           "code": "KA22",
           "name": "Teluk Pulai",
-          "coordinates": [101.4287, 3.0132]
+          "coordinates": [
+            101.4287,
+            3.0132
+          ]
         },
         {
           "code": "KA23",
           "name": "Teluk Gadong",
-          "coordinates": [101.4101, 3.0056]
+          "coordinates": [
+            101.4101,
+            3.0056
+          ]
         },
         {
           "code": "KA24",
           "name": "Port Klang",
-          "coordinates": [101.3952, 2.9986]
+          "coordinates": [
+            101.3952,
+            2.9986
+          ]
         }
       ]
     },
@@ -1213,87 +1989,159 @@
         {
           "code": "KB01",
           "name": "Batu Caves",
-          "coordinates": [101.6837, 3.2376],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.6837,
+            3.2376
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB02",
           "name": "Taman Wahyu",
-          "coordinates": [101.6812, 3.2216],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.6812,
+            3.2216
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB03",
           "name": "Kampung Batu",
-          "coordinates": [101.6117, 3.1952],
-          "interchangeLines": ["ktm-port-klang", "mrt-putrajaya"]
+          "coordinates": [
+            101.6117,
+            3.1952
+          ],
+          "interchangeLines": [
+            "ktm-port-klang",
+            "mrt-putrajaya"
+          ]
         },
         {
           "code": "KB04",
           "name": "Batu Kentonmen",
-          "coordinates": [101.6898, 3.1921],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.6898,
+            3.1921
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB05",
           "name": "Sentul",
-          "coordinates": [101.6932, 3.1719],
-          "interchangeLines": ["ktm-port-klang", "lrt-ampang", "lrt-sri-petaling"]
+          "coordinates": [
+            101.6932,
+            3.1719
+          ],
+          "interchangeLines": [
+            "ktm-port-klang",
+            "lrt-ampang",
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "KB06",
           "name": "Putra",
-          "coordinates": [101.6920, 3.1636],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.692,
+            3.1636
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB07",
           "name": "Bank Negara",
-          "coordinates": [101.6918, 3.1578],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.6918,
+            3.1578
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB08",
           "name": "Kuala Lumpur",
-          "coordinates": [101.6889, 3.1480],
-          "interchangeLines": ["ktm-port-klang"]
+          "coordinates": [
+            101.6889,
+            3.148
+          ],
+          "interchangeLines": [
+            "ktm-port-klang"
+          ]
         },
         {
           "code": "KB09",
           "name": "KL Sentral",
-          "coordinates": [101.6869, 3.1334],
-          "interchangeLines": ["ktm-port-klang", "lrt-kelana-jaya", "klia-transit", "mrt-kajang", "monorail"]
+          "coordinates": [
+            101.6869,
+            3.1334
+          ],
+          "interchangeLines": [
+            "ktm-port-klang",
+            "lrt-kelana-jaya",
+            "klia-transit",
+            "mrt-kajang",
+            "monorail"
+          ]
         },
         {
           "code": "KB10",
           "name": "Bandar Tasik Selatan",
-          "coordinates": [101.7080, 3.0800],
-          "interchangeLines": ["lrt-sri-petaling"]
+          "coordinates": [
+            101.708,
+            3.08
+          ],
+          "interchangeLines": [
+            "lrt-sri-petaling"
+          ]
         },
         {
           "code": "KB11",
           "name": "Salak",
-          "coordinates": [101.7289, 3.0632]
+          "coordinates": [
+            101.7289,
+            3.0632
+          ]
         },
         {
           "code": "KB12",
           "name": "Nilai",
-          "coordinates": [101.8197, 2.8215]
+          "coordinates": [
+            101.8197,
+            2.8215
+          ]
         },
         {
           "code": "KB13",
           "name": "Labu",
-          "coordinates": [101.8305, 2.7936]
+          "coordinates": [
+            101.8305,
+            2.7936
+          ]
         },
         {
           "code": "KB14",
           "name": "Tiroi",
-          "coordinates": [101.8414, 2.7658]
+          "coordinates": [
+            101.8414,
+            2.7658
+          ]
         },
         {
           "code": "KB15",
           "name": "Seremban",
-          "coordinates": [101.9424, 2.7297]
+          "coordinates": [
+            101.9424,
+            2.7297
+          ]
         }
       ]
     },
@@ -1307,34 +2155,61 @@
         {
           "code": "AT01",
           "name": "KL Sentral",
-          "coordinates": [101.6869, 3.1334],
-          "interchangeLines": ["ktm-port-klang", "ktm-skypark", "lrt-kelana-jaya", "mrt-kajang", "monorail"]
+          "coordinates": [
+            101.6869,
+            3.1334
+          ],
+          "interchangeLines": [
+            "ktm-port-klang",
+            "ktm-skypark",
+            "lrt-kelana-jaya",
+            "mrt-kajang",
+            "monorail"
+          ]
         },
         {
           "code": "AT02",
           "name": "Bandar Tasik Selatan",
-          "coordinates": [101.7080, 3.0800],
-          "interchangeLines": ["lrt-sri-petaling", "ktm-skypark"]
+          "coordinates": [
+            101.708,
+            3.08
+          ],
+          "interchangeLines": [
+            "lrt-sri-petaling",
+            "ktm-skypark"
+          ]
         },
         {
           "code": "AT03",
           "name": "Putrajaya & Cyberjaya",
-          "coordinates": [101.6434, 2.9264]
+          "coordinates": [
+            101.6434,
+            2.9264
+          ]
         },
         {
           "code": "AT04",
           "name": "Salak Tinggi",
-          "coordinates": [101.8071, 2.8031]
+          "coordinates": [
+            101.8071,
+            2.8031
+          ]
         },
         {
           "code": "AT05",
           "name": "KLIA",
-          "coordinates": [101.7092, 2.7456]
+          "coordinates": [
+            101.7092,
+            2.7456
+          ]
         },
         {
           "code": "AT06",
           "name": "KLIA2",
-          "coordinates": [101.7012, 2.7456]
+          "coordinates": [
+            101.7012,
+            2.7456
+          ]
         }
       ]
     }

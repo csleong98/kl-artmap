@@ -119,7 +119,7 @@
     "coordinates": [101.7187, 3.1590],
     "address": "Kuala Lumpur City Centre, 50088 Kuala Lumpur",
     "images": ["/images/locations/Ilham tower/1.jpg"],
-    "nearestStations": ["KLCC", "Ampang Park"],
+    "nearestStations": ["KJ9", "PY29"],
     "admission": "free",
     "details": {
       "overview": {

@@ -48,8 +48,8 @@ function resolveStations(location: Location) {
     .map(stationIdentifier => {
       console.log('🔎 Looking up station:', stationIdentifier);
 
-      // Check if it's a station code (e.g., "AG06", "SP06", "PY27")
-      const isStationCode = /^[A-Z]{2,4}\d{2}$/.test(stationIdentifier);
+      // Check if it's a station code (e.g., "AG06", "SP06", "PY27", "KJ9")
+      const isStationCode = /^[A-Z]{2,4}\d{1,2}$/.test(stationIdentifier);
 
       let result;
       if (isStationCode) {
