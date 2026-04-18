@@ -8,6 +8,8 @@ import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
+import NearestStationAccordion from './nearest-station-accordion';
+import { getStationByName } from '@/data/helpers';
 
 interface LocationDetailProps {
   location: Location;
@@ -17,18 +19,6 @@ interface LocationDetailProps {
   getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
-}
-
-const LINE_TYPES = ['LRT', 'MRT', 'KTM', 'Monorail', 'ETS', 'KLIA'];
-
-function parseLineInfo(line: string): { type: string; name: string } {
-  for (const t of LINE_TYPES) {
-    if (line.toUpperCase().startsWith(t.toUpperCase())) {
-      const rest = line.slice(t.length).trim();
-      return { type: t.toUpperCase(), name: rest || t.toUpperCase() };
-    }
-  }
-  return { type: line, name: line };
 }
 
 const daysOfWeek = [
@@ -298,49 +288,33 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
           </div>
 
           {routesLoading ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {[1, 2, 3].map(i => (
-                <div key={i} className="bg-[#f2f2f2] rounded-[10px] p-4">
+                <div key={i} className="bg-[#f2f2f2] rounded-[24px] p-6">
                   <div className="h-5 w-40 bg-[#d9d9d9] rounded animate-pulse" />
                   <div className="h-4 w-52 bg-[#d9d9d9] rounded animate-pulse mt-3" />
                 </div>
               ))}
             </div>
           ) : routeData && routeData.length > 0 ? (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               {routeData.map((route, i) => {
-                const primaryLine = route.lines[0] || '';
-                const lineInfo = parseLineInfo(primaryLine);
+                // Get station code from station name
+                const stationData = getStationByName(route.stationName);
+
+                // Skip if we can't find the station code
+                if (!stationData) {
+                  return null;
+                }
 
                 return (
-                  <div
+                  <NearestStationAccordion
                     key={i}
-                    className="flex items-center justify-between bg-[#f2f2f2] rounded-[10px] p-4"
-                  >
-                    <div className="flex flex-col gap-3">
-                      <p className="text-lg font-medium leading-[1.4] text-[#1a1a1a]">
-                        {route.stationName}
-                      </p>
-                      <div className="flex items-center gap-2 text-sm text-[#404040]">
-                        <span>{route.formattedDuration}</span>
-                        <div className="flex items-center justify-center size-[5.657px]">
-                          <div className="-rotate-45">
-                            <div className="bg-[#999] rounded-[1px] size-[4px]" />
-                          </div>
-                        </div>
-                        <span>{route.formattedDistance}</span>
-                        <div className="flex items-center justify-center size-[5.657px]">
-                          <div className="-rotate-45">
-                            <div className="bg-[#999] rounded-[1px] size-[4px]" />
-                          </div>
-                        </div>
-                        <span>{lineInfo.type} {lineInfo.name !== lineInfo.type ? lineInfo.name : ''}</span>
-                      </div>
-                    </div>
-                    <svg className="w-5 h-5 text-[#404040] shrink-0" viewBox="0 0 256 256" fill="currentColor">
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/>
-                    </svg>
-                  </div>
+                    stationCode={stationData.code}
+                    walkTime={route.formattedDuration}
+                    walkDistance={route.formattedDistance}
+                    exitName={route.exitName}
+                  />
                 );
               })}
             </div>
