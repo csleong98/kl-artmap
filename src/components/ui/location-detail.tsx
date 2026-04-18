@@ -9,7 +9,6 @@ import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
 import NearestStationAccordion from './nearest-station-accordion';
-import { getStationByName } from '@/data/helpers';
 
 interface LocationDetailProps {
   location: Location;
@@ -298,25 +297,15 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             </div>
           ) : routeData && routeData.length > 0 ? (
             <div className="flex flex-col gap-4">
-              {routeData.map((route, i) => {
-                // Get station code from station name
-                const stationData = getStationByName(route.stationName);
-
-                // Skip if we can't find the station code
-                if (!stationData) {
-                  return null;
-                }
-
-                return (
-                  <NearestStationAccordion
-                    key={i}
-                    stationCode={stationData.code}
-                    walkTime={route.formattedDuration}
-                    walkDistance={route.formattedDistance}
-                    exitName={route.exitName}
-                  />
-                );
-              })}
+              {routeData.map((route, i) => (
+                <NearestStationAccordion
+                  key={i}
+                  stationCode={route.stationCode}
+                  walkTime={route.formattedDuration}
+                  walkDistance={route.formattedDistance}
+                  exitName={route.exitName}
+                />
+              ))}
             </div>
           ) : (
             <p className="text-sm text-ds-text-muted py-4">

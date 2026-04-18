@@ -9,7 +9,7 @@ import {
 } from './collapsible';
 import {
   getStationByCode,
-  getNearbyStationsOnLine,
+  getStationsByLine,
   getInterchangeInfo,
 } from '@/data/helpers';
 
@@ -32,8 +32,8 @@ export default function NearestStationAccordion({
   const station = getStationByCode(stationCode);
   if (!station) return null;
 
-  // Get route context (2 stations before and after)
-  const routeStops = getNearbyStationsOnLine(stationCode, 2);
+  // Get all stations on this line
+  const routeStops = getStationsByLine(station.lineId);
 
   // Get interchange info
   const interchangeInfo = getInterchangeInfo(stationCode);
@@ -67,16 +67,16 @@ export default function NearestStationAccordion({
             <div className="flex gap-3 items-center">
               {/* Walk Time Chip */}
               <div className="flex gap-1.5 items-center py-1">
-                <Footprints className="w-3 h-3 text-[#424242]" />
-                <p className="text-[12px] text-[#424242] leading-none">
+                <Footprints className="w-4 h-4 text-[#424242]" />
+                <p className="text-[14px] text-[#424242] leading-none">
                   {walkTime} walk from station{exitName ? ` (${exitName})` : ''}
                 </p>
               </div>
 
               {/* Distance Chip */}
               <div className="flex gap-1.5 items-center py-1">
-                <Ticket className="w-3 h-3 text-[#424242]" />
-                <p className="text-[12px] text-[#424242] leading-none">
+                <Ticket className="w-4 h-4 text-[#424242]" />
+                <p className="text-[14px] text-[#424242] leading-none">
                   {walkDistance}
                 </p>
               </div>
@@ -96,7 +96,7 @@ export default function NearestStationAccordion({
 
       {/* Expandable Content - Route & Interchange */}
       <CollapsibleContent className="mt-4">
-        <div className="flex flex-col">
+        <div className="flex flex-col max-h-[400px] overflow-y-auto pr-2">
           {/* Route Stops */}
           {routeStops.map((stop, index) => {
             const isCurrentStation = stop.code === stationCode;
@@ -107,7 +107,15 @@ export default function NearestStationAccordion({
                 {/* Station Row */}
                 <div className="flex gap-3 items-center py-2 w-full">
                   {/* Indicator Dot */}
-                  <div className="w-4 h-4 rounded-full bg-[#35b635] shrink-0" />
+                  <div
+                    className="w-4 h-4 rounded-full shrink-0 flex items-center justify-center"
+                    style={{ backgroundColor: `${lineColor}30` }}
+                  >
+                    <div
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: lineColor }}
+                    />
+                  </div>
 
                   {/* Station Name & Code */}
                   <div className="flex-1 flex gap-3 items-center">
@@ -151,15 +159,15 @@ export default function NearestStationAccordion({
 
                 {/* Connecting Line */}
                 {!isLastStop && (
-                  <div className="flex gap-5 h-6 items-start pl-2 w-full">
-                    <div className="w-px h-full bg-[#35b635]" />
+                  <div className="flex gap-5 h-6 items-start pl-[7px] w-full">
+                    <div className="w-px h-full bg-[#C4C4C4]" />
                   </div>
                 )}
 
                 {/* Interchange Info Card */}
                 {isCurrentStation && interchangeInfo && (
-                  <div className="flex gap-5 items-start pl-2 w-full mb-2">
-                    <div className="w-px h-6 bg-[#35b635]" />
+                  <div className="flex gap-5 items-start pl-[7px] w-full mb-2">
+                    <div className="w-px h-6 bg-[#C4C4C4]" />
                     <div className="flex-1 bg-[#fbfaf8] border border-[#ececec] rounded-xl p-4 flex flex-col gap-2">
                       <p className="text-[14px] text-[#595959]">
                         This is an interchange station to{' '}

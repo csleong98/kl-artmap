@@ -9,7 +9,7 @@
     "coordinates": [101.7052281988475, 3.1737653613452355],
     "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
     "images": ["/images/locations/National Art Gallery/1.jpg"],
-    "nearestStations": ["KLCC", "Ampang Park"],
+    "nearestStations": ["Hospital Kuala Lumpur"],
     "admission": "free",
     "details": {
       "overview": {

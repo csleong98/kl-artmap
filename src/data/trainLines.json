@@ -363,7 +363,14 @@
         {
           "code": "PY27",
           "name": "Hospital Kuala Lumpur",
-          "coordinates": [101.7001, 3.1669]
+          "coordinates": [101.7001, 3.1669],
+          "exits": [
+            {
+              "exitName": "Gate B",
+              "coordinates": [101.7042, 3.1715],
+              "description": "Gate B"
+            }
+          ]
         },
         {
           "code": "PY28",
