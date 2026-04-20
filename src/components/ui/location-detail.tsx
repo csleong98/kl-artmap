@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Info, Bus, Copy, Link as LinkIcon, Phone } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
-import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
@@ -13,9 +12,6 @@ import NearestStationAccordion from './nearest-station-accordion';
 interface LocationDetailProps {
   location: Location;
   onBack?: () => void;
-  routeData?: WalkingRouteData[];
-  routesLoading?: boolean;
-  getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
 }
@@ -31,9 +27,10 @@ const daysOfWeek = [
 ] as const;
 
 
-export default function LocationDetail({ location, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: LocationDetailProps) {
+export default function LocationDetail({ location, onBack, onTabChange, initialTab }: LocationDetailProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'about');
   const details = location.details;
+  const stationGuideData = details?.stationGuide?.stations || [];
 
   const handleTabValueChange = (tab: string) => {
     setActiveTab(tab);
@@ -286,24 +283,15 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             </div>
           </div>
 
-          {routesLoading ? (
+          {stationGuideData.length > 0 ? (
             <div className="flex flex-col gap-4">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-[#f2f2f2] rounded-[24px] p-6">
-                  <div className="h-5 w-40 bg-[#d9d9d9] rounded animate-pulse" />
-                  <div className="h-4 w-52 bg-[#d9d9d9] rounded animate-pulse mt-3" />
-                </div>
-              ))}
-            </div>
-          ) : routeData && routeData.length > 0 ? (
-            <div className="flex flex-col gap-4">
-              {routeData.map((route, i) => (
+              {stationGuideData.map((station, i) => (
                 <NearestStationAccordion
                   key={i}
-                  stationCode={route.stationCode}
-                  walkTime={route.formattedDuration}
-                  walkDistance={route.formattedDistance}
-                  exitName={route.exitName}
+                  stationCode={station.stationCode}
+                  walkTime={`${station.walkTime} min${station.walkTime !== 1 ? 's' : ''}`}
+                  walkDistance={station.walkDistance}
+                  exitName={station.exitName}
                 />
               ))}
             </div>

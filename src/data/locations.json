@@ -26,7 +26,15 @@
         "specialNote": "Closed on public holidays"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "PY27",
+            "stationName": "Hospital Kuala Lumpur",
+            "line": "MRT Putrajaya Line",
+            "walkTime": 7,
+            "walkDistance": "450m"
+          }
+        ]
       },
       "contact": {
         "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
@@ -63,7 +71,15 @@
         "specialNote": "Check performance schedule online"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "PY27",
+            "stationName": "Hospital Kuala Lumpur",
+            "line": "MRT Putrajaya Line",
+            "walkTime": 3,
+            "walkDistance": "150m"
+          }
+        ]
       },
       "contact": {
         "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
@@ -100,7 +116,22 @@
         "specialNote": "Closed on public holidays"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "AG06",
+            "stationName": "Bandaraya",
+            "line": "LRT Ampang Line",
+            "walkTime": 8,
+            "walkDistance": "800m"
+          },
+          {
+            "stationCode": "SP06",
+            "stationName": "Bandaraya",
+            "line": "LRT Sri Petaling Line",
+            "walkTime": 8,
+            "walkDistance": "800m"
+          }
+        ]
       },
       "contact": {
         "address": "2, Jalan Dato Onn, Kuala Lumpur, 50480 Kuala Lumpur",
@@ -119,7 +150,7 @@
     "coordinates": [101.7187, 3.1590],
     "address": "Kuala Lumpur City Centre, 50088 Kuala Lumpur",
     "images": ["/images/locations/Ilham tower/1.jpg"],
-    "nearestStations": ["KJ9", "PY29"],
+    "nearestStations": ["KJ09", "PY29"],
     "admission": "free",
     "details": {
       "overview": {
@@ -137,7 +168,22 @@
         "specialNote": "Last admission 30 minutes before closing"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ09",
+            "stationName": "Ampang Park",
+            "line": "LRT Ampang Line",
+            "walkTime": 3,
+            "walkDistance": "300m"
+          },
+          {
+            "stationCode": "PY29",
+            "stationName": "Persiaran KLCC",
+            "line": "MRT Putrajaya Line",
+            "walkTime": 3,
+            "walkDistance": "200m"
+          }
+        ]
       },
       "contact": {
         "address": "Level 5, Ilham Tower, 8 Jalan Binjai, 50450 Kuala Lumpur",
@@ -156,7 +202,7 @@
     "coordinates": [101.7121, 3.1581],
     "address": "Jalan Hang Kasturi, City Centre, 50050 Kuala Lumpur",
     "imageUrl": "/images/central-market.jpg",
-    "nearestStations": ["Pasar Seni", "Masjid Jamek LRT"],
+    "nearestStations": ["KJ10"],
     "admission": "free",
     "details": {
       "overview": {
@@ -173,7 +219,15 @@
         }
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ10",
+            "stationName": "KLCC",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 4,
+            "walkDistance": "250m"
+          }
+        ]
       },
       "contact": {
         "address": "Petronas Tower 3, KLCC, 50088 Kuala Lumpur",
@@ -193,7 +247,7 @@
     "coordinates": [101.6899, 3.1419],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "imageUrl": "/images/islamic-arts-museum.jpg",
-    "nearestStations": ["KL Sentral", "Muzium Negara MRT"],
+    "nearestStations": ["SBK13", "KJ15", "MR01"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -221,7 +275,29 @@
         "specialNote": "Closed on first day of Hari Raya Aidilfitri and Hari Raya Aidiladha"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "SBK13",
+            "stationName": "Museum Negara",
+            "line": "MRT Kajang",
+            "walkTime": 19,
+            "walkDistance": "1.3km"
+          },
+          {
+            "stationCode": "KJ15",
+            "stationName": "KL Sentral",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 25,
+            "walkDistance": "1.8km"
+          },
+          {
+            "stationCode": "MR01",
+            "stationName": "KL Sentral",
+            "line": "Monorail",
+            "walkTime": 25,
+            "walkDistance": "1.8km"
+          }
+        ]
       },
       "contact": {
         "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
@@ -241,7 +317,7 @@
     "coordinates": [101.6941, 3.1467],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images": ["/images/locations/Textile museum/1.jpg"],
-    "nearestStations": ["KL Sentral", "Muzium Negara MRT"],
+    "nearestStations": ["KJ14", "KJ13", "AG07", "SP07", "SBK14"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -265,7 +341,43 @@
         "specialNote": "Closed on first day of Hari Raya Aidilfitri"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ14",
+            "stationName": "Pasar Seni",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 7,
+            "walkDistance": "400m"
+          },
+          {
+            "stationCode": "KJ13",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 8,
+            "walkDistance": "500m"
+          },
+          {
+            "stationCode": "AG07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Ampang",
+            "walkTime": 8,
+            "walkDistance": "500m"
+          },
+          {
+            "stationCode": "SP07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Sri Petaling",
+            "walkTime": 8,
+            "walkDistance": "500m"
+          },
+          {
+            "stationCode": "SBK14",
+            "stationName": "Pasar Seni",
+            "line": "MRT Kajang",
+            "walkTime": 11,
+            "walkDistance": "700m"
+          }
+        ]
       },
       "contact": {
         "address": "26, Jalan Sultan Hishamuddin, 50050 Kuala Lumpur",
@@ -285,7 +397,7 @@
     "coordinates": [101.6942, 3.1487],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images": ["/images/locations/bsas/1.jpg"],
-    "nearestStations": ["KL Sentral", "Muzium Negara MRT"],
+    "nearestStations": ["KJ13", "AG07", "SP07", "KJ14", "SBK14"],
     "admission": "free",
     "details": {
       "overview": {
@@ -303,7 +415,43 @@
         "specialNote": "Interior closed to public, exterior viewable anytime"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ13",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          },
+          {
+            "stationCode": "AG07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Ampang",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          },
+          {
+            "stationCode": "SP07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Sri Petaling",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          },
+          {
+            "stationCode": "KJ14",
+            "stationName": "Pasar Seni",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 8,
+            "walkDistance": "550m"
+          },
+          {
+            "stationCode": "SBK14",
+            "stationName": "Pasar Seni",
+            "line": "MRT Kajang",
+            "walkTime": 13,
+            "walkDistance": "900m"
+          }
+        ]
       },
       "contact": {
         "address": "Jln Raja, Kuala Lumpur City Centre, 50050 Kuala Lumpur",
@@ -322,7 +470,7 @@
     "coordinates": [101.6994, 3.1489],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "imageUrl": "/images/islamic-arts-museum.jpg",
-    "nearestStations": ["KL Sentral", "Muzium Negara MRT"],
+    "nearestStations": ["KJ13", "AG07", "SP07"],
     "admission": "free",
     "details": {
       "overview": {
@@ -340,7 +488,29 @@
         "specialNote": "Closed on public holidays"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ13",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 6,
+            "walkDistance": "450m"
+          },
+          {
+            "stationCode": "AG07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Ampang",
+            "walkTime": 6,
+            "walkDistance": "450m"
+          },
+          {
+            "stationCode": "SP07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Sri Petaling",
+            "walkTime": 6,
+            "walkDistance": "450m"
+          }
+        ]
       },
       "contact": {
         "address": "Jalan Raja Chulan, 50200 Kuala Lumpur",
@@ -356,9 +526,9 @@
     "walkTime": "20mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
-    "coordinates": [101.7117, 3.1462],
+    "coordinates": [101.70954795507214, 3.1475962646518143],
     "address": "3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur",
-    "nearestStations": ["Bukit Bintang MRT", "Bukit Bintang Monorail"],
+    "nearestStations": ["SBK16", "MR06"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -384,7 +554,22 @@
         "specialNote": "Last entry at 9:30pm"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "SBK16",
+            "stationName": "Bukit Bintang",
+            "line": "MRT Kajang",
+            "walkTime": 3,
+            "walkDistance": "200m"
+          },
+          {
+            "stationCode": "MR06",
+            "stationName": "Bukit Bintang",
+            "line": "Monorail",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          }
+        ]
       },
       "contact": {
         "address": "Lot 10 Shopping Centre, 50 Jalan Sultan Ismail, 50250 Kuala Lumpur",
@@ -400,9 +585,9 @@
     "walkTime": "20mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
-    "coordinates": [101.7078, 3.1515],
+    "coordinates": [101.69858737208806, 3.1485403570739496],
     "address": "2, Jalan Raja Chulan, City Centre, 50100 Kuala Lumpur",
-    "nearestStations": ["Raja Chulan Monorail"],
+    "nearestStations": ["KJ13", "AG07", "SP07"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -428,7 +613,29 @@
         "specialNote": "Last entry at 9:30pm"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "KJ13",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          },
+          {
+            "stationCode": "AG07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Ampang",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          },
+          {
+            "stationCode": "SP07",
+            "stationName": "Masjid Jamek",
+            "line": "LRT Sri Petaling",
+            "walkTime": 5,
+            "walkDistance": "350m"
+          }
+        ]
       },
       "contact": {
         "address": "The Toffee, 2 Jalan Raja Chulan, 50200 Kuala Lumpur",
@@ -438,16 +645,16 @@
     }
   },
   {
-    "name": "UR-MU Tun H.S. Lee",
+    "name": "+n by UR MU",
     "type": "art_gallery",
     "distance": "3km",
     "walkTime": "25mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
-    "coordinates": [101.6967, 3.1453],
+    "coordinates": [101.69654887072686, 3.1447376875622948],
     "address": "131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur",
     "images": ["/images/locations/UR-MU Tun HS Lee/1.jpg"],
-    "nearestStations": ["Pasar Seni LRT", "Pasar Seni MRT"],
+    "nearestStations": ["SBK14", "KJ14"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -473,7 +680,23 @@
         "specialNote": "Last entry at 9:30pm"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "SBK14",
+            "stationName": "Pasar Seni",
+            "line": "MRT Kajang",
+            "walkTime": 4,
+            "walkDistance": "250m"
+          },
+          {
+            "stationCode": "KJ14",
+            "stationName": "Pasar Seni",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 4,
+            "walkDistance": "300m"
+          }
+          
+        ]
       },
       "contact": {
         "address": "131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur",
@@ -491,7 +714,7 @@
     "status": "open",
     "coordinates": [101.6968, 3.1440],
     "address": "Lorong Panggung, 50000 Kuala Lumpur",
-    "nearestStations": ["Pasar Seni LRT", "Pasar Seni MRT"],
+    "nearestStations": ["KJ14", "SBK14"],
     "admission": "free",
     "details": {
       "overview": {
@@ -509,7 +732,22 @@
         "specialNote": "Best visited during daylight hours for photography"
       },
       "stationGuide": {
-        "stations": []
+        "stations": [
+          {
+            "stationCode": "SBK14",
+            "stationName": "Pasar Seni",
+            "line": "MRT Kajang",
+            "walkTime": 3,
+            "walkDistance": "300m"
+          },
+          {
+            "stationCode": "KJ14",
+            "stationName": "Pasar Seni",
+            "line": "LRT Kelana Jaya",
+            "walkTime": 6,
+            "walkDistance": "400m"
+          }
+        ]
       },
       "contact": {
         "address": "Lorong Panggung, 50000 Kuala Lumpur",
@@ -527,7 +765,7 @@
     "coordinates": [101.69716477094327, 3.137803887112592],
     "address": "80-84, Jalan Rotan, Kampung Attap, 50460 Kuala Lumpur",
     "images": ["/images/locations/Zhongshan building/1.JPEG", "/images/locations/Zhongshan building/2.JPEG"],
-    "nearestStations": ["Maharajalela Monorail"],
+    "nearestStations": ["MR03"],
     "admission": "free",
     "details": {
       "overview": {
@@ -547,10 +785,11 @@
       "stationGuide": {
         "stations": [
           {
-            "name": "Maharajalela",
+            "stationCode": "MR03",
+            "stationName": "Maharajalela",
             "line": "Monorail",
             "walkTime": 5,
-            "walkDistance": "0.4km"
+            "walkDistance": "350m"
           }
         ]
       },

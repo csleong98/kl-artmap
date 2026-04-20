@@ -6,7 +6,6 @@ import { Drawer } from 'vaul';
 import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
-import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
 import { getAllLocations } from '@/data/helpers';
 
@@ -20,7 +19,6 @@ function HomeContent() {
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
-  const { routeData, isLoading: routesLoading, fetchRoutes, clearRoutes, getStationRouteInfo } = useWalkingRoutes();
 
   // Detect mobile viewport
   useEffect(() => {
@@ -83,19 +81,13 @@ function HomeContent() {
         bearing: 0,
         duration: 1500,
       });
-      if (tab === 'station-guide') {
-        fetchRoutes(loc);
-      }
       // Clear refs so this only runs once
       initialLocationRef.current = null;
       initialTabRef.current = null;
     }
-  }, [fetchRoutes]);
+  }, []);
 
   const handleLocationSelect = useCallback((location: Location) => {
-    // Clean up any existing routes from a previous selection
-    clearRoutes();
-
     setSelectedLocation(location);
     setInitialTab('about');
     updateUrl(location.name, 'about');
@@ -111,22 +103,14 @@ function HomeContent() {
         duration: 2000,
       });
     }
-  }, [updateUrl, clearRoutes]);
+  }, [updateUrl]);
 
   const handleTabChange = useCallback((tab: string) => {
     if (!selectedLocation) return;
-
     updateUrl(selectedLocation.name, tab);
-
-    if (tab === 'station-guide') {
-      fetchRoutes(selectedLocation);
-    } else {
-      clearRoutes();
-    }
-  }, [selectedLocation, fetchRoutes, clearRoutes, updateUrl]);
+  }, [selectedLocation, updateUrl]);
 
   const handleBack = useCallback(() => {
-    clearRoutes();
     unmuteAllMarkers();
     setSelectedLocation(null);
     setInitialTab(undefined);
@@ -142,7 +126,7 @@ function HomeContent() {
         duration: 1500,
       });
     }
-  }, [clearRoutes, updateUrl]);
+  }, [updateUrl]);
 
   return (
     <>
@@ -162,9 +146,6 @@ function HomeContent() {
               selectedLocation={selectedLocation}
               onLocationSelect={handleLocationSelect}
               onBack={handleBack}
-              routeData={routeData}
-              routesLoading={routesLoading}
-              getStationRouteInfo={getStationRouteInfo}
               onTabChange={handleTabChange}
               initialTab={initialTab}
             />
@@ -189,9 +170,6 @@ function HomeContent() {
                     selectedLocation={selectedLocation}
                     onLocationSelect={handleLocationSelect}
                     onBack={handleBack}
-                    routeData={routeData}
-                    routesLoading={routesLoading}
-                    getStationRouteInfo={getStationRouteInfo}
                     onTabChange={handleTabChange}
                     initialTab={initialTab}
                   />
@@ -221,9 +199,6 @@ function HomeContent() {
                       selectedLocation={selectedLocation}
                       onLocationSelect={handleLocationSelect}
                       onBack={handleBack}
-                      routeData={routeData}
-                      routesLoading={routesLoading}
-                      getStationRouteInfo={getStationRouteInfo}
                       onTabChange={handleTabChange}
                       initialTab={initialTab}
                     />

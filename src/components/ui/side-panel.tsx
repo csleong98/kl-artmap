@@ -7,7 +7,6 @@ import { getAllLocations } from '@/data/helpers';
 import { Location } from '@/types';
 
 const mockLocations = getAllLocations();
-import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import LocationDetail from './location-detail';
 import StackedList from './stacked-list';
 import GridList from './grid-list';
@@ -75,14 +74,11 @@ interface SidePanelProps {
   selectedLocation: Location | null;
   onLocationSelect: (location: Location) => void;
   onBack: () => void;
-  routeData?: WalkingRouteData[];
-  routesLoading?: boolean;
-  getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, onLocationSelect, onBack, onTabChange, initialTab }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
 
@@ -259,9 +255,6 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             <LocationDetail
               location={selectedLocation}
               onBack={onBack}
-              routeData={routeData}
-              routesLoading={routesLoading}
-              getStationRouteInfo={getStationRouteInfo}
               onTabChange={onTabChange}
               initialTab={initialTab}
             />

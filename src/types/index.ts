@@ -34,15 +34,13 @@ export interface LocationDetails {
   };
   stationGuide: {
     stations: {
-      name: string;
+      stationCode: string;
+      stationName: string;
       line: string;
       walkTime: number;
       walkDistance: string;
-      routeInfo?: {
-        distance: number;
-        duration: number;
-        routeGeometry?: any;
-      };
+      exitName?: string;
+      exitDescription?: string;
     }[];
   };
   contact: {
