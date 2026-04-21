@@ -53,8 +53,6 @@ export interface LocationDetails {
 export interface Location {
   name: string;
   type: 'art_gallery' | 'art_museum' | 'monument' | 'street_art';
-  distance: string;
-  walkTime: string;
   openingHours: string;
   status: 'open' | 'closed';
   reopenTime?: string;

@@ -2,8 +2,6 @@
   {
     "name": "National Art Gallery",
     "type": "art_museum",
-    "distance": "2km",
-    "walkTime": "25mins",
     "openingHours": "Closes at 5pm today",
     "status": "open",
     "coordinates": [101.7052281988475, 3.1737653613452355],
@@ -46,8 +44,6 @@
   {
     "name": "Istana Budaya (National Theater)",
     "type": "theater",
-    "distance": "1km",
-    "walkTime": "15mins",
     "openingHours": "Varies by performance",
     "status": "open",
     "coordinates": [101.70442501774133, 3.174501865435276],
@@ -91,8 +87,6 @@
   {
     "name": "Bank Negara Malaysia Museum & Art Gallery",
     "type": "art_museum",
-    "distance": "1km",
-    "walkTime": "15mins",
     "openingHours": "Closes at 5pm today",
     "status": "open",
     "coordinates": [101.6905, 3.1572],
@@ -143,8 +137,6 @@
   {
     "name": "Ilham Gallery",
     "type": "art_museum",
-    "distance": "2km",
-    "walkTime": "25mins",
     "openingHours": "Closes at 7pm today",
     "status": "open",
     "coordinates": [101.7187, 3.1590],
@@ -195,8 +187,6 @@
   {
     "name": "Galeri Petronas",
     "type": "art_museum",
-    "distance": "2km",
-    "walkTime": "25mins",
     "openingHours": "Closes at 7pm today",
     "status": "open",
     "coordinates": [101.7121, 3.1581],
@@ -239,8 +229,6 @@
   {
     "name": "Islamic Arts Museum Malaysia",
     "type": "art_museum",
-    "distance": "3km",
-    "walkTime": "35mins",
     "openingHours": "Reopens at 10am tomorrow",
     "status": "closed",
     "reopenTime": "10am tomorrow",
@@ -309,8 +297,6 @@
   {
     "name": "National Textile Museum",
     "type": "art_museum",
-    "distance": "3km",
-    "walkTime": "35mins",
     "openingHours": "Reopens at 10am tomorrow",
     "status": "closed",
     "reopenTime": "10am tomorrow",
@@ -389,8 +375,6 @@
   {
     "name": "Sultan Abdul Samad Building",
     "type": "monument",
-    "distance": "3km",
-    "walkTime": "35mins",
     "openingHours": "Reopens at 10am tomorrow",
     "status": "closed",
     "reopenTime": "10am tomorrow",
@@ -462,8 +446,6 @@
   {
     "name": "Telekom Museum",
     "type": "art_museum",
-    "distance": "3km",
-    "walkTime": "35mins",
     "openingHours": "Reopens at 10am tomorrow",
     "status": "closed",
     "reopenTime": "10am tomorrow",
@@ -522,8 +504,6 @@
   {
     "name": "UR-MU Bukit Bintang",
     "type": "art_gallery",
-    "distance": "2km",
-    "walkTime": "20mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
     "coordinates": [101.70954795507214, 3.1475962646518143],
@@ -581,8 +561,6 @@
   {
     "name": "UR-MU The Toffee",
     "type": "art_gallery",
-    "distance": "2km",
-    "walkTime": "20mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
     "coordinates": [101.69858737208806, 3.1485403570739496],
@@ -647,8 +625,6 @@
   {
     "name": "+n by UR MU",
     "type": "art_gallery",
-    "distance": "3km",
-    "walkTime": "25mins",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
     "coordinates": [101.69654887072686, 3.1447376875622948],
@@ -708,8 +684,6 @@
   {
     "name": "Kwai Chai Hong",
     "type": "street_art",
-    "distance": "3km",
-    "walkTime": "25mins",
     "openingHours": "Closes at 12am today",
     "status": "open",
     "coordinates": [101.6968, 3.1440],
@@ -758,8 +732,6 @@
   {
     "name": "Zhongshan Building",
     "type": "art_gallery",
-    "distance": "2.5km",
-    "walkTime": "20mins",
     "openingHours": "Closes at 8pm today",
     "status": "open",
     "coordinates": [101.69716477094327, 3.137803887112592],
