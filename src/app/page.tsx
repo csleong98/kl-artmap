@@ -162,7 +162,7 @@ function HomeContent() {
           {/* Single Drawer - Dynamic Content */}
           <Drawer.Root modal={false} open={true} dismissible={false}>
             <Drawer.Portal>
-              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[60vh] fixed bottom-0 left-0 right-0 shadow-xl z-40">
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[60vh] fixed bottom-0 left-0 right-0 shadow-xl overflow-hidden z-40">
                 <Drawer.Title className="sr-only">
                   {selectedLocation ? selectedLocation.name : 'Location List'}
                 </Drawer.Title>
