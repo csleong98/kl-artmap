@@ -159,11 +159,13 @@ function HomeContent() {
           {/* Fullscreen Map */}
           <Map className="w-full h-full" onMapLoad={handleMapLoad} />
 
-          {/* List View Drawer (always visible on mobile) */}
-          <Drawer.Root modal={false} open={true}>
+          {/* Single Drawer - Dynamic Content */}
+          <Drawer.Root modal={false} open={true} dismissible={false}>
             <Drawer.Portal>
-              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[40vh] fixed bottom-0 left-0 right-0 shadow-xl">
-                <Drawer.Title className="sr-only">Location List</Drawer.Title>
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[60vh] fixed bottom-0 left-0 right-0 shadow-xl z-40">
+                <Drawer.Title className="sr-only">
+                  {selectedLocation ? selectedLocation.name : 'Location List'}
+                </Drawer.Title>
                 <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" />
                 <div className="flex-1 overflow-y-auto">
                   <SidePanel
@@ -173,36 +175,6 @@ function HomeContent() {
                     onTabChange={handleTabChange}
                     initialTab={initialTab}
                   />
-                </div>
-              </Drawer.Content>
-            </Drawer.Portal>
-          </Drawer.Root>
-
-          {/* Detail View Drawer (opens when location selected) */}
-          <Drawer.Root
-            open={selectedLocation !== null}
-            onOpenChange={(open) => {
-              if (!open) handleBack();
-            }}
-            dismissible={true}
-          >
-            <Drawer.Portal>
-              <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[85vh] fixed bottom-0 left-0 right-0 z-50">
-                <Drawer.Title className="sr-only">
-                  {selectedLocation ? selectedLocation.name : 'Location Details'}
-                </Drawer.Title>
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" />
-                <div className="flex-1 overflow-y-auto">
-                  {selectedLocation && (
-                    <SidePanel
-                      selectedLocation={selectedLocation}
-                      onLocationSelect={handleLocationSelect}
-                      onBack={handleBack}
-                      onTabChange={handleTabChange}
-                      initialTab={initialTab}
-                    />
-                  )}
                 </div>
               </Drawer.Content>
             </Drawer.Portal>
