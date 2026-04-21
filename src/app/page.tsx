@@ -6,7 +6,6 @@ import { Drawer } from 'vaul';
 import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
 import { Location } from '@/types';
-import { useWalkingRoutes } from '@/hooks/useWalkingRoutes';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
 import { getAllLocations } from '@/data/helpers';
 
@@ -20,7 +19,6 @@ function HomeContent() {
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
-  const { routeData, isLoading: routesLoading, fetchRoutes, clearRoutes, getStationRouteInfo } = useWalkingRoutes();
 
   // Detect mobile viewport
   useEffect(() => {
@@ -83,19 +81,13 @@ function HomeContent() {
         bearing: 0,
         duration: 1500,
       });
-      if (tab === 'station-guide') {
-        fetchRoutes(loc);
-      }
       // Clear refs so this only runs once
       initialLocationRef.current = null;
       initialTabRef.current = null;
     }
-  }, [fetchRoutes]);
+  }, []);
 
   const handleLocationSelect = useCallback((location: Location) => {
-    // Clean up any existing routes from a previous selection
-    clearRoutes();
-
     setSelectedLocation(location);
     setInitialTab('about');
     updateUrl(location.name, 'about');
@@ -111,22 +103,14 @@ function HomeContent() {
         duration: 2000,
       });
     }
-  }, [updateUrl, clearRoutes]);
+  }, [updateUrl]);
 
   const handleTabChange = useCallback((tab: string) => {
     if (!selectedLocation) return;
-
     updateUrl(selectedLocation.name, tab);
-
-    if (tab === 'station-guide') {
-      fetchRoutes(selectedLocation);
-    } else {
-      clearRoutes();
-    }
-  }, [selectedLocation, fetchRoutes, clearRoutes, updateUrl]);
+  }, [selectedLocation, updateUrl]);
 
   const handleBack = useCallback(() => {
-    clearRoutes();
     unmuteAllMarkers();
     setSelectedLocation(null);
     setInitialTab(undefined);
@@ -142,7 +126,7 @@ function HomeContent() {
         duration: 1500,
       });
     }
-  }, [clearRoutes, updateUrl]);
+  }, [updateUrl]);
 
   return (
     <>
@@ -162,9 +146,6 @@ function HomeContent() {
               selectedLocation={selectedLocation}
               onLocationSelect={handleLocationSelect}
               onBack={handleBack}
-              routeData={routeData}
-              routesLoading={routesLoading}
-              getStationRouteInfo={getStationRouteInfo}
               onTabChange={handleTabChange}
               initialTab={initialTab}
             />
@@ -178,56 +159,22 @@ function HomeContent() {
           {/* Fullscreen Map */}
           <Map className="w-full h-full" onMapLoad={handleMapLoad} />
 
-          {/* List View Drawer (always visible on mobile) */}
-          <Drawer.Root modal={false} open={true}>
+          {/* Single Drawer - Dynamic Content */}
+          <Drawer.Root modal={false} open={true} dismissible={false}>
             <Drawer.Portal>
-              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[40vh] fixed bottom-0 left-0 right-0 shadow-xl">
-                <Drawer.Title className="sr-only">Location List</Drawer.Title>
-                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
-                <div className="flex-1 overflow-y-auto px-4">
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[60vh] fixed bottom-0 left-0 right-0 shadow-xl overflow-hidden z-40">
+                <Drawer.Title className="sr-only">
+                  {selectedLocation ? selectedLocation.name : 'Location List'}
+                </Drawer.Title>
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" />
+                <div className="flex-1 overflow-y-auto">
                   <SidePanel
                     selectedLocation={selectedLocation}
                     onLocationSelect={handleLocationSelect}
                     onBack={handleBack}
-                    routeData={routeData}
-                    routesLoading={routesLoading}
-                    getStationRouteInfo={getStationRouteInfo}
                     onTabChange={handleTabChange}
                     initialTab={initialTab}
                   />
-                </div>
-              </Drawer.Content>
-            </Drawer.Portal>
-          </Drawer.Root>
-
-          {/* Detail View Drawer (opens when location selected) */}
-          <Drawer.Root
-            open={selectedLocation !== null}
-            onOpenChange={(open) => {
-              if (!open) handleBack();
-            }}
-            dismissible={true}
-          >
-            <Drawer.Portal>
-              <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[85vh] fixed bottom-0 left-0 right-0 z-50">
-                <Drawer.Title className="sr-only">
-                  {selectedLocation ? selectedLocation.name : 'Location Details'}
-                </Drawer.Title>
-                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
-                <div className="flex-1 overflow-y-auto px-6">
-                  {selectedLocation && (
-                    <SidePanel
-                      selectedLocation={selectedLocation}
-                      onLocationSelect={handleLocationSelect}
-                      onBack={handleBack}
-                      routeData={routeData}
-                      routesLoading={routesLoading}
-                      getStationRouteInfo={getStationRouteInfo}
-                      onTabChange={handleTabChange}
-                      initialTab={initialTab}
-                    />
-                  )}
                 </div>
               </Drawer.Content>
             </Drawer.Portal>

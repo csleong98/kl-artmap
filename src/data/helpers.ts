@@ -79,6 +79,69 @@ export function getStationByName(name: string): (TrainStation & { lineId: string
 }
 
 /**
+ * Get station with full metadata (for walking routes)
+ * Returns StationWithMetadata structure compatible with useWalkingRoutes
+ */
+export function getStationWithMetadata(name: string): StationWithMetadata | null {
+  const lowerName = name.toLowerCase().trim();
+
+  // Try exact match first
+  for (const line of trainLines) {
+    const station = line.stations.find(s => s.name.toLowerCase() === lowerName);
+    if (station) {
+      const servingLines = getLinesAtStationByCode(station.code).map(l => l.name);
+
+      return {
+        name: station.name,
+        code: station.code,
+        coordinates: station.coordinates,
+        exits: station.exits || [{
+          exitName: 'Main Exit',
+          coordinates: station.coordinates,
+          description: 'Main station exit'
+        }],
+        lines: servingLines.length > 0 ? servingLines : [line.name],
+        type: line.type,
+        lineId: line.id,
+        lineName: line.name,
+        lineColor: line.color,
+        interchangeLines: station.interchangeLines
+      };
+    }
+  }
+
+  // Try partial match
+  for (const line of trainLines) {
+    const station = line.stations.find(s =>
+      s.name.toLowerCase().includes(lowerName) ||
+      lowerName.includes(s.name.toLowerCase())
+    );
+    if (station) {
+      const servingLines = getLinesAtStationByCode(station.code).map(l => l.name);
+
+      return {
+        name: station.name,
+        code: station.code,
+        coordinates: station.coordinates,
+        exits: station.exits || [{
+          exitName: 'Main Exit',
+          coordinates: station.coordinates,
+          description: 'Main station exit'
+        }],
+        lines: servingLines.length > 0 ? servingLines : [line.name],
+        type: line.type,
+        lineId: line.id,
+        lineName: line.name,
+        lineColor: line.color,
+        interchangeLines: station.interchangeLines
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
  * Get all lines that serve a particular station (by station name)
  * Useful for interchange stations
  */

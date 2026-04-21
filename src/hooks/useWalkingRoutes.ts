@@ -1,14 +1,14 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Location } from '@/types';
-import { getStationsWithinRadius, findRelevantIndoorConnections } from '@/data/helpers';
+import { getStationWithMetadata, getStationByCode, haversineMeters } from '@/data/helpers';
 import {
-  fetchDirectionsRoute,
   formatDistance,
   formatDuration,
 } from '@/services/routeService';
 
 export interface WalkingRouteData {
   stationName: string;
+  stationCode: string;        // Station code (e.g., "SBK15")
   exitName: string;           // Specific exit to use
   coordinates: [number, number]; // The exit's coordinates
   exitDescription?: string;   // Optional helper text like "Near Central Market"
@@ -31,19 +31,61 @@ interface UseWalkingRoutesReturn {
   getStationRouteInfo: (stationName: string) => WalkingRouteData | undefined;
 }
 
-/** Maximum walking duration in seconds (15 minutes) */
-const MAX_WALK_SECONDS = 900;
-
-/** Haversine pre-filter radius in meters (~1.5km straight-line) */
-const PREFILTER_RADIUS_M = 2000;
-
 /**
- * Pre-filters stations within a straight-line radius.
- * Real walking time is checked after the Matrix API call.
+ * Get stations for a location using the manually curated nearestStations list.
  * Returns full StationData objects with exits.
  */
 function resolveStations(location: Location) {
-  return getStationsWithinRadius(location.coordinates, PREFILTER_RADIUS_M);
+  console.log('🔍 resolveStations called for:', location.name);
+  console.log('📍 nearestStations:', location.nearestStations);
+
+  if (!location.nearestStations || location.nearestStations.length === 0) {
+    console.log('❌ No nearestStations found');
+    return [];
+  }
+
+  const stations = location.nearestStations
+    .map(stationIdentifier => {
+      console.log('🔎 Looking up station:', stationIdentifier);
+
+      // Check if it's a station code (e.g., "AG06", "SP06", "PY27", "KJ9")
+      const isStationCode = /^[A-Z]{2,4}\d{1,2}$/.test(stationIdentifier);
+
+      let result;
+      if (isStationCode) {
+        // Look up by code
+        const stationData = getStationByCode(stationIdentifier);
+        if (stationData) {
+          // Convert to StationWithMetadata format
+          result = {
+            name: stationData.name,
+            code: stationData.code,
+            coordinates: stationData.coordinates,
+            exits: stationData.exits || [{
+              exitName: 'Main Exit',
+              coordinates: stationData.coordinates,
+              description: 'Main station exit'
+            }],
+            lines: [stationData.lineName],
+            type: stationData.lineType,
+            lineId: stationData.lineId,
+            lineName: stationData.lineName,
+            lineColor: stationData.lineColor,
+            interchangeLines: stationData.interchangeLines
+          };
+        }
+      } else {
+        // Look up by name
+        result = getStationWithMetadata(stationIdentifier);
+      }
+
+      console.log('✅ Result:', result ? `${result.name} (${result.code})` : 'NULL');
+      return result;
+    })
+    .filter((station): station is NonNullable<typeof station> => station !== null);
+
+  console.log('📊 Resolved stations count:', stations.length);
+  return stations;
 }
 
 export function useWalkingRoutes(): UseWalkingRoutesReturn {
@@ -51,23 +93,12 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const abortRef = useRef<AbortController | null>(null);
-
   const clearRoutes = useCallback(() => {
-    // Cancel in-flight requests
-    abortRef.current?.abort();
-    abortRef.current = null;
-
     setRouteData([]);
     setError(null);
   }, []);
 
   const fetchRoutes = useCallback(async (location: Location) => {
-    // Cancel any previous in-flight work
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-
     const stations = resolveStations(location);
     if (stations.length === 0) {
       setRouteData([]);
@@ -78,146 +109,69 @@ export function useWalkingRoutes(): UseWalkingRoutesReturn {
     setIsLoading(true);
     setError(null);
 
-    const origin = location.coordinates;
-    const signal = controller.signal;
-
     try {
-      // Build a flat list of all station-exit combinations
-      const allExitCombos: Array<{
-        station: typeof stations[0];
-        exit: typeof stations[0]['exits'][0];
-      }> = [];
+      // Simply convert stations to route data without API calls
+      const routes: WalkingRouteData[] = stations.map((station) => {
+        // Use first exit or create default exit
+        const exit = station.exits[0] || {
+          exitName: 'Main Exit',
+          coordinates: station.coordinates,
+          description: 'Main station exit'
+        };
 
-      stations.forEach(station => {
-        station.exits.forEach(exit => {
-          allExitCombos.push({ station, exit });
-        });
-      });
+        // Manual override for specific routes
+        let distance: number;
+        let duration: number;
 
-      // Calculate routes from ALL exits to the art venue
-      // First check for indoor connections, then use Mapbox API as fallback
-      const directionsResults = await Promise.allSettled(
-        allExitCombos.map(async (combo) => {
-          // Check if there's an indoor connection for this route
-          const indoorConns = findRelevantIndoorConnections(
-            combo.exit.coordinates,
-            origin,
-            150 // Allow 150m detour to use indoor route
+        if (station.code === 'PY27' && location.name === 'National Art Gallery') {
+          // Hospital Kuala Lumpur to National Art Gallery: 7 mins, 450m
+          distance = 450;
+          duration = 420; // 7 minutes in seconds
+        } else if (station.code === 'PY27' && location.name === 'Istana Budaya (National Theater)') {
+          // Hospital Kuala Lumpur to Istana Budaya: 3 mins, 150m
+          distance = 150;
+          duration = 180; // 3 minutes in seconds
+        } else {
+          // Calculate straight-line distance as estimate
+          distance = Math.round(
+            haversineMeters(exit.coordinates, location.coordinates)
           );
-
-          // If indoor connection exists and is better, use it
-          if (indoorConns.length > 0) {
-            const bestIndoor = indoorConns[0]; // Use first (best) match
-
-            // Create synthetic route result with indoor connection data
-            return {
-              success: true,
-              distance: bestIndoor.distance,
-              duration: bestIndoor.duration,
-              geometry: {
-                type: 'LineString' as const,
-                coordinates: [bestIndoor.start.coordinates, bestIndoor.end.coordinates]
-              },
-              steps: [{
-                distance: bestIndoor.distance,
-                duration: bestIndoor.duration,
-                name: bestIndoor.name,
-                instruction: bestIndoor.instructions,
-                maneuverType: 'indoor',
-                isCrossing: false,
-              }],
-              isIndoor: true,
-              indoorFeatures: bestIndoor.features,
-            };
-          }
-
-          // Fallback to Mapbox API
-          const result = await fetchDirectionsRoute(
-            combo.exit.coordinates,
-            origin,
-            signal
-          );
-
-          return {
-            ...result,
-            isIndoor: false,
-          };
-        })
-      );
-
-      // Check if aborted while awaiting
-      if (signal.aborted) return;
-
-      // Group results by station and pick best exit per station
-      const stationBestExits: Map<string, {
-        exit: typeof stations[0]['exits'][0];
-        route: any;
-        station: typeof stations[0];
-      }> = new Map();
-
-      allExitCombos.forEach((combo, index) => {
-        const dirResult = directionsResults[index];
-        if (dirResult.status !== 'fulfilled' || !dirResult.value.success) return;
-
-        const route = dirResult.value;
-        const existing = stationBestExits.get(combo.station.name);
-
-        // Prefer indoor routes (boost priority), otherwise use shortest time
-        const routeScore = route.isIndoor
-          ? route.duration * 0.7  // 30% bonus for indoor routes
-          : route.duration;
-
-        const existingScore = existing
-          ? (existing.route.isIndoor ? existing.route.duration * 0.7 : existing.route.duration)
-          : Infinity;
-
-        // Keep the exit with best score (shortest time, with indoor bonus)
-        if (routeScore < existingScore) {
-          stationBestExits.set(combo.station.name, {
-            exit: combo.exit,
-            route,
-            station: combo.station
-          });
+          // Estimate walking time: 5 km/h = 1.39 m/s
+          duration = Math.round(distance / 1.39);
         }
-      });
-
-      // Build final route data with exit information
-      const routes: WalkingRouteData[] = Array.from(stationBestExits.values()).map((best) => {
-        const isIndoor = best.route.isIndoor || false;
-        const indoorPercentage = isIndoor ? 100 : 0; // Simplified - either fully indoor or outdoor
 
         return {
-          stationName: best.station.name,
-          exitName: best.exit.exitName,
-          exitDescription: best.exit.description,
-          coordinates: best.exit.coordinates,
-          lines: best.station.lines,
-          distance: best.route.distance,
-          duration: best.route.duration,
-          formattedDistance: formatDistance(best.route.distance),
-          formattedDuration: formatDuration(best.route.duration),
-          hasIndoorRoute: isIndoor,
-          indoorPercentage: indoorPercentage,
-          indoorFeatures: best.route.indoorFeatures || [],
+          stationName: station.name,
+          stationCode: station.code,
+          exitName: exit.exitName,
+          exitDescription: exit.description,
+          coordinates: exit.coordinates,
+          lines: station.lines,
+          distance: distance,
+          duration: duration,
+          formattedDistance: formatDistance(distance),
+          formattedDuration: formatDuration(duration),
+          hasIndoorRoute: false,
+          indoorPercentage: 0,
+          indoorFeatures: [],
         };
       });
 
-      if (signal.aborted) return;
+      console.log('🚶 Routes:', routes.length);
+      console.log('📋 Route details:', routes.map(r => ({
+        station: r.stationName,
+        code: r.stationCode,
+        exit: r.exitName,
+        duration: r.formattedDuration,
+        distance: r.formattedDistance
+      })));
 
-      // Keep only stations walkable within 15 minutes, sorted by duration (shortest first)
-      const walkableRoutes = routes
-        .filter(r => r.duration > 0 && r.duration <= MAX_WALK_SECONDS)
-        .sort((a, b) => a.duration - b.duration);
-
-      setRouteData(walkableRoutes);
+      setRouteData(routes);
     } catch (err) {
-      if ((err as Error).name === 'AbortError') return;
       console.error('Walking routes error:', err);
       setError('Failed to load walking directions');
     } finally {
-      if (!signal.aborted) {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }
   }, []);
 

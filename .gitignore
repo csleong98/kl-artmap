@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# templates and temporary guides
+STATION_DATA_READY.md
+STATION_DATA_TEMPLATE.md

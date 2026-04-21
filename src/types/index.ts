@@ -34,15 +34,13 @@ export interface LocationDetails {
   };
   stationGuide: {
     stations: {
-      name: string;
+      stationCode: string;
+      stationName: string;
       line: string;
       walkTime: number;
       walkDistance: string;
-      routeInfo?: {
-        distance: number;
-        duration: number;
-        routeGeometry?: any;
-      };
+      exitName?: string;
+      exitDescription?: string;
     }[];
   };
   contact: {
@@ -55,8 +53,6 @@ export interface LocationDetails {
 export interface Location {
   name: string;
   type: 'art_gallery' | 'art_museum' | 'monument' | 'street_art';
-  distance: string;
-  walkTime: string;
   openingHours: string;
   status: 'open' | 'closed';
   reopenTime?: string;

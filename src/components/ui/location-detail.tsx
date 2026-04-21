@@ -4,31 +4,16 @@ import { useState } from 'react';
 import { Info, Bus, Copy, Link as LinkIcon, Phone } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 import { Location } from '@/types';
-import { WalkingRouteData } from '@/hooks/useWalkingRoutes';
 import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
+import NearestStationAccordion from './nearest-station-accordion';
 
 interface LocationDetailProps {
   location: Location;
   onBack?: () => void;
-  routeData?: WalkingRouteData[];
-  routesLoading?: boolean;
-  getStationRouteInfo?: (stationName: string) => WalkingRouteData | undefined;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
-}
-
-const LINE_TYPES = ['LRT', 'MRT', 'KTM', 'Monorail', 'ETS', 'KLIA'];
-
-function parseLineInfo(line: string): { type: string; name: string } {
-  for (const t of LINE_TYPES) {
-    if (line.toUpperCase().startsWith(t.toUpperCase())) {
-      const rest = line.slice(t.length).trim();
-      return { type: t.toUpperCase(), name: rest || t.toUpperCase() };
-    }
-  }
-  return { type: line, name: line };
 }
 
 const daysOfWeek = [
@@ -42,9 +27,10 @@ const daysOfWeek = [
 ] as const;
 
 
-export default function LocationDetail({ location, onBack, routeData, routesLoading, getStationRouteInfo, onTabChange, initialTab }: LocationDetailProps) {
+export default function LocationDetail({ location, onBack, onTabChange, initialTab }: LocationDetailProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'about');
   const details = location.details;
+  const stationGuideData = details?.stationGuide?.stations || [];
 
   const handleTabValueChange = (tab: string) => {
     setActiveTab(tab);
@@ -297,52 +283,17 @@ export default function LocationDetail({ location, onBack, routeData, routesLoad
             </div>
           </div>
 
-          {routesLoading ? (
-            <div className="flex flex-col gap-2">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="bg-[#f2f2f2] rounded-[10px] p-4">
-                  <div className="h-5 w-40 bg-[#d9d9d9] rounded animate-pulse" />
-                  <div className="h-4 w-52 bg-[#d9d9d9] rounded animate-pulse mt-3" />
-                </div>
+          {stationGuideData.length > 0 ? (
+            <div className="flex flex-col gap-4">
+              {stationGuideData.map((station, i) => (
+                <NearestStationAccordion
+                  key={i}
+                  stationCode={station.stationCode}
+                  walkTime={`${station.walkTime} min${station.walkTime !== 1 ? 's' : ''}`}
+                  walkDistance={station.walkDistance}
+                  exitName={station.exitName}
+                />
               ))}
-            </div>
-          ) : routeData && routeData.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              {routeData.map((route, i) => {
-                const primaryLine = route.lines[0] || '';
-                const lineInfo = parseLineInfo(primaryLine);
-
-                return (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between bg-[#f2f2f2] rounded-[10px] p-4"
-                  >
-                    <div className="flex flex-col gap-3">
-                      <p className="text-lg font-medium leading-[1.4] text-[#1a1a1a]">
-                        {route.stationName}
-                      </p>
-                      <div className="flex items-center gap-2 text-sm text-[#404040]">
-                        <span>{route.formattedDuration}</span>
-                        <div className="flex items-center justify-center size-[5.657px]">
-                          <div className="-rotate-45">
-                            <div className="bg-[#999] rounded-[1px] size-[4px]" />
-                          </div>
-                        </div>
-                        <span>{route.formattedDistance}</span>
-                        <div className="flex items-center justify-center size-[5.657px]">
-                          <div className="-rotate-45">
-                            <div className="bg-[#999] rounded-[1px] size-[4px]" />
-                          </div>
-                        </div>
-                        <span>{lineInfo.type} {lineInfo.name !== lineInfo.type ? lineInfo.name : ''}</span>
-                      </div>
-                    </div>
-                    <svg className="w-5 h-5 text-[#404040] shrink-0" viewBox="0 0 256 256" fill="currentColor">
-                      <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/>
-                    </svg>
-                  </div>
-                );
-              })}
             </div>
           ) : (
             <p className="text-sm text-ds-text-muted py-4">
