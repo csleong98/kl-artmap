@@ -162,10 +162,10 @@ function HomeContent() {
           {/* List View Drawer (always visible on mobile) */}
           <Drawer.Root modal={false} open={true}>
             <Drawer.Portal>
-              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[40vh] fixed bottom-0 left-0 right-0 shadow-xl">
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[40vh] fixed bottom-0 left-0 right-0 shadow-xl">
                 <Drawer.Title className="sr-only">Location List</Drawer.Title>
-                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
-                <div className="flex-1 overflow-y-auto px-4">
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" />
+                <div className="flex-1 overflow-y-auto">
                   <SidePanel
                     selectedLocation={selectedLocation}
                     onLocationSelect={handleLocationSelect}
@@ -188,12 +188,12 @@ function HomeContent() {
           >
             <Drawer.Portal>
               <Drawer.Overlay className="fixed inset-0 bg-black/40 z-40" />
-              <Drawer.Content className="bg-white flex flex-col rounded-t-[16px] h-[85vh] fixed bottom-0 left-0 right-0 z-50">
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[85vh] fixed bottom-0 left-0 right-0 z-50">
                 <Drawer.Title className="sr-only">
                   {selectedLocation ? selectedLocation.name : 'Location Details'}
                 </Drawer.Title>
-                <div className="flex-none mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-gray-300 my-3" />
-                <div className="flex-1 overflow-y-auto px-6">
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" />
+                <div className="flex-1 overflow-y-auto">
                   {selectedLocation && (
                     <SidePanel
                       selectedLocation={selectedLocation}
