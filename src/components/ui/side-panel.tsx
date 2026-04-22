@@ -272,7 +272,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
           </div>
 
           {/* Content Section with padding */}
-          <div className="flex-1 px-6 py-6">
+          <div className="flex-1 px-6 pb-6">
             {/* Search + view toggles */}
             <div className="flex gap-3 items-center w-full">
               <InputGroup className="flex-1 h-10 rounded-full [&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
