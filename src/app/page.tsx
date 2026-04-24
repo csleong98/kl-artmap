@@ -91,7 +91,7 @@ function HomeContent() {
     if (mapRef.current) {
       const defaultZoom = isMobile ? 12 : 13;
       mapRef.current.flyTo({
-        center: [101.6869, 3.1390],
+        center: [101.70, 3.15],  // Match map.tsx default center
         zoom: defaultZoom,
         pitch: 0,
         bearing: 0,
