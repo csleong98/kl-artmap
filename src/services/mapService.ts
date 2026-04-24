@@ -407,38 +407,40 @@ function deactivateMarker(): void {
 /**
  * Adds all stations and venues to the map using custom SVG pin markers
  * @param map - Mapbox GL JS map instance
+ * @param onMarkerClick - Callback when a marker is clicked
  * @returns Array of Mapbox Marker instances
  */
-export async function addAllMarkers(map: any): Promise<any[]> {
+export async function addAllMarkers(map: any, onMarkerClick?: (location: any) => void): Promise<any[]> {
   const markers: any[] = [];
-
-  // Store map instance globally for deactivation
-  (window as any).__mapInstance = map;
 
   try {
     const mapboxgl = (await import('mapbox-gl')).default;
     const { getAllLocations } = await import('../data/helpers');
     const mockLocations = getAllLocations();
 
-    // Add all venues with default circular pins
+    // Add all venues with default circular pins (no activation)
     mockLocations.forEach((location: any) => {
       const el = createDefaultPinElement('#E53E3E', location.name, location.type);
       const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);
 
-      // Add click handler to activate pin
+      // Simple click - just notify parent
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        activateMarker(map, marker, location);
+        if (onMarkerClick) {
+          onMarkerClick(location);
+        }
       });
 
       markers.push(marker);
     });
 
-    // Add click handler to map to deactivate when clicking elsewhere
+    // Click map to deselect
     map.on('click', () => {
-      deactivateMarker();
+      if (onMarkerClick) {
+        onMarkerClick(null);
+      }
     });
 
     return markers;

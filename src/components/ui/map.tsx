@@ -6,10 +6,13 @@ import dynamic from 'next/dynamic';
 interface MapProps {
   className?: string;
   onMapLoad?: (map: any) => void;
+  onMarkerClick?: (location: any) => void;
+  initialLocation?: { coordinates: [number, number] } | null;
+  isMobile?: boolean;
   mapPadding?: { left?: number; top?: number; right?: number; bottom?: number };
 }
 
-function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
+function MapComponent({ className, onMapLoad, onMarkerClick, initialLocation, isMobile, mapPadding }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,12 +39,18 @@ function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
         link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css';
         document.head.appendChild(link);
         mapboxgl.accessToken = apiToken;
-        
+
+        // Use initial location if provided, otherwise default
+        const center = initialLocation?.coordinates || [101.70, 3.15];
+        // Different default zooms for desktop vs mobile
+        const defaultZoom = isMobile ? 12 : 13;
+        const zoom = initialLocation ? 17 : defaultZoom;
+
         mapInstance = new mapboxgl.Map({
           container: mapContainer.current,
           style: 'mapbox://styles/mapbox/streets-v12',
-          center: [101.6869, 3.1390], // Kuala Lumpur coordinates
-          zoom: 11
+          center: center,
+          zoom: zoom
         });
 
         mapInstance.on('load', () => {
@@ -50,11 +59,13 @@ function MapComponent({ className, onMapLoad, mapPadding }: MapProps) {
           // Apply padding if provided
           if (mapPadding) {
             mapInstance.setPadding(mapPadding);
+            console.log('[Map] Padding set:', mapPadding);
+            console.log('[Map] Padding applied:', mapInstance.getPadding());
           }
 
           // Add all location markers
           import('../../services/mapService').then(({ addAllMarkers }) => {
-            addAllMarkers(mapInstance);
+            addAllMarkers(mapInstance, onMarkerClick);
           });
 
           // Pass map instance to parent component

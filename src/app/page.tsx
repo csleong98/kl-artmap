@@ -15,8 +15,13 @@ function HomeContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
-  const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
+  // Initialize selectedLocation from URL params immediately
+  const locationFromUrl = searchParams.get('location');
+  const tabFromUrl = searchParams.get('tab');
+  const foundLocation = locationFromUrl ? mockLocations.find(l => l.name === locationFromUrl) : null;
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(foundLocation);
+  const [initialTab, setInitialTab] = useState<string | undefined>(tabFromUrl || undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
 
@@ -31,27 +36,6 @@ function HomeContent() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Refs for restoring state from URL on map load
-  const initialLocationRef = useRef<Location | null>(null);
-  const initialTabRef = useRef<string | null>(null);
-  const restoredRef = useRef(false);
-
-  // Read URL params on mount
-  useEffect(() => {
-    if (restoredRef.current) return;
-    const locationName = searchParams.get('location');
-    const tab = searchParams.get('tab');
-    if (locationName) {
-      const found = mockLocations.find(l => l.name === locationName);
-      if (found) {
-        initialLocationRef.current = found;
-        initialTabRef.current = tab || 'about';
-        setSelectedLocation(found);
-        setInitialTab(tab || 'about');
-      }
-    }
-    restoredRef.current = true;
-  }, [searchParams]);
 
   const updateUrl = useCallback((location: string | null, tab?: string) => {
     if (!location) {
@@ -67,25 +51,12 @@ function HomeContent() {
   const handleMapLoad = useCallback((map: any) => {
     mapRef.current = map;
 
-    // Restore from URL params if needed
-    const loc = initialLocationRef.current;
-    const tab = initialTabRef.current;
-    if (loc) {
-      muteOtherMarkers(loc.name);
+    // Mute markers if there's a selected location
+    if (selectedLocation) {
+      muteOtherMarkers(selectedLocation.name);
       map.resize();
-
-      map.flyTo({
-        center: loc.coordinates,
-        zoom: 17,
-        pitch: 0,
-        bearing: 0,
-        duration: 1500,
-      });
-      // Clear refs so this only runs once
-      initialLocationRef.current = null;
-      initialTabRef.current = null;
     }
-  }, []);
+  }, [selectedLocation]);
 
   const handleLocationSelect = useCallback((location: Location) => {
     setSelectedLocation(location);
@@ -116,17 +87,18 @@ function HomeContent() {
     setInitialTab(undefined);
     updateUrl(null);
 
-    // Reset to overview
+    // Reset to overview with appropriate zoom level
     if (mapRef.current) {
+      const defaultZoom = isMobile ? 12 : 13;
       mapRef.current.flyTo({
         center: [101.6869, 3.1390],
-        zoom: 11,
+        zoom: defaultZoom,
         pitch: 0,
         bearing: 0,
         duration: 1500,
       });
     }
-  }, [updateUrl]);
+  }, [updateUrl, isMobile]);
 
   return (
     <>
@@ -136,6 +108,9 @@ function HomeContent() {
         <Map
           className="w-full h-full"
           onMapLoad={handleMapLoad}
+          onMarkerClick={handleLocationSelect}
+          initialLocation={selectedLocation}
+          isMobile={false}
           mapPadding={{ left: 482, top: 16, right: 16, bottom: 16 }}
         />
 
@@ -157,7 +132,14 @@ function HomeContent() {
       {isMobile && (
         <div className="md:hidden h-screen relative">
           {/* Fullscreen Map */}
-          <Map className="w-full h-full" onMapLoad={handleMapLoad} />
+          <Map
+            className="w-full h-full"
+            onMapLoad={handleMapLoad}
+            onMarkerClick={handleLocationSelect}
+            initialLocation={selectedLocation}
+            isMobile={true}
+            mapPadding={{ bottom: typeof window !== 'undefined' ? window.innerHeight * 0.5 : 400 }}
+          />
 
           {/* Single Drawer - Dynamic Content */}
           <Drawer.Root modal={false} open={true} dismissible={false}>
