@@ -6,6 +6,7 @@
     "status": "open",
     "coordinates": [101.7052281988475, 3.1737653613452355],
     "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
+    "images":["/images/locations/National Art Gallery/1.jpeg", "/images/locations/National Art Gallery/2.jpeg", "/images/locations/National Art Gallery/3.jpeg"],
     "nearestStations": ["PY27"],
     "admission": "free",
     "details": {
@@ -48,7 +49,7 @@
     "status": "open",
     "coordinates": [101.70442501774133, 3.174501865435276],
     "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
-    "images": ["/images/locations/Istana Budaya/1.jpg"],
+    "images": ["/images/locations/Istana Budaya/1.jpeg", "/images/locations/Istana Budaya/2.jpeg"],
     "nearestStations": ["PY27"],
     "admission": "paid",
     "details": {
@@ -91,6 +92,7 @@
     "status": "open",
     "coordinates": [101.6905, 3.1572],
     "address": "8, Jalan Scott, Brickfields, 50470 Kuala Lumpur",
+    "images":["/images/locations/BNM Museum/1.jpeg", "/images/locations/BNM Museum/2.jpeg"],
     "imageUrl": "/images/wei-ling-gallery.jpg",
     "nearestStations": ["AG06", "SP06"],
     "admission": "free",
@@ -191,6 +193,7 @@
     "status": "open",
     "coordinates": [101.7121, 3.1581],
     "address": "Jalan Hang Kasturi, City Centre, 50050 Kuala Lumpur",
+    "images":["/images/locations/Petronas Gallery/1.jpeg", "/images/locations/Petronas Gallery/2.jpeg", "/images/locations/Petronas Gallery/3.jpeg"],
     "imageUrl": "/images/central-market.jpg",
     "nearestStations": ["KJ10"],
     "admission": "free",
@@ -234,6 +237,7 @@
     "reopenTime": "10am tomorrow",
     "coordinates": [101.6899, 3.1419],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
+    "images":["/images/locations/Islamic Arts Museum/1.jpeg", "/images/locations/Islamic Arts Museum/2.jpeg"],
     "imageUrl": "/images/islamic-arts-museum.jpg",
     "nearestStations": ["SBK13", "KJ15", "MR01"],
     "admission": "paid",
@@ -451,7 +455,7 @@
     "reopenTime": "10am tomorrow",
     "coordinates": [101.6994, 3.1489],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
-    "imageUrl": "/images/islamic-arts-museum.jpg",
+    "images":["/images/locations/Telekom Museum/1.jpeg"],
     "nearestStations": ["KJ13", "AG07", "SP07"],
     "admission": "free",
     "details": {
@@ -508,6 +512,7 @@
     "status": "open",
     "coordinates": [101.70954795507214, 3.1475962646518143],
     "address": "3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur",
+    "images":["/images/locations/UR-MU Bukit Bintang/1.jpeg"],
     "nearestStations": ["SBK16", "MR06"],
     "admission": "paid",
     "details": {
@@ -565,6 +570,7 @@
     "status": "open",
     "coordinates": [101.69858737208806, 3.1485403570739496],
     "address": "2, Jalan Raja Chulan, City Centre, 50100 Kuala Lumpur",
+    "images":["/images/locations/UR-MU Toffee/1.jpeg", "/images/locations/UR-MU Toffee/2.jpeg"],
     "nearestStations": ["KJ13", "AG07", "SP07"],
     "admission": "paid",
     "details": {
@@ -686,8 +692,9 @@
     "type": "street_art",
     "openingHours": "Closes at 12am today",
     "status": "open",
-    "coordinates": [101.6968, 3.1440],
+    "coordinates": [101.69767906714453, 3.14150583499496],
     "address": "Lorong Panggung, 50000 Kuala Lumpur",
+    "images":["/images/locations/Kwai Chai Hong/1.jpg"],
     "nearestStations": ["KJ14", "SBK14"],
     "admission": "free",
     "details": {
