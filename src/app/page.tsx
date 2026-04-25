@@ -20,7 +20,7 @@ function HomeContent() {
   const tabFromUrl = searchParams.get('tab');
   const foundLocation = locationFromUrl ? mockLocations.find(l => l.name === locationFromUrl) : null;
 
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(foundLocation);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(foundLocation ?? null);
   const [initialTab, setInitialTab] = useState<string | undefined>(tabFromUrl || undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
