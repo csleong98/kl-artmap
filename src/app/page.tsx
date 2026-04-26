@@ -24,6 +24,7 @@ function HomeContent() {
   const [initialTab, setInitialTab] = useState<string | undefined>(tabFromUrl || undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
 
   // Detect mobile viewport
   useEffect(() => {
@@ -35,6 +36,13 @@ function HomeContent() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Reset scroll position when location changes on mobile
+  useEffect(() => {
+    if (isMobile && mobileScrollRef.current) {
+      mobileScrollRef.current.scrollTop = 0;
+    }
+  }, [selectedLocation, isMobile]);
 
 
   const updateUrl = useCallback((location: string | null, tab?: string) => {
@@ -59,6 +67,8 @@ function HomeContent() {
   }, [selectedLocation]);
 
   const handleLocationSelect = useCallback((location: Location) => {
+    if (!location) return;
+
     setSelectedLocation(location);
     setInitialTab('about');
     updateUrl(location.name, 'about');
@@ -144,12 +154,12 @@ function HomeContent() {
           {/* Single Drawer - Dynamic Content */}
           <Drawer.Root modal={false} open={true} dismissible={false}>
             <Drawer.Portal>
-              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[50vh] fixed bottom-0 left-0 right-0 shadow-xl overflow-hidden z-40">
+              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[35vh] fixed bottom-0 left-0 right-0 shadow-2xl z-40">
                 <Drawer.Title className="sr-only">
                   {selectedLocation ? selectedLocation.name : 'Location List'}
                 </Drawer.Title>
                 {/* <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" /> */}
-                <div className="flex-1 overflow-y-auto">
+                <div ref={mobileScrollRef} className="flex-1 overflow-y-auto">
                   <SidePanel
                     selectedLocation={selectedLocation}
                     onLocationSelect={handleLocationSelect}

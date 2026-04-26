@@ -341,19 +341,6 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
 
         {/* Nearby stations tab */}
         <TabsContent value="station-guide" className="mt-6 flex flex-col gap-4">
-          {/* Info box */}
-          <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
-            <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
-            <div className="flex flex-col gap-1.5">
-              <p className="text-sm text-[#15171e] font-medium">
-                Walking distance only
-              </p>
-              <p className="text-sm text-[#495269] leading-[1.2]">
-                Station guide shows all train stations that are within 15 mins walkable distance
-              </p>
-            </div>
-          </div>
-
           {stationGuideData.length > 0 ? (
             <div className="flex flex-col gap-4">
               {stationGuideData.map((station, i) => (
