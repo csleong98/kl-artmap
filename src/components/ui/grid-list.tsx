@@ -31,17 +31,17 @@ export default function GridList({
     <div
       className="
         flex flex-col gap-3 p-4
-        bg-[var(--list-item-bg)]
-        border border-[var(--list-item-border)]
-        rounded-2xl
+        bg-white
+        border border-[#ececec]
+        rounded-3xl
         cursor-pointer
         transition-all duration-200
-        hover:bg-[var(--list-item-bg-hover)]
-        active:bg-[var(--list-item-bg-active)]
+        hover:bg-gray-50
+        active:bg-gray-100
         focus-visible:outline-none
         focus-visible:ring-2
         focus-visible:ring-offset-2
-        focus-visible:ring-[var(--list-item-border)]
+        focus-visible:ring-[#ececec]
       "
       onClick={onClick}
       onMouseEnter={onMouseEnter}
@@ -79,7 +79,7 @@ export default function GridList({
       {metadata && metadata.length > 0 && (
         <div className="flex items-center gap-3 flex-wrap">
           {metadata.map((item, index) => (
-            <div key={index} className="flex items-center gap-1 text-xs text-ds-text-muted">
+            <div key={index} className="flex items-center gap-1 text-small text-ds-text-muted">
               {item.icon && <span className="shrink-0">{item.icon}</span>}
               <span className="truncate">{item.label}</span>
             </div>

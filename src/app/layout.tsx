@@ -3,8 +3,8 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KL Art Map - Discover Street Art in Kuala Lumpur",
-  description: "Interactive map for discovering street art, galleries, and cultural spaces in Kuala Lumpur",
+  title: "KL Art Map",
+  description: "Discover art galleries and museums around the city of Kuala Lumpur that are all walkable from the train stations",
 };
 
 export const viewport = {

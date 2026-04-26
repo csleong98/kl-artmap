@@ -183,7 +183,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                   </Tooltip>
 
                   {/* Feedback Button with Tooltip */}
-                  <Tooltip>
+                  {/* <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
@@ -197,7 +197,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                     <TooltipContent>
                       <p>Send feedback to developer</p>
                     </TooltipContent>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
               </div>
             </TooltipProvider>
@@ -277,7 +277,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
           <div className="px-6 py-6">
             <PanelHeader
               title="KL Art Map"
-              description="Explore artsy spots in the city of Kuala Lumpur that are also near the train stations."
+              description="Discover art galleries and museums around the city of Kuala Lumpur that are all walkable from the train stations"
             />
           </div>
 
@@ -338,10 +338,6 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                   subtitle={location.details?.overview?.description || location.address}
                   metadata={[
                     {
-                      icon: <CircleDot className="w-3.5 h-3.5" />,
-                      label: location.status === 'open' ? 'Open' : 'Closed'
-                    },
-                    {
                       icon: <Ticket className="w-3.5 h-3.5" />,
                       label: location.admission === 'free' ? 'Free' : 'Paid'
                     },
@@ -373,10 +369,6 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                   key={location.name}
                   title={location.name}
                   metadata={[
-                    {
-                      icon: <CircleDot className="w-3.5 h-3.5" />,
-                      label: location.status === 'open' ? 'Open' : 'Closed'
-                    },
                     {
                       icon: <Ticket className="w-3.5 h-3.5" />,
                       label: location.admission === 'free' ? 'Free' : 'Paid'

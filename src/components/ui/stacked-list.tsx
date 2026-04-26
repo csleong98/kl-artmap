@@ -46,7 +46,7 @@ export default function StackedList({
         flex items-stretch gap-4 p-6
         bg-white
         border border-[#ececec]
-        rounded-[24px]
+        rounded-3xl
         cursor-pointer
         transition-all duration-200
         hover:bg-gray-50
@@ -71,34 +71,34 @@ export default function StackedList({
       {/* Left Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Title + Subtitle Section */}
-        <div className="flex flex-col gap-1">
-          <h3 className="text-base font-semibold text-[#282828] leading-normal">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-semibold text-[#282828] leading-normal text-ellipsis mb-3">
             {title}
-          </h3>
-          {subtitle && (
+          </h2>
+          {/* {subtitle && (
             <p className="text-base text-[#595959] line-clamp-1 overflow-hidden text-ellipsis">
               {subtitle}
             </p>
-          )}
+          )} */}
         </div>
 
         {/* Spacer that grows to fill available space */}
-        <div className="flex-1"></div>
+        {/* <div className="flex-1"></div> */}
 
         {/* Information Chips Section */}
         <div className="flex items-center gap-3 flex-wrap">
           {/* Metadata chips */}
           {metadata && metadata.length > 0 && metadata.map((item, index) => (
             <div key={index} className="flex items-center gap-1.5 py-1">
-              {item.icon && <span className="shrink-0 w-3 h-3 text-[#424242]">{item.icon}</span>}
-              <span className="text-xs text-[#424242] leading-none">{item.label}</span>
+              {item.icon && <span className="shrink-0 w-3 h-3 text-ds-text-muted">{item.icon}</span>}
+              <span className="text-small text-ds-text-muted leading-none">{item.label}</span>
             </div>
           ))}
 
           {/* Badge chips (if any) */}
           {badges && badges.length > 0 && badges.map((badge, index) => (
             <div key={index} className="flex items-center gap-1.5 py-1">
-              <span className="text-xs text-[#424242] leading-none">{badge.label}</span>
+              <span className="text-small text-ds-text-muted leading-none">{badge.label}</span>
             </div>
           ))}
         </div>

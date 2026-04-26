@@ -74,7 +74,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
 
                 {/* Admission Special Note */}
                 {details.overview.specialNotes?.admission && (
-                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
+                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-4 py-4">
                     <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
                     <div className="flex flex-col gap-1.5">
                       <p className="text-sm text-[#15171e] font-medium">
@@ -91,7 +91,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                   <>
                     {/* Ticket Info Box (Optional) */}
                     {details.overview.pricing?.ticketInfo && (
-                      <div className="flex gap-3 items-center w-full border border-[#adadad] rounded-[32px] px-3 py-2">
+                      <div className="flex gap-3 items-center w-full border border-[#adadad] rounded-lg px-4 py-4">
                         <p className="flex-1 text-[14px] font-medium text-[#15171e]">
                           {details.overview.pricing.ticketInfo}
                         </p>
@@ -150,7 +150,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                 <SectionHeader title="Opening hours" />
 
                 {(details.overview.specialNotes?.openingHours || details.overview.specialNote) && (
-                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
+                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-4 py-4">
                     <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
                     <div className="flex flex-col gap-1.5">
                       <p className="text-sm text-[#15171e] font-medium">
