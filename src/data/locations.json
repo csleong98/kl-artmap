@@ -52,7 +52,7 @@
     "coordinates": [101.68739, 3.13758],
     "address": "Jalan Damansara, 50566 Kuala Lumpur",
     "images": ["/images/locations/National Museum/1.jpg"],
-    "nearestStations": ["SBK13", "KJ15", "MR01"],
+    "nearestStations": ["KG15", "KJ15", "MR01"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -91,7 +91,7 @@
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "SBK13",
+            "stationCode": "KG15",
             "stationName": "Muzium Negara",
             "line": "MRT Kajang Line",
             "walkTime": 2,
@@ -252,7 +252,7 @@
           {
             "stationCode": "KJ09",
             "stationName": "Ampang Park",
-            "line": "LRT Ampang Line",
+            "line": "LRT Kelana Jaya Line",
             "walkTime": 3,
             "walkDistance": "300m"
           },
@@ -325,7 +325,7 @@
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images":["/images/locations/Islamic Arts Museum/1.jpeg", "/images/locations/Islamic Arts Museum/2.jpeg"],
     "imageUrl": "/images/locations/Islamic Arts Museum/1.jpeg",
-    "nearestStations": ["SBK13", "KJ15", "MR01"],
+    "nearestStations": ["KG15", "KJ15", "MR01"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -362,9 +362,9 @@
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "SBK13",
-            "stationName": "Museum Negara",
-            "line": "MRT Kajang",
+            "stationCode": "KG15",
+            "stationName": "Muzium Negara",
+            "line": "MRT Kajang Line",
             "walkTime": 19,
             "walkDistance": "1.3km"
           },
@@ -400,7 +400,7 @@
     "coordinates": [101.6941, 3.1467],
     "address": "26, Jalan Sultan Hishamuddin, City Centre, 50000 Kuala Lumpur",
     "images": ["/images/locations/Textile museum/1.jpg"],
-    "nearestStations": ["KJ14", "KJ13", "AG07", "SP07", "SBK14"],
+    "nearestStations": ["KJ14", "KJ13", "AG07", "SP07", "KG16"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -466,9 +466,9 @@
             "walkDistance": "500m"
           },
           {
-            "stationCode": "SBK14",
+            "stationCode": "KG16",
             "stationName": "Pasar Seni",
-            "line": "MRT Kajang",
+            "line": "MRT Kajang Line",
             "walkTime": 11,
             "walkDistance": "700m"
           }
@@ -490,7 +490,7 @@
     "coordinates": [101.6942, 3.1487],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images": ["/images/locations/bsas/1.jpg"],
-    "nearestStations": ["KJ13", "AG07", "SP07", "KJ14", "SBK14"],
+    "nearestStations": ["KJ13", "AG07", "SP07", "KJ14", "KG16"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -553,9 +553,9 @@
             "walkDistance": "550m"
           },
           {
-            "stationCode": "SBK14",
+            "stationCode": "KG16",
             "stationName": "Pasar Seni",
-            "line": "MRT Kajang",
+            "line": "MRT Kajang Line",
             "walkTime": 13,
             "walkDistance": "900m"
           }
@@ -635,7 +635,7 @@
     "coordinates": [101.70954795507214, 3.1475962646518143],
     "address": "3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur",
     "images":["/images/locations/UR-MU Bukit Bintang/1.jpeg"],
-    "nearestStations": ["SBK16", "MR06"],
+    "nearestStations": ["KG18A", "MR06"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -669,9 +669,9 @@
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "SBK16",
+            "stationCode": "KG18A",
             "stationName": "Bukit Bintang",
-            "line": "MRT Kajang",
+            "line": "MRT Kajang Line",
             "walkTime": 3,
             "walkDistance": "200m"
           },
@@ -770,7 +770,7 @@
     "coordinates": [101.69654887072686, 3.1447376875622948],
     "address": "131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur",
     "images": ["/images/locations/UR-MU Tun HS Lee/1.jpg"],
-    "nearestStations": ["SBK14", "KJ14"],
+    "nearestStations": ["KG16", "KJ14"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -804,9 +804,9 @@
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "SBK14",
+            "stationCode": "KG16",
             "stationName": "Pasar Seni",
-            "line": "MRT Kajang",
+            "line": "MRT Kajang Line",
             "walkTime": 4,
             "walkDistance": "250m"
           },
@@ -835,7 +835,7 @@
     "coordinates": [101.69767906714453, 3.14150583499496],
     "address": "Lorong Panggung, 50000 Kuala Lumpur",
     "images":["/images/locations/Kwai Chai Hong/1.jpg"],
-    "nearestStations": ["KJ14", "SBK14"],
+    "nearestStations": ["KJ14", "KG16"],
     "admission": "free",
     "details": {
       "overview": {
@@ -857,9 +857,9 @@
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "SBK14",
+            "stationCode": "KG16",
             "stationName": "Pasar Seni",
-            "line": "MRT Kajang",
+            "line": "MRT Kajang Line",
             "walkTime": 3,
             "walkDistance": "300m"
           },
