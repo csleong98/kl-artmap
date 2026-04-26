@@ -16,7 +16,11 @@ export interface LocationDetails {
     pricing?: {
       ticketInfo?: string;
       ticketUrl?: string;
-      prices: Array<{
+      malaysian: Array<{
+        category: string;
+        price: string;
+      }>;
+      nonMalaysian: Array<{
         category: string;
         price: string;
       }>;
@@ -31,6 +35,10 @@ export interface LocationDetails {
       sunday: string;
     };
     specialNote?: string;
+    specialNotes?: {
+      admission?: string;
+      openingHours?: string;
+    };
   };
   stationGuide: {
     stations: {

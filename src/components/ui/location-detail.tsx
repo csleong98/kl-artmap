@@ -7,6 +7,7 @@ import { Location } from '@/types';
 import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import NearestStationAccordion from './nearest-station-accordion';
 
 interface LocationDetailProps {
@@ -29,6 +30,7 @@ const daysOfWeek = [
 
 export default function LocationDetail({ location, onBack, onTabChange, initialTab }: LocationDetailProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'about');
+  const [pricingType, setPricingType] = useState<'malaysian' | 'nonMalaysian'>('malaysian');
   const details = location.details;
   const stationGuideData = details?.stationGuide?.stations || [];
 
@@ -61,6 +63,21 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
               <ContentContainer>
                 <SectionHeader title="Admission" />
 
+                {/* Admission Special Note */}
+                {details.overview.specialNotes?.admission && (
+                  <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
+                    <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
+                    <div className="flex flex-col gap-1.5">
+                      <p className="text-sm text-[#15171e] font-medium">
+                        Take note
+                      </p>
+                      <p className="text-sm text-[#495269]">
+                        {details.overview.specialNotes.admission}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {details.overview.pricing ? (
                   <>
                     {/* Ticket Info Box (Optional) */}
@@ -80,9 +97,26 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                       </div>
                     )}
 
+                    {/* Pricing Type Toggle */}
+                    {details.overview.pricing?.malaysian && details.overview.pricing?.nonMalaysian && (
+                      <ToggleGroup
+                        type="single"
+                        value={pricingType}
+                        onValueChange={(value) => value && setPricingType(value as 'malaysian' | 'nonMalaysian')}
+                        className="justify-start"
+                      >
+                        <ToggleGroupItem value="malaysian">
+                          Malaysian
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="nonMalaysian">
+                          Non-Malaysian
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    )}
+
                     {/* Pricing Table */}
                     <div className="flex flex-col gap-3 w-full">
-                      {details.overview.pricing?.prices.map((item: any, index: number) => (
+                      {details.overview.pricing?.[pricingType]?.map((item: any, index: number) => (
                         <div key={index} className="flex gap-2 items-center w-full">
                           <span className="text-base text-[#282828] shrink-0">
                             {item.category}
@@ -106,7 +140,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
               <ContentContainer>
                 <SectionHeader title="Opening hours" />
 
-                {details.overview.specialNote && (
+                {(details.overview.specialNotes?.openingHours || details.overview.specialNote) && (
                   <div className="flex items-start gap-2 bg-[#f2f2f2] border border-[#bfbfbf] rounded-lg px-2.5 py-2">
                     <Info className="w-4 h-4 text-ds-text-muted shrink-0 mt-0.5" />
                     <div className="flex flex-col gap-1.5">
@@ -114,7 +148,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                         Take note
                       </p>
                       <p className="text-sm text-[#495269]">
-                        {details.overview.specialNote}
+                        {details.overview.specialNotes?.openingHours || details.overview.specialNote}
                       </p>
                     </div>
                   </div>

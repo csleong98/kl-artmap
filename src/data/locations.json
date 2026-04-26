@@ -7,27 +7,29 @@
     "coordinates": [101.7052281988475, 3.1737653613452355],
     "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
     "images":["/images/locations/National Art Gallery/1.jpeg", "/images/locations/National Art Gallery/2.jpeg", "/images/locations/National Art Gallery/3.jpeg"],
-    "nearestStations": ["PY27"],
+    "nearestStations": ["PY18"],
     "admission": "free",
     "details": {
       "overview": {
         "description": "Malaysia's premier national art gallery showcasing Malaysian and Southeast Asian visual arts, featuring traditional and contemporary works.",
-        "admission": "Free",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
-          "monday": "Closed",
-          "tuesday": "10am - 5pm",
-          "wednesday": "10am - 5pm",
-          "thursday": "10am - 5pm",
-          "friday": "10am - 5pm",
-          "saturday": "10am - 5pm",
-          "sunday": "10am - 5pm"
+          "monday": "9am - 5pm",
+          "tuesday": "9am - 5pm",
+          "wednesday": "9am - 5pm",
+          "thursday": "9am - 5pm",
+          "friday": "9am - 5pm",
+          "saturday": "9am - 5pm",
+          "sunday": "9am - 5pm"
         },
-        "specialNote": "Closed on public holidays"
+        "specialNotes": {
+          "openingHours": "Closed on public holidays"
+        }
       },
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "PY27",
+            "stationCode": "PY18",
             "stationName": "Hospital Kuala Lumpur",
             "line": "MRT Putrajaya Line",
             "walkTime": 7,
@@ -38,19 +40,97 @@
       "contact": {
         "address": "2, Jalan Temerloh, Taman Titiwangsa, 53200 Kuala Lumpur",
         "website": "https://www.artgallery.gov.my/",
-        "phone": "03-4025 4990"
+        "phone": "03-4026 7000"
+      }
+    }
+  },
+  {
+    "name": "National Museum",
+    "type": "art_museum",
+    "openingHours": "Closes at 5pm today",
+    "status": "open",
+    "coordinates": [101.68739, 3.13758],
+    "address": "Jalan Damansara, 50566 Kuala Lumpur",
+    "images": ["/images/locations/National Museum/1.jpg"],
+    "nearestStations": ["SBK13", "KJ15", "MR01"],
+    "admission": "paid",
+    "details": {
+      "overview": {
+        "description": "Public museum in Kuala Lumpur, Malaysia dedicated to Malaysian art, culture, and history.",
+        "admission": "Paid admission required",
+        "pricing": {
+          "malaysian": [
+            { "category": "Adults (13 and above)", "price": "RM 2" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 1" },
+            { "category": "OKU (Disabled)", "price": "RM 1" },
+            { "category": "Children (Below 12)", "price": "FREE" }
+          ],
+          "nonMalaysian": [
+            { "category": "Adults (13 and above)", "price": "RM 5" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 5" },
+            { "category": "OKU (Disabled)", "price": "RM 5" },
+            { "category": "Children (6 to 12)", "price": "Rm 2" },
+            { "category": "Children (Below 6)", "price": "FREE" },
+            { "category": "Intl. Council of Museums members", "price": "FREE" }
+          ]
+        },
+        "openingHours": {
+          "monday": "9am - 5pm",
+          "tuesday": "9am - 5pm",
+          "wednesday": "9am - 5pm",
+          "thursday": "9am - 5pm",
+          "friday": "9am - 5pm",
+          "saturday": "9am - 5pm",
+          "sunday": "9am - 5pm"
+        },
+        "specialNotes": {
+          "admission": "Last entry at 4:30pm",
+          "openingHours": "The Museum is closed only on the upcoming Hari Raya Haji (Eid al-Adha) on May 27. As the Islamic Hijri calendar follows the lunar cycle, dates are subject to change. Check for our announcements ahead of your visit"
+        }
+      },
+      "stationGuide": {
+        "stations": [
+          {
+            "stationCode": "SBK13",
+            "stationName": "Muzium Negara",
+            "line": "MRT Kajang Line",
+            "walkTime": 2,
+            "walkDistance": "150m"
+          },
+          {
+            "stationCode": "KJ15",
+            "stationName": "KL Sentral",
+            "line": "LRT Kelana Jaya Line",
+            "walkTime": 5,
+            "walkDistance": "400m",
+            "exitDescription": "Via covered pedestrian walkway"
+          },
+          {
+            "stationCode": "MR01",
+            "stationName": "KL Sentral",
+            "line": "Monorail",
+            "walkTime": 5,
+            "walkDistance": "400m",
+            "exitDescription": "Via covered pedestrian walkway"
+          }
+        ]
+      },
+      "contact": {
+        "address": "Jalan Damansara, 50566 Kuala Lumpur",
+        "website": "https://www.muziumnegara.gov.my/en/national-museum",
+        "phone": "03-2267 1111"
       }
     }
   },
   {
     "name": "Istana Budaya (National Theater)",
-    "type": "theater",
+    "type": "monument",
     "openingHours": "Varies by performance",
     "status": "open",
     "coordinates": [101.70442501774133, 3.174501865435276],
     "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
     "images": ["/images/locations/Istana Budaya/1.jpeg", "/images/locations/Istana Budaya/2.jpeg"],
-    "nearestStations": ["PY27"],
+    "nearestStations": ["PY18"],
     "admission": "paid",
     "details": {
       "overview": {
@@ -62,15 +142,17 @@
           "wednesday": "Varies",
           "thursday": "Varies",
           "friday": "Varies",
-          "saturday": "Varies",
-          "sunday": "Varies"
+          "saturday": "Closed",
+          "sunday": "Closed"
         },
-        "specialNote": "Check performance schedule online"
+        "specialNotes": {
+          "openingHours": "Check performance schedule online"
+        }
       },
       "stationGuide": {
         "stations": [
           {
-            "stationCode": "PY27",
+            "stationCode": "PY18",
             "stationName": "Hospital Kuala Lumpur",
             "line": "MRT Putrajaya Line",
             "walkTime": 3,
@@ -80,7 +162,7 @@
       },
       "contact": {
         "address": "Jalan Tun Razak, Titiwangsa, 53200 Kuala Lumpur",
-        "website": "https://www.istanabudaya.gov.my/",
+        "website": "https://www.instagram.com/istanabudaya",
         "phone": "03-4026 5555"
       }
     }
@@ -93,23 +175,25 @@
     "coordinates": [101.6905, 3.1572],
     "address": "8, Jalan Scott, Brickfields, 50470 Kuala Lumpur",
     "images":["/images/locations/BNM Museum/1.jpeg", "/images/locations/BNM Museum/2.jpeg"],
-    "imageUrl": "/images/wei-ling-gallery.jpg",
+    "imageUrl": "/images/locations/BNM Museum/1.jpeg",
     "nearestStations": ["AG06", "SP06"],
     "admission": "free",
     "details": {
       "overview": {
         "description": "Showcases Malaysia's economic and financial history through interactive exhibits, art collections, and educational displays.",
-        "admission": "Free",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
           "monday": "Closed",
-          "tuesday": "10am - 6pm",
-          "wednesday": "10am - 6pm",
-          "thursday": "10am - 6pm",
-          "friday": "10am - 6pm",
-          "saturday": "10am - 6pm",
-          "sunday": "Closed"
+          "tuesday": "10am - 5pm",
+          "wednesday": "10am - 5pm",
+          "thursday": "10am - 5pm",
+          "friday": "10am - 5pm",
+          "saturday": "10am - 5pm",
+          "sunday": "10am - 5pm"
         },
-        "specialNote": "Closed on public holidays"
+        "specialNotes": {
+          "admission": "Walk-in admission is allowed. For group visits of more than 20 pax, prior booking via e-mail is required. Kindly e-mail to infomuseum@bnm.gov.my"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -130,15 +214,15 @@
         ]
       },
       "contact": {
-        "address": "2, Jalan Dato Onn, Kuala Lumpur, 50480 Kuala Lumpur",
-        "website": "https://www.bnm.gov.my/museum",
-        "phone": "03-2698 8044"
+        "address": "Sasana Kijang, 2, Jalan Dato Onn, Kuala Lumpur, 50480 Kuala Lumpur",
+        "website": "https://museum.bnm.gov.my/v2/index.html",
+        "phone": "03-2784 6482"
       }
     }
   },
   {
-    "name": "Ilham Gallery",
-    "type": "art_museum",
+    "name": "ILHAM Gallery",
+    "type": "art_gallery",
     "openingHours": "Closes at 7pm today",
     "status": "open",
     "coordinates": [101.7187, 3.1590],
@@ -149,7 +233,7 @@
     "details": {
       "overview": {
         "description": "Contemporary art gallery focusing on modern and emerging Southeast Asian artists with rotating exhibitions.",
-        "admission": "Free",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
           "monday": "Closed",
           "tuesday": "11am - 7pm",
@@ -157,9 +241,11 @@
           "thursday": "11am - 7pm",
           "friday": "11am - 7pm",
           "saturday": "11am - 7pm",
-          "sunday": "11am - 7pm"
+          "sunday": "11am - 5pm"
         },
-        "specialNote": "Last admission 30 minutes before closing"
+        "specialNotes": {
+          "openingHours": "Last admission 30 minutes before closing"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -182,13 +268,13 @@
       "contact": {
         "address": "Level 5, Ilham Tower, 8 Jalan Binjai, 50450 Kuala Lumpur",
         "website": "https://www.ilhamgallery.com",
-        "phone": "03-2260 7901"
+        "phone": "03-2181 3003"
       }
     }
   },
   {
-    "name": "Galeri Petronas",
-    "type": "art_museum",
+    "name": "PETRONAS Art Gallery",
+    "type": "art_gallery",
     "openingHours": "Closes at 7pm today",
     "status": "open",
     "coordinates": [101.7121, 3.1581],
@@ -199,16 +285,16 @@
     "admission": "free",
     "details": {
       "overview": {
-        "description": "Premier art gallery showcasing Malaysian and international contemporary art, located at the iconic Petronas Twin Towers.",
-        "admission": "Free",
+        "description": "Comteporary art gallery establised by Petronas, located at the iconic Suria KLCC.",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
           "monday": "Closed",
-          "tuesday": "10am - 8pm",
-          "wednesday": "10am - 8pm",
-          "thursday": "10am - 8pm",
-          "friday": "10am - 8pm",
-          "saturday": "10am - 8pm",
-          "sunday": "10am - 8pm"
+          "tuesday": "10am - 6pm",
+          "wednesday": "10am - 6pm",
+          "thursday": "10am - 6pm",
+          "friday": "10am - 6pm",
+          "saturday": "10am - 6:30pm",
+          "sunday": "10am - 6:30pm"
         }
       },
       "stationGuide": {
@@ -223,8 +309,8 @@
         ]
       },
       "contact": {
-        "address": "Petronas Tower 3, KLCC, 50088 Kuala Lumpur",
-        "website": "https://www.galeripetronas.com.my",
+        "address": "Lot 341-43, Level 3, Suria Klcc, Petronas Twin Tower, Persiaran Petronas, Kuala Lumpur City Centre, 50088, Kuala Lumpur",
+        "website": "https://www.petronas.com/galeri-petronas",
         "phone": "03-2051 7770"
       }
     }
@@ -238,7 +324,7 @@
     "coordinates": [101.6899, 3.1419],
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images":["/images/locations/Islamic Arts Museum/1.jpeg", "/images/locations/Islamic Arts Museum/2.jpeg"],
-    "imageUrl": "/images/islamic-arts-museum.jpg",
+    "imageUrl": "/images/locations/Islamic Arts Museum/1.jpeg",
     "nearestStations": ["SBK13", "KJ15", "MR01"],
     "admission": "paid",
     "details": {
@@ -247,24 +333,31 @@
         "admission": "Paid admission required",
         "pricing": {
           "ticketInfo": "Walk-in and online purchase available",
-          "ticketUrl": "https://www.iammuseum.org.my/tickets",
-          "prices": [
+          "malaysian": [
             { "category": "Adults", "price": "RM 20" },
             { "category": "Students (with valid ID)", "price": "RM 10" },
-            { "category": "Seniors (60 years and above)", "price": "RM 10" },
-            { "category": "Children (12 years and below)", "price": "FREE" }
+            { "category": "Senior Citizens (60 and above)", "price": "RM 10" },
+            { "category": "Children (Under 6)", "price": "FREE" }
+          ],
+          "nonMalaysian": [
+            { "category": "Adults", "price": "RM 20" },
+            { "category": "Students (with valid ID)", "price": "RM 10" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 20" },
+            { "category": "Children (Under 6)", "price": "FREE" }
           ]
         },
         "openingHours": {
-          "monday": "Closed",
-          "tuesday": "10am - 6pm",
-          "wednesday": "10am - 6pm",
-          "thursday": "10am - 6pm",
-          "friday": "10am - 6pm",
-          "saturday": "10am - 6pm",
-          "sunday": "10am - 6pm"
+          "monday": "9:30am - 6pm",
+          "tuesday": "9:30am - 6pm",
+          "wednesday": "9:30am - 6pm",
+          "thursday": "9:30am - 6pm",
+          "friday": "9:30am - 6pm",
+          "saturday": "9:30am - 6pm",
+          "sunday": "9:30am - 6pm"
         },
-        "specialNote": "Closed on first day of Hari Raya Aidilfitri and Hari Raya Aidiladha"
+        "specialNotes": {
+          "openingHours": "The Museum is closed only on the upcoming Hari Raya Haji (Eid al-Adha) on May 27. As the Islamic Hijri calendar follows the lunar cycle, dates are subject to change. Check for our announcements ahead of your visit"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -292,9 +385,9 @@
         ]
       },
       "contact": {
-        "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
-        "website": "https://www.iammuseum.org.my",
-        "phone": "03-2274 2020"
+        "address": "Islamic Arts Museum Malaysia, Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
+        "website": "https://www.iamm.org.my/",
+        "phone": "03-2092 7070"
       }
     }
   },
@@ -305,7 +398,7 @@
     "status": "closed",
     "reopenTime": "10am tomorrow",
     "coordinates": [101.6941, 3.1467],
-    "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
+    "address": "26, Jalan Sultan Hishamuddin, City Centre, 50000 Kuala Lumpur",
     "images": ["/images/locations/Textile museum/1.jpg"],
     "nearestStations": ["KJ14", "KJ13", "AG07", "SP07", "SBK14"],
     "admission": "paid",
@@ -314,21 +407,33 @@
         "description": "Dedicated to preserving Malaysia's rich textile heritage, featuring traditional batik, songket, and weaving collections.",
         "admission": "Paid admission required",
         "pricing": {
-          "prices": [
-            { "category": "Adults", "price": "RM 5" },
-            { "category": "Children (12 years and below)", "price": "RM 2" }
+          "malaysian": [
+            { "category": "Adults (13 and above)", "price": "RM 2" },
+            { "category": "Children (6-12)", "price": "FREE" },
+            { "category": "Children (Below 6)", "price": "FREE" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 1" },
+            { "category": "OKU (Disabled)", "price": "RM 1" }
+          ],
+          "nonMalaysian": [
+            { "category": "Adults (13 and above)", "price": "RM 5" },
+            { "category": "Children (6-12)", "price": "RM 2" },
+            { "category": "Children (Below 6)", "price": "FREE" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 1" },
+            { "category": "OKU (Disabled)", "price": "RM 1" }
           ]
         },
         "openingHours": {
-          "monday": "Closed",
-          "tuesday": "9am - 6pm",
-          "wednesday": "9am - 6pm",
-          "thursday": "9am - 6pm",
-          "friday": "9am - 6pm",
-          "saturday": "9am - 6pm",
-          "sunday": "9am - 6pm"
+          "monday": "9am - 5pm",
+          "tuesday": "9am - 5pm",
+          "wednesday": "9am - 5pm",
+          "thursday": "9am - 5pm",
+          "friday": "9am - 5pm",
+          "saturday": "9am - 5pm",
+          "sunday": "9am - 5pm"
         },
-        "specialNote": "Closed on first day of Hari Raya Aidilfitri"
+        "specialNotes": {
+          "openingHours": "Closed on first day of Hari Raya Aidilfitri"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -370,8 +475,8 @@
         ]
       },
       "contact": {
-        "address": "26, Jalan Sultan Hishamuddin, 50050 Kuala Lumpur",
-        "website": "https://www.muziumtekstilnegara.gov.my",
+        "address": "26, Jalan Sultan Hishamuddin, City Centre, 50000 Kuala Lumpur",
+        "website": "http://www.muziumtekstilnegara.gov.my/main/content/234/",
         "phone": "03-2694 3457"
       }
     }
@@ -386,21 +491,36 @@
     "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
     "images": ["/images/locations/bsas/1.jpg"],
     "nearestStations": ["KJ13", "AG07", "SP07", "KJ14", "SBK14"],
-    "admission": "free",
+    "admission": "paid",
     "details": {
       "overview": {
-        "description": "Historic landmark and iconic Moorish architecture building, formerly housed colonial administrative offices.",
-        "admission": "Free (exterior viewing only)",
-        "openingHours": {
-          "monday": "Open 24 hours",
-          "tuesday": "Open 24 hours",
-          "wednesday": "Open 24 hours",
-          "thursday": "Open 24 hours",
-          "friday": "Open 24 hours",
-          "saturday": "Open 24 hours",
-          "sunday": "Open 24 hours"
+        "description": "Historic landmark and iconic Moorish architecture building, formerly housed colonial administrative offices. Also houses the KL City Gallery with interactive exhibits about Kuala Lumpur's history.",
+        "admission": "Building exterior and hallways are free for everyone. KL City Gallery requires paid admission for non-Malaysians.",
+        "pricing": {
+          "ticketInfo": "Online and walk-in purchase available for KL City Gallery",
+          "ticketUrl": "https://klcitygallery.my",
+          "malaysian": [
+            { "category": "All visitors", "price": "FREE" }
+          ],
+          "nonMalaysian": [
+            { "category": "Adults", "price": "RM 40" },
+            { "category": "Children (6-12)", "price": "RM 22" },
+            { "category": "Children (Below 6)", "price": "FREE" }
+          ]
         },
-        "specialNote": "Interior closed to public, exterior viewable anytime"
+        "openingHours": {
+          "monday": "8am - 10pm",
+          "tuesday": "8am - 10pm",
+          "wednesday": "8am - 10pm",
+          "thursday": "8am - 10pm",
+          "friday": "8am - 10pm",
+          "saturday": "8am - 10pm",
+          "sunday": "8am - 10pm"
+        },
+        "specialNotes": {
+          "admission": "Building exterior and hallways are free to explore. KL City Gallery admission is free for Malaysians until further notice.",
+          "openingHours": "The cafes in this building opens at 9am until 7pm, slightly different than the building and gallery operating hours."
+        }
       },
       "stationGuide": {
         "stations": [
@@ -443,7 +563,7 @@
       },
       "contact": {
         "address": "Jln Raja, Kuala Lumpur City Centre, 50050 Kuala Lumpur",
-        "website": "https://www.palangnegara.gov.my"
+        "website": "https://bsas.com.my/bm/"
       }
     }
   },
@@ -454,24 +574,26 @@
     "status": "closed",
     "reopenTime": "10am tomorrow",
     "coordinates": [101.6994, 3.1489],
-    "address": "Jalan Lembah, Tasik Perdana, 50480 Kuala Lumpur",
+    "address": "Jalan Raja Chulan, Kuala Lumpur, 50200 Kuala Lumpur",
     "images":["/images/locations/Telekom Museum/1.jpeg"],
     "nearestStations": ["KJ13", "AG07", "SP07"],
     "admission": "free",
     "details": {
       "overview": {
         "description": "Traces the evolution of telecommunications in Malaysia from telegraphs to modern mobile networks.",
-        "admission": "Free",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
-          "monday": "Closed",
+          "monday": "9am - 5pm",
           "tuesday": "9am - 5pm",
           "wednesday": "9am - 5pm",
           "thursday": "9am - 5pm",
-          "friday": "Closed",
+          "friday": "9am - 5pm",
           "saturday": "9am - 5pm",
           "sunday": "9am - 5pm"
         },
-        "specialNote": "Closed on public holidays"
+        "specialNotes": {
+          "openingHours": "Closed on public holidays"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -499,9 +621,9 @@
         ]
       },
       "contact": {
-        "address": "Jalan Raja Chulan, 50200 Kuala Lumpur",
-        "website": "https://www.tm.com.my/museum",
-        "phone": "03-2031 9966"
+        "address": "Jalan Raja Chulan, Kuala Lumpur, 50200 Kuala Lumpur",
+        "website": "https://muziumtelekom.com.my/visit/",
+        "phone": "03-2020 6839"
       }
     }
   },
@@ -517,26 +639,32 @@
     "admission": "paid",
     "details": {
       "overview": {
-        "description": "Interactive digital art museum featuring immersive installations and futuristic exhibits perfect for social media.",
+        "description": "The first of the Urban Museums, a series of galleries that showcase selected artworks from the private collections of different art patrons. This particular Ur-Mu features artworks across 10 themed gallery spaces, a roof-top sculpture garden, and a Balinese garden to commemorate the late landscape maestro from Bali, Pak Made Wijaya",
         "admission": "Paid admission required",
         "pricing": {
-          "ticketInfo": "Online booking recommended",
-          "ticketUrl": "https://www.ur-mu.com/tickets",
+          "ticketInfo": "Walk-in and online purchase available",
+          "ticketUrl": "https://ur-mu.com/buy-ticket/gallery/19",
           "prices": [
-            { "category": "Adults", "price": "RM 49" },
-            { "category": "Children", "price": "RM 39" }
+            { "category": "Adults", "price": "RM 20" },
+            { "category": "Children (12 and below)", "price": "FREE" },
+            { "category": "Students (with valid ID)", "price": "RM 10" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 10" },
+            { "category": "OKU (Disabled)", "price": "RM 10" }
           ]
         },
         "openingHours": {
-          "monday": "10am - 10pm",
-          "tuesday": "10am - 10pm",
-          "wednesday": "10am - 10pm",
-          "thursday": "10am - 10pm",
-          "friday": "10am - 10pm",
-          "saturday": "10am - 10pm",
-          "sunday": "10am - 10pm"
+          "monday": "Closed",
+          "tuesday": "11am - 7pm",
+          "wednesday": "11am - 7pm",
+          "thursday": "11am - 7pm",
+          "friday": "11am - 7pm",
+          "saturday": "11am - 7pm",
+          "sunday": "11am - 7pm"
         },
-        "specialNote": "Last entry at 9:30pm"
+        "specialNotes": {
+          "openingHours": "Last entry at 6:30pm. It is also closed on selected public holidays",
+          "admission": "The admission fees are the same for Malaysian and Non-Malaysian"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -557,9 +685,9 @@
         ]
       },
       "contact": {
-        "address": "Lot 10 Shopping Centre, 50 Jalan Sultan Ismail, 50250 Kuala Lumpur",
-        "website": "https://www.ur-mu.com",
-        "phone": "03-2181 3399"
+        "address": "3, Jalan Bedara, Bukit Bintang, 50200 Kuala Lumpur.",
+        "website": "https://ur-mu.com/buy-ticket/gallery/19",
+        "phone": "03-2110 3004"
       }
     }
   },
@@ -575,26 +703,32 @@
     "admission": "paid",
     "details": {
       "overview": {
-        "description": "Modern immersive art space featuring interactive light installations and projection mapping experiences.",
+        "description": "houses the private art collections of two prominent collectors in Malaysia. Over 200 exhibits featuring the essential works produced from the 1990s by Malaysian and regional artists are on show",
         "admission": "Paid admission required",
         "pricing": {
-          "ticketInfo": "Online booking recommended",
-          "ticketUrl": "https://www.ur-mu.com/tickets",
+          "ticketInfo": "Walk-in and online purchase available",
+          "ticketUrl": "https://ur-mu.com/gallery/20",
           "prices": [
-            { "category": "Adults", "price": "RM 49" },
-            { "category": "Children", "price": "RM 39" }
+            { "category": "Adults", "price": "RM 20" },
+            { "category": "Children (12 and below)", "price": "FREE" },
+            { "category": "Students (with valid ID)", "price": "RM 10" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 10" },
+            { "category": "OKU (Disabled)", "price": "RM 10" }
           ]
         },
         "openingHours": {
-          "monday": "10am - 10pm",
-          "tuesday": "10am - 10pm",
-          "wednesday": "10am - 10pm",
-          "thursday": "10am - 10pm",
-          "friday": "10am - 10pm",
-          "saturday": "10am - 10pm",
-          "sunday": "10am - 10pm"
+          "monday": "Closed",
+          "tuesday": "11am - 7pm",
+          "wednesday": "11am - 7pm",
+          "thursday": "11am - 7pm",
+          "friday": "11am - 7pm",
+          "saturday": "11am - 7pm",
+          "sunday": "11am - 7pm"
         },
-        "specialNote": "Last entry at 9:30pm"
+        "specialNotes": {
+          "openingHours": "Last entry at 6:30pm. It is also closed on selected public holidays",
+          "admission": "The admission fees are the same for Malaysian and Non-Malaysian"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -623,13 +757,13 @@
       },
       "contact": {
         "address": "The Toffee, 2 Jalan Raja Chulan, 50200 Kuala Lumpur",
-        "website": "https://www.ur-mu.com",
-        "phone": "03-2181 3399"
+        "website": "https://ur-mu.com/gallery/20",
+        "phone": "03-2110 3004"
       }
     }
   },
   {
-    "name": "+n by UR MU",
+    "name": "UR-MU n+ Tun HS Lee",
     "type": "art_gallery",
     "openingHours": "Closes at 8:30pm today",
     "status": "open",
@@ -640,26 +774,32 @@
     "admission": "paid",
     "details": {
       "overview": {
-        "description": "Digital art museum in the heart of Chinatown, blending traditional heritage with modern technology.",
+        "description": "A contemporary art museum that features nearly 70 artworks from the private art collection of Ng Sek San. Strategies of Dissent explores the art of protest and resistance from the 1990s to the present.",
         "admission": "Paid admission required",
         "pricing": {
-          "ticketInfo": "Online booking recommended",
-          "ticketUrl": "https://www.ur-mu.com/tickets",
+          "ticketInfo": "Walk-in and online purchase available",
+          "ticketUrl": "https://ur-mu.com/gallery/25",
           "prices": [
-            { "category": "Adults", "price": "RM 49" },
-            { "category": "Children", "price": "RM 39" }
+            { "category": "Adults", "price": "RM 20" },
+            { "category": "Children (12 and below)", "price": "FREE" },
+            { "category": "Students (with valid ID)", "price": "RM 10" },
+            { "category": "Senior Citizens (60 and above)", "price": "RM 10" },
+            { "category": "OKU (Disabled)", "price": "RM 10" }
           ]
         },
         "openingHours": {
-          "monday": "10am - 10pm",
-          "tuesday": "10am - 10pm",
-          "wednesday": "10am - 10pm",
-          "thursday": "10am - 10pm",
-          "friday": "10am - 10pm",
-          "saturday": "10am - 10pm",
-          "sunday": "10am - 10pm"
+          "monday": "Closed",
+          "tuesday": "11am - 7pm",
+          "wednesday": "11am - 7pm",
+          "thursday": "11am - 7pm",
+          "friday": "11am - 7pm",
+          "saturday": "11am - 7pm",
+          "sunday": "11am - 7pm"
         },
-        "specialNote": "Last entry at 9:30pm"
+        "specialNotes": {
+          "openingHours": "Last entry at 6:30pm. It is also closed on selected public holidays",
+          "admission": "The admission fees are the same for Malaysian and Non-Malaysian"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -682,8 +822,8 @@
       },
       "contact": {
         "address": "131 & 133, Jalan Tun HS Lee, 50000 Kuala Lumpur",
-        "website": "https://www.ur-mu.com",
-        "phone": "03-2181 3399"
+        "website": "https://ur-mu.com/gallery/25",
+        "phone": "03-2110 3004"
       }
     }
   },
@@ -700,17 +840,19 @@
     "details": {
       "overview": {
         "description": "Historic alleyway transformed with vibrant murals depicting old Kuala Lumpur stories and local culture.",
-        "admission": "Free",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
-          "monday": "Open 24 hours",
-          "tuesday": "Open 24 hours",
-          "wednesday": "Open 24 hours",
-          "thursday": "Open 24 hours",
-          "friday": "Open 24 hours",
-          "saturday": "Open 24 hours",
-          "sunday": "Open 24 hours"
+          "monday": "9am - 12am",
+          "tuesday": "9am - 12am",
+          "wednesday": "9am - 12am",
+          "thursday": "9am - 12am",
+          "friday": "9am - 12am",
+          "saturday": "9am - 12am",
+          "sunday": "9am - 12am"
         },
-        "specialNote": "Best visited during daylight hours for photography"
+        "specialNotes": {
+          "admission": "From time to time this alleyway will feature rotating art installations celebrating Chinese cultures - follow their Instagram for updates"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -732,13 +874,13 @@
       },
       "contact": {
         "address": "Lorong Panggung, 50000 Kuala Lumpur",
-        "website": "https://www.visitkl.gov.my/visitklv2/kwai-chai-hong"
+        "website": "https://www.kwaichaihong.com/"
       }
     }
   },
   {
-    "name": "Zhongshan Building",
-    "type": "art_gallery",
+    "name": "The Zhongshan Building",
+    "type": "monument",
     "openingHours": "Closes at 8pm today",
     "status": "open",
     "coordinates": [101.69716477094327, 3.137803887112592],
@@ -748,18 +890,20 @@
     "admission": "free",
     "details": {
       "overview": {
-        "description": "A vibrant 4-storey arts and creative hub housed in 1950s heritage shophouses, featuring independent galleries, artisan cafes, bookstores, vintage music stores, and a hidden rooftop with city views. Home to a lively community of artists, crafters, and independent brands.",
-        "admission": "Free",
+        "description": "A vibrant 4-storey arts and creative hub housed in 1950s heritage shophouses, featuring housing artisanal sourdough, speciality stores, bespoke services, folks from the underground music scene, silkscreen printing, and more",
+        "admission": "Free for both Malaysians and tourists",
         "openingHours": {
           "monday": "Closed",
-          "tuesday": "2pm - 8pm",
-          "wednesday": "2pm - 8pm",
-          "thursday": "11am - 8pm",
-          "friday": "11am - 8pm",
-          "saturday": "11am - 8pm",
-          "sunday": "11am - 8pm"
+          "tuesday": "10am - 6pm",
+          "wednesday": "10am - 6pm",
+          "thursday": "10am - 6pm",
+          "friday": "10am - 6pm",
+          "saturday": "10am - 6pm",
+          "sunday": "10am - 6pm"
         },
-        "specialNote": "Former Selangor Zhongshan Association building, now a cultural landmark in Kampung Attap"
+        "specialNotes": {
+          "openingHours": "Note individual store opening hours before your visits, as some spaces are only open during events or by appointment. And, be mindful not to intrude into private design studios"
+        }
       },
       "stationGuide": {
         "stations": [
@@ -774,7 +918,7 @@
       },
       "contact": {
         "address": "80-84, Jalan Rotan, Kampung Attap, 50460 Kuala Lumpur",
-        "website": "https://www.facebook.com/thezhongshanbuilding/"
+        "website": "https://www.instagram.com/thezhongshanbuilding/"
       }
     }
   }
