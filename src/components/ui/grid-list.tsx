@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface MetadataItem {
   icon?: React.ReactNode;
@@ -26,37 +27,6 @@ export default function GridList({
   onMouseEnter,
   onMouseLeave,
 }: GridListProps) {
-  const [imageLoaded, setImageLoaded] = React.useState(false);
-  const [imageError, setImageError] = React.useState(false);
-
-  // Preload image to check if it's valid
-  React.useEffect(() => {
-    if (!thumbnail) {
-      setImageError(false);
-      setImageLoaded(false);
-      return;
-    }
-
-    setImageLoaded(false);
-    setImageError(false);
-
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-      setImageError(false);
-    };
-    img.onerror = () => {
-      setImageLoaded(false);
-      setImageError(true);
-    };
-    img.src = thumbnail;
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [thumbnail]);
-
   return (
     <div
       className="
@@ -86,19 +56,17 @@ export default function GridList({
       }}
     >
       {/* Thumbnail */}
-      {showThumbnail && (
-        <div className="aspect-square w-full rounded-lg overflow-hidden bg-ds-surface">
-          {imageLoaded && !imageError ? (
-            <img
-              src={thumbnail}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-ds-text-muted text-xs">
-              No image
-            </div>
-          )}
+      {showThumbnail && thumbnail && (
+        <div className="aspect-square w-full rounded-lg overflow-hidden bg-ds-surface relative">
+          <Image
+            src={thumbnail}
+            alt={title}
+            fill
+            className="object-cover"
+            loading="lazy"
+            sizes="(max-width: 768px) 50vw, 200px"
+            quality={60}
+          />
         </div>
       )}
 

@@ -81,6 +81,7 @@ interface SidePanelProps {
 export default function SidePanel({ selectedLocation, onLocationSelect, onBack, onTabChange, initialTab }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
+  const [showShareCopied, setShowShareCopied] = useState(false);
 
   const filteredLocations = useMemo(() => {
     if (!searchQuery.trim()) return mockLocations;
@@ -160,7 +161,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                 {/* Icon Buttons Group */}
                 <div className="flex gap-4 items-center">
                   {/* Share Button with Tooltip */}
-                  <Tooltip>
+                  <Tooltip open={showShareCopied}>
                     <TooltipTrigger asChild>
                       <Button
                         variant="outline"
@@ -168,6 +169,8 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                         onClick={() => {
                           const url = `${window.location.origin}?location=${encodeURIComponent(selectedLocation.name)}`;
                           navigator.clipboard.writeText(url);
+                          setShowShareCopied(true);
+                          setTimeout(() => setShowShareCopied(false), 2000);
                         }}
                         className="size-12 p-3 rounded-[24px] bg-white"
                       >
@@ -175,7 +178,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Share this place</p>
+                      <p>Copied location link!</p>
                     </TooltipContent>
                   </Tooltip>
 
@@ -211,6 +214,9 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                         alt={selectedLocation.name}
                         fill
                         className="object-cover"
+                        priority
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        quality={75}
                       />
                     </div>
                   </div>
@@ -237,6 +243,10 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                                   alt={`${selectedLocation.name} - Image ${index + 1}`}
                                   fill
                                   className="object-cover"
+                                  priority={index === 0}
+                                  loading={index === 0 ? undefined : "lazy"}
+                                  sizes="(max-width: 768px) 100vw, 400px"
+                                  quality={75}
                                 />
                               </div>
                             </div>

@@ -8,6 +8,7 @@ import ContentContainer from './content-container';
 import SectionHeader from './section-header';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import NearestStationAccordion from './nearest-station-accordion';
 
 interface LocationDetailProps {
@@ -31,8 +32,15 @@ const daysOfWeek = [
 export default function LocationDetail({ location, onBack, onTabChange, initialTab }: LocationDetailProps) {
   const [activeTab, setActiveTab] = useState(initialTab || 'about');
   const [pricingType, setPricingType] = useState<'malaysian' | 'nonMalaysian'>('malaysian');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const details = location.details;
   const stationGuideData = details?.stationGuide?.stations || [];
+
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const handleTabValueChange = (tab: string) => {
     setActiveTab(tab);
@@ -40,6 +48,7 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
   };
 
   return (
+      <TooltipProvider>
       <div className="flex flex-col w-full">
 
       {/* Tabs */}
@@ -199,14 +208,21 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                         <p className="flex-1 text-base text-[#282828] leading-normal">
                           {details.contact.address}
                         </p>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="rounded-[10px] shrink-0 size-9"
-                          onClick={() => navigator.clipboard.writeText(details.contact.address || '')}
-                        >
-                          <Copy className="w-5 h-5" />
-                        </Button>
+                        <Tooltip open={copiedField === 'address'}>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="rounded-[10px] shrink-0 size-9"
+                              onClick={() => handleCopy(details.contact.address || '', 'address')}
+                            >
+                              <Copy className="w-5 h-5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copied!</p>
+                          </TooltipContent>
+                        </Tooltip>
                       </div>
                     </div>
 
@@ -228,14 +244,21 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                           >
                             <LinkIcon className="w-5 h-5" />
                           </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-[10px] shrink-0 size-9"
-                            onClick={() => navigator.clipboard.writeText(details.contact.website || '')}
-                          >
-                            <Copy className="w-5 h-5" />
-                          </Button>
+                          <Tooltip open={copiedField === 'website'}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-[10px] shrink-0 size-9"
+                                onClick={() => handleCopy(details.contact.website || '', 'website')}
+                              >
+                                <Copy className="w-5 h-5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copied!</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </div>
                     )}
@@ -258,14 +281,21 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                           >
                             <Phone className="w-5 h-5" />
                           </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            className="rounded-[10px] shrink-0 size-9"
-                            onClick={() => navigator.clipboard.writeText(details.contact.phone || '')}
-                          >
-                            <Copy className="w-5 h-5" />
-                          </Button>
+                          <Tooltip open={copiedField === 'phone'}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-[10px] shrink-0 size-9"
+                                onClick={() => handleCopy(details.contact.phone || '', 'phone')}
+                              >
+                                <Copy className="w-5 h-5" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copied!</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </div>
                     )}
@@ -279,14 +309,21 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
                       <p className="flex-1 text-base text-[#282828] leading-normal">
                         {location.address}
                       </p>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="rounded-[10px] shrink-0 size-9"
-                        onClick={() => navigator.clipboard.writeText(location.address)}
-                      >
-                        <Copy className="w-5 h-5" />
-                      </Button>
+                      <Tooltip open={copiedField === 'address-fallback'}>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="rounded-[10px] shrink-0 size-9"
+                            onClick={() => handleCopy(location.address, 'address-fallback')}
+                          >
+                            <Copy className="w-5 h-5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Copied!</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </div>
                   </div>
                 )}
@@ -337,5 +374,6 @@ export default function LocationDetail({ location, onBack, onTabChange, initialT
         </TabsContent>
       </Tabs>
       </div>
+      </TooltipProvider>
   );
 }

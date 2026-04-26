@@ -18,6 +18,7 @@ interface PanelHeaderProps {
   description: string;
   variant?: 'main' | 'details';
   showSymbols?: boolean;
+  showActions?: boolean;
   tags?: React.ReactNode;
   onShare?: () => void;
   onBack?: () => void;
@@ -28,6 +29,7 @@ export default function PanelHeader({
   description,
   variant = 'main',
   showSymbols = true,
+  showActions = false,
   tags,
   onShare,
   onBack,
@@ -120,31 +122,33 @@ export default function PanelHeader({
       {/* Right Section - Different layouts for main vs details */}
       <div className="shrink-0">
         {variant === 'main' ? (
-          // Main variant: Share + Dropdown
-          <ButtonGroup className="[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
-            <Button variant="outline" onClick={handleShare}>
-              Share site
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
-                <DropdownMenuItem onClick={() => console.log('Help clicked')}>
-                  <HelpCircle className="w-4 h-4" />
-                  Help
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => console.log('Feedback clicked')}>
-                  <MessageCircle className="w-4 h-4" />
-                  Feedback
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </ButtonGroup>
+          // Main variant: Share + Dropdown (only shown if showActions is true)
+          showActions && (
+            <ButtonGroup className="[&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
+              <Button variant="outline" onClick={handleShare}>
+                Share site
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem onClick={() => console.log('Help clicked')}>
+                    <HelpCircle className="w-4 h-4" />
+                    Help
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => console.log('Feedback clicked')}>
+                    <MessageCircle className="w-4 h-4" />
+                    Feedback
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </ButtonGroup>
+          )
         ) : (
-          // Details variant: Single circular close button
+          // Details variant: Single circular close button (always shown)
           <Button
             variant="outline"
             size="icon"

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface MetadataItem {
   icon?: React.ReactNode;
@@ -38,33 +39,7 @@ export default function StackedList({
   const [imageLoaded, setImageLoaded] = React.useState(false);
   const [imageError, setImageError] = React.useState(false);
 
-  // Preload image to check if it's valid
-  React.useEffect(() => {
-    if (!thumbnail) {
-      setImageError(false);
-      setImageLoaded(false);
-      return;
-    }
-
-    setImageLoaded(false);
-    setImageError(false);
-
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-      setImageError(false);
-    };
-    img.onerror = () => {
-      setImageLoaded(false);
-      setImageError(true);
-    };
-    img.src = thumbnail;
-
-    return () => {
-      img.onload = null;
-      img.onerror = null;
-    };
-  }, [thumbnail]);
+  // Removed preload - Next.js Image handles this more efficiently
   return (
     <div
       className="
@@ -130,19 +105,18 @@ export default function StackedList({
       </div>
 
       {/* Right Thumbnail */}
-      {showThumbnail && (
-        <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
-          {imageLoaded && !imageError ? (
-            <img
-              src={thumbnail}
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-ds-text-muted text-xs">
-              No image
-            </div>
-          )}
+      {showThumbnail && thumbnail && (
+        <div className="shrink-0 w-24 h-24 rounded-lg overflow-hidden bg-gray-100 relative">
+          <Image
+            src={thumbnail}
+            alt={title}
+            fill
+            className="object-cover"
+            loading="lazy"
+            sizes="96px"
+            quality={60}
+            onError={() => setImageError(true)}
+          />
         </div>
       )}
     </div>
