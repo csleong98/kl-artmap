@@ -2,9 +2,9 @@
 
 import { useState, useRef, useCallback, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Drawer } from 'vaul';
 import Map from '@/components/ui/map';
 import SidePanel from '@/components/ui/side-panel';
+import MobileDrawer, { MobileDrawerRef } from '@/components/ui/mobile-drawer';
 import { Location } from '@/types';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
 import { getAllLocations } from '@/data/helpers';
@@ -24,7 +24,7 @@ function HomeContent() {
   const [initialTab, setInitialTab] = useState<string | undefined>(tabFromUrl || undefined);
   const [isMobile, setIsMobile] = useState(false);
   const mapRef = useRef<any>(null);
-  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<MobileDrawerRef>(null);
 
   // Detect mobile viewport
   useEffect(() => {
@@ -39,8 +39,8 @@ function HomeContent() {
 
   // Reset scroll position when location changes on mobile
   useEffect(() => {
-    if (isMobile && mobileScrollRef.current) {
-      mobileScrollRef.current.scrollTop = 0;
+    if (isMobile && drawerRef.current) {
+      drawerRef.current.resetScroll();
     }
   }, [selectedLocation, isMobile]);
 
@@ -151,26 +151,16 @@ function HomeContent() {
             mapPadding={{ bottom: typeof window !== 'undefined' ? window.innerHeight * 0.5 : 400 }}
           />
 
-          {/* Single Drawer - Dynamic Content */}
-          <Drawer.Root modal={false} open={true} dismissible={false}>
-            <Drawer.Portal>
-              <Drawer.Content className="bg-[#FBFAF8] flex flex-col rounded-t-[16px] h-[43vh] fixed bottom-0 left-0 right-0 shadow-2xl z-40">
-                <Drawer.Title className="sr-only">
-                  {selectedLocation ? selectedLocation.name : 'Location List'}
-                </Drawer.Title>
-                {/* <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 rounded-full bg-gray-300 z-10" /> */}
-                <div ref={mobileScrollRef} className="flex-1 overflow-y-auto">
-                  <SidePanel
-                    selectedLocation={selectedLocation}
-                    onLocationSelect={handleLocationSelect}
-                    onBack={handleBack}
-                    onTabChange={handleTabChange}
-                    initialTab={initialTab}
-                  />
-                </div>
-              </Drawer.Content>
-            </Drawer.Portal>
-          </Drawer.Root>
+          {/* Custom Drawer with Snap Points */}
+          <MobileDrawer ref={drawerRef}>
+            <SidePanel
+              selectedLocation={selectedLocation}
+              onLocationSelect={handleLocationSelect}
+              onBack={handleBack}
+              onTabChange={handleTabChange}
+              initialTab={initialTab}
+            />
+          </MobileDrawer>
         </div>
       )}
     </>
