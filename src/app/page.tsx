@@ -8,6 +8,7 @@ import MobileDrawer, { MobileDrawerRef } from '@/components/ui/mobile-drawer';
 import { Location } from '@/types';
 import { muteOtherMarkers, unmuteAllMarkers } from '@/services/mapService';
 import { getAllLocations } from '@/data/helpers';
+import { Analytics } from "@vercel/analytics/next"
 
 const mockLocations = getAllLocations();
 
@@ -163,6 +164,7 @@ function HomeContent() {
           </MobileDrawer>
         </div>
       )}
+      <Analytics/>
     </>
   );
 }
