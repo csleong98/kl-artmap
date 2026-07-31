@@ -39,12 +39,13 @@ function getIconPath(locationType?: string, color: string = 'currentColor'): str
  * @param fillColor - The fill color of the circle
  * @param markerId - Optional ID for linking markers to list items
  * @param locationType - Type of location for icon selection
- * @returns HTMLDivElement containing the SVG circle
+ * @param imageUrl - Optional image URL for the pin
+ * @returns HTMLDivElement containing the pin
  */
-function createDefaultPinElement(fillColor: string, markerId?: string, locationType?: string): HTMLDivElement {
+function createDefaultPinElement(fillColor: string, markerId?: string, locationType?: string, imageUrl?: string): HTMLDivElement {
   const el = document.createElement('div');
   el.style.width = '50px';
-  el.style.height = '54px';
+  el.style.height = '60px';
   el.style.cursor = 'pointer';
   el.classList.add('map-marker');
   if (markerId) {
@@ -53,15 +54,15 @@ function createDefaultPinElement(fillColor: string, markerId?: string, locationT
     el.setAttribute('data-location-type', locationType || '');
   }
 
-  el.innerHTML = getDefaultPinSVG(fillColor, locationType);
+  el.innerHTML = getDefaultPinSVG(fillColor, locationType, imageUrl);
 
-  // Hover animation - scale the SVG inside, not the container
-  const svg = el.querySelector('svg')!;
+  // Hover animation - scale the pin inside, not the container
+  const pinElement = el.querySelector('div')!;
   el.addEventListener('mouseenter', () => {
-    svg.style.transform = 'scale(1.15)';
+    pinElement.style.transform = 'scale(1.15)';
   });
   el.addEventListener('mouseleave', () => {
-    svg.style.transform = 'scale(1)';
+    pinElement.style.transform = 'scale(1)';
   });
 
   return el;
@@ -174,157 +175,145 @@ export function unmuteAllMarkers(): void {
 }
 
 /**
- * Gets the default pin SVG content
+ * Gets the default pin HTML content (CSS-based design)
  * Anchor point is at bottom center (25, 50)
  */
-function getDefaultPinSVG(fillColor: string, locationType?: string): string {
-  const gradientId = `circle-gradient-${Date.now()}`;
-  const shineId = `shine-${Date.now()}`;
-  const shadowId = `shadow-${Date.now()}`;
+function getDefaultPinSVG(fillColor: string, locationType?: string, imageUrl?: string): string {
+  const uniqueId = Date.now();
+  const clipId = `clip-${uniqueId}`;
 
   return `
-    <svg width="50" height="54" viewBox="0 0 50 54" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 3px 8px rgba(0,0,0,0.3)) drop-shadow(0 1px 2px rgba(0,0,0,0.2)); transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center bottom;">
-      <defs>
-        <!-- Main radial gradient for 3D sphere effect -->
-        <radialGradient id="${gradientId}" cx="35%" cy="35%">
-          <stop offset="0%" stop-color="${adjustBrightness(fillColor, 40)}" />
-          <stop offset="50%" stop-color="${fillColor}" />
-          <stop offset="100%" stop-color="${adjustBrightness(fillColor, -30)}" />
-        </radialGradient>
+    <div style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,0.35));
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center bottom;
+      width: 50px;
+      height: 60px;
+    ">
+      <!-- Circular bubble with photo -->
+      <div style="
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: ${fillColor};
+        border: 5px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        ${imageUrl ? `
+          <img
+            src="${imageUrl}"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center;
+            "
+            alt="Location"
+          />
+        ` : `
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            style="flex-shrink: 0;"
+          >
+            ${getIconPath(locationType, 'white')}
+          </svg>
+        `}
+      </div>
 
-        <!-- Shine/highlight gradient -->
-        <radialGradient id="${shineId}" cx="30%" cy="30%">
-          <stop offset="0%" stop-color="white" stop-opacity="0.5" />
-          <stop offset="50%" stop-color="white" stop-opacity="0.2" />
-          <stop offset="100%" stop-color="white" stop-opacity="0" />
-        </radialGradient>
-
-        <!-- Inner shadow for depth -->
-        <radialGradient id="${shadowId}" cx="50%" cy="50%">
-          <stop offset="70%" stop-color="transparent" />
-          <stop offset="100%" stop-color="rgba(0,0,0,0.2)" />
-        </radialGradient>
-      </defs>
-
-      <!-- Outer glow/shadow circle -->
-      <circle cx="25" cy="25" r="16.5" fill="${fillColor}" opacity="0.2"/>
-
-      <!-- Main circle with gradient -->
-      <circle cx="25" cy="25" r="15" fill="url(#${gradientId})" stroke="white" stroke-width="2.5" stroke-opacity="0.9"/>
-
-      <!-- Inner shadow overlay -->
-      <circle cx="25" cy="25" r="15" fill="url(#${shadowId})"/>
-
-      <!-- Shine/highlight -->
-      <ellipse cx="21" cy="20" rx="8" ry="9" fill="url(#${shineId})"/>
-
-      <!-- Icon from Lucide - centered at (25, 25) with 12px size -->
-      <g transform="translate(19, 19) scale(0.5)" stroke="rgba(0,0,0,0.5)" fill="rgba(0,0,0,0.5)">
-        ${getIconPath(locationType, 'rgba(0,0,0,0.5)')}
-      </g>
-
-      <!-- Anchor dot at bottom with space for full circle -->
-      <circle cx="25" cy="51" r="3" fill="${fillColor}" opacity="0.3"/>
-      <circle cx="25" cy="51" r="2" fill="${fillColor}" opacity="0.9"/>
-    </svg>
+      <!-- Triangle tail -->
+      <div style="
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #111;
+        margin-top: -2px;
+      "></div>
+    </div>
   `;
 }
 
 /**
- * Gets the active pin SVG content
- * Anchor point is at bottom center (30, 80)
+ * Gets the active pin HTML content (CSS-based design)
+ * Anchor point is at bottom center (40, 95)
  */
 function getActivePinSVG(location: any, fillColor: string, locationType?: string): string {
-  const clipId = `pin-clip-${Date.now()}`;
-  const badgeGradientId = `badge-gradient-${Date.now()}`;
-  const shineId = `shine-active-${Date.now()}`;
-  const pointerGradientId = `pointer-gradient-${Date.now()}`;
-  const shadowId = `shadow-active-${Date.now()}`;
+  const uniqueId = Date.now();
+  const imageUrl = location.images?.[0] || location.imageUrl;
 
   return `
-    <svg width="60" height="85" viewBox="0 0 60 85" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)) drop-shadow(0 2px 4px rgba(0,0,0,0.2)); transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center bottom;">
-      <defs>
-        <!-- Radial gradient for badge sphere -->
-        <radialGradient id="${badgeGradientId}" cx="35%" cy="35%">
-          <stop offset="0%" stop-color="${adjustBrightness(fillColor, 40)}" />
-          <stop offset="50%" stop-color="${fillColor}" />
-          <stop offset="100%" stop-color="${adjustBrightness(fillColor, -30)}" />
-        </radialGradient>
+    <div style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,0.35));
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center bottom;
+      width: 80px;
+      height: 95px;
+    ">
+      <!-- Circular bubble with photo -->
+      <div style="
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: ${fillColor};
+        border: 8px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        ${imageUrl ? `
+          <img
+            src="${imageUrl}"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: center;
+            "
+            alt="${location.name}"
+          />
+        ` : `
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            style="flex-shrink: 0;"
+          >
+            ${getIconPath(locationType, 'white')}
+          </svg>
+        `}
+      </div>
 
-        <!-- Shine effect -->
-        <radialGradient id="${shineId}" cx="30%" cy="25%">
-          <stop offset="0%" stop-color="white" stop-opacity="0.6" />
-          <stop offset="40%" stop-color="white" stop-opacity="0.3" />
-          <stop offset="100%" stop-color="white" stop-opacity="0" />
-        </radialGradient>
-
-        <!-- Pointer gradient -->
-        <linearGradient id="${pointerGradientId}" x1="30" y1="52" x2="30" y2="78">
-          <stop offset="0%" stop-color="${fillColor}" />
-          <stop offset="100%" stop-color="${adjustBrightness(fillColor, -35)}" />
-        </linearGradient>
-
-        <!-- Inner shadow -->
-        <radialGradient id="${shadowId}" cx="50%" cy="50%">
-          <stop offset="75%" stop-color="transparent" />
-          <stop offset="100%" stop-color="rgba(0,0,0,0.15)" />
-        </radialGradient>
-
-        <!-- Clip path for image -->
-        <clipPath id="${clipId}">
-          <circle cx="30" cy="30" r="20" />
-        </clipPath>
-      </defs>
-
-      <!-- Outer glow -->
-      <circle cx="30" cy="30" r="27" fill="${fillColor}" opacity="0.15"/>
-
-      <!-- Main badge circle with 3D effect -->
-      <circle cx="30" cy="30" r="25" fill="url(#${badgeGradientId})" stroke="white" stroke-width="3" stroke-opacity="0.95"/>
-
-      <!-- Inner shadow for depth -->
-      <circle cx="30" cy="30" r="25" fill="url(#${shadowId})"/>
-
-      <!-- White background for image/icon -->
-      <circle cx="30" cy="30" r="21" fill="white" opacity="0.97"/>
-
-      <!-- Content: Icon as fallback background -->
-      <g transform="translate(21, 21) scale(0.75)" stroke="${fillColor}" fill="${fillColor}" opacity="0.7">
-        ${getIconPath(locationType, fillColor)}
-      </g>
-
-      <!-- Image overlay (if exists and loads successfully, will show over icon) -->
-      ${location.imageUrl && !location.imageUrl.startsWith('/images/')
-        ? `<image href="${location.imageUrl}" x="10" y="10" width="40" height="40" clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice" opacity="0" onload="this.setAttribute('opacity', '1')"/>`
-        : ''
-      }
-
-      <!-- Inner border for content -->
-      <circle cx="30" cy="30" r="20" fill="none" stroke="${fillColor}" stroke-width="1" stroke-opacity="0.2"/>
-
-      <!-- Shine highlight -->
-      <ellipse cx="24" cy="22" rx="12" ry="14" fill="url(#${shineId})"/>
-
-      <!-- Pointer/teardrop tail with 3D effect -->
-      <g>
-        <!-- Pointer shadow -->
-        <path d="M 30 54 L 27.5 77 L 30 80 L 32.5 77 Z" fill="rgba(0,0,0,0.2)" transform="translate(1, 1)"/>
-        <!-- Main pointer -->
-        <path d="M 30 52 L 27 76 L 30 80 L 33 76 Z" fill="url(#${pointerGradientId})" stroke="white" stroke-width="2" stroke-opacity="0.9"/>
-        <!-- Pointer highlight -->
-        <path d="M 30 52 L 28.5 68 L 30 74 L 31.5 68 Z" fill="white" opacity="0.25"/>
-      </g>
-
-      <!-- Anchor dot at bottom with space for full circle -->
-      <circle cx="30" cy="81" r="4" fill="${fillColor}" opacity="0.25"/>
-      <circle cx="30" cy="81" r="2.5" fill="${fillColor}" opacity="0.95"/>
-      <circle cx="30" cy="80" r="1" fill="white" opacity="0.6"/>
-    </svg>
+      <!-- Triangle tail -->
+      <div style="
+        width: 0;
+        height: 0;
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 15px solid #111;
+        margin-top: -3px;
+      "></div>
+    </div>
   `;
 }
 
 /**
- * Activates a marker by swapping its SVG content
+ * Activates a marker by swapping its content
  */
 function activateMarker(_map: any, marker: any, location: any): void {
   // If clicking the same marker, deactivate it
@@ -344,20 +333,20 @@ function activateMarker(_map: any, marker: any, location: any): void {
 
   // Get the marker element and swap its content
   const element = marker.getElement();
-  const fillColor = element.getAttribute('data-marker-color') || '#E53E3E';
+  const fillColor = element.getAttribute('data-marker-color') || '#111';
   const locationType = element.getAttribute('data-location-type') || undefined;
 
-  // Swap to active pin SVG
+  // Swap to active pin
   element.innerHTML = getActivePinSVG(location, fillColor, locationType);
 
   // Update size for active state
-  element.style.width = '60px';
-  element.style.height = '85px';
+  element.style.width = '80px';
+  element.style.height = '95px';
 
   // Re-attach hover listeners
-  const svg = element.querySelector('svg')!;
-  element.onmouseenter = () => { svg.style.transform = 'scale(1.1)'; };
-  element.onmouseleave = () => { svg.style.transform = 'scale(1)'; };
+  const pinElement = element.querySelector('div')!;
+  element.onmouseenter = () => { pinElement.style.transform = 'scale(1.1)'; };
+  element.onmouseleave = () => { pinElement.style.transform = 'scale(1)'; };
 
   // Create and add label
   const labelElement = createLabelElement(location);
@@ -375,20 +364,22 @@ function deactivateMarker(): void {
 
   // Get the marker element
   const element = activeMarkerState.marker.getElement();
-  const fillColor = element.getAttribute('data-marker-color') || '#E53E3E';
+  const fillColor = element.getAttribute('data-marker-color') || '#111';
   const locationType = element.getAttribute('data-location-type') || undefined;
+  const location = activeMarkerState.location;
+  const imageUrl = location.images?.[0] || location.imageUrl;
 
-  // Swap back to default pin SVG
-  element.innerHTML = getDefaultPinSVG(fillColor, locationType);
+  // Swap back to default pin
+  element.innerHTML = getDefaultPinSVG(fillColor, locationType, imageUrl);
 
   // Restore default size
   element.style.width = '50px';
-  element.style.height = '54px';
+  element.style.height = '60px';
 
   // Re-attach hover listeners
-  const svg = element.querySelector('svg')!;
-  element.onmouseenter = () => { svg.style.transform = 'scale(1.15)'; };
-  element.onmouseleave = () => { svg.style.transform = 'scale(1)'; };
+  const pinElement = element.querySelector('div')!;
+  element.onmouseenter = () => { pinElement.style.transform = 'scale(1.15)'; };
+  element.onmouseleave = () => { pinElement.style.transform = 'scale(1)'; };
 
   // Remove label if exists
   if (activeMarkerState.label) {
@@ -420,7 +411,8 @@ export async function addAllMarkers(map: any, onMarkerClick?: (location: any) =>
 
     // Add all venues with default circular pins (no activation)
     mockLocations.forEach((location: any) => {
-      const el = createDefaultPinElement('#E53E3E', location.name, location.type);
+      const imageUrl = location.images?.[0] || location.imageUrl;
+      const el = createDefaultPinElement('#111', location.name, location.type, imageUrl);
       const marker = new mapboxgl.Marker({ element: el, anchor: 'bottom' })
         .setLngLat(location.coordinates)
         .addTo(map);
@@ -556,7 +548,6 @@ export function setActiveRoute(map: any, activeRouteId: string, allRouteIds: str
 
 /**
  * Adds endpoint markers for a walking route.
- * Green pin at the station (start of walk), red pin at the art venue (destination).
  * @param start - location/art venue coordinates
  * @param end - station coordinates
  * Returns the marker array for cleanup.
@@ -568,8 +559,8 @@ export async function addRouteEndpointMarkers(
 ): Promise<any[]> {
   const mapboxgl = (await import('mapbox-gl')).default;
 
-  const startEl = createDefaultPinElement('#E53E3E'); // red — art venue (destination)
-  const endEl   = createDefaultPinElement('#38A169'); // green — station (start of walk)
+  const startEl = createDefaultPinElement('#111');
+  const endEl   = createDefaultPinElement('#111');
 
   const startMarker = new mapboxgl.Marker({ element: startEl, anchor: 'bottom' })
     .setLngLat(start)

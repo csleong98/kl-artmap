@@ -1,12 +1,14 @@
 import indoorConnectionsData from './indoorConnections.json';
 import trainLinesData from './trainLines.json';
 import locationsData from './locations.json';
+import guidesData from './guides.json';
 import type { IndoorConnection, TrainLine, TrainStation, Location, StationExit } from '@/types';
 
 // Type assertions for JSON imports
 const indoorConnections = indoorConnectionsData as IndoorConnection[];
 const trainLines = trainLinesData.lines as TrainLine[];
 const locations = locationsData as Location[];
+const guides = guidesData as any[];
 
 // ============================================
 // TRAIN LINE & STATION HELPERS
@@ -336,6 +338,17 @@ export function getAllLocations(): Location[] {
  */
 export function getLocationByName(name: string): Location | null {
   return locations.find(loc => loc.name === name) || null;
+}
+
+// ============================================
+// GUIDE HELPERS
+// ============================================
+
+/**
+ * Get all guides
+ */
+export function getAllGuides() {
+  return guides;
 }
 
 // Type for station with metadata (backwards compatible with old StationData)

@@ -3,10 +3,11 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Search, LayoutGrid, List, CircleDot, Ticket, Train, Rows, Grid2x2, Share2, Mail, MapPin } from 'lucide-react';
 import { animate } from 'motion';
-import { getAllLocations } from '@/data/helpers';
+import { getAllLocations, getAllGuides } from '@/data/helpers';
 import { Location } from '@/types';
 
 const mockLocations = getAllLocations();
+const guides = getAllGuides();
 import LocationDetail from './location-detail';
 import StackedList from './stacked-list';
 import GridList from './grid-list';
@@ -72,13 +73,17 @@ function CarouselDots({ count }: { count: number }) {
 
 interface SidePanelProps {
   selectedLocation: Location | null;
+  selectedGuide?: any;
   onLocationSelect: (location: Location) => void;
+  onGuideSelect?: (guide: any) => void;
   onBack: () => void;
   onTabChange?: (tab: string) => void;
   initialTab?: string;
+  mode?: 'galleries' | 'guides';
+  isMobile?: boolean;
 }
 
-export default function SidePanel({ selectedLocation, onLocationSelect, onBack, onTabChange, initialTab }: SidePanelProps) {
+export default function SidePanel({ selectedLocation, selectedGuide, onLocationSelect, onGuideSelect, onBack, onTabChange, initialTab, mode = 'galleries', isMobile = false }: SidePanelProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [showShareCopied, setShowShareCopied] = useState(false);
@@ -104,7 +109,7 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
   return (
     <div className="flex flex-col h-full bg-[#FBFAF8]">
       {selectedLocation ? (
-        // Detail view
+        // Location Detail view
         <>
           {/* Header Section - Transparent to show background */}
           <div className="px-6 py-6">
@@ -270,19 +275,79 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
             />
           </div>
         </>
-      ) : (
-        // List view
+      ) : selectedGuide ? (
+        // Guide Detail view
         <>
-          {/* Header Section - Transparent to show background */}
+          {/* Header Section */}
           <div className="px-6 py-6">
             <PanelHeader
-              title="KL Art Map"
-              description="Discover art galleries and museums around the city of Kuala Lumpur that are all walkable from the train stations"
+              variant="details"
+              showSymbols={false}
+              title={selectedGuide.name}
+              description={selectedGuide.description}
+              onBack={onBack}
             />
           </div>
 
+          {/* Content Section */}
+          <div className="flex-1 px-6 py-6">
+            {/* Guide Info */}
+            <div className="mb-6">
+              <div className="flex items-center gap-4 text-sm text-ds-text-secondary">
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4" />
+                  <span>{selectedGuide.stops.length} stops</span>
+                </div>
+                <span>{selectedGuide.distance}</span>
+                <span>{selectedGuide.duration}</span>
+              </div>
+            </div>
+
+            {/* Stops List */}
+            <div>
+              <h3 className="text-lg font-semibold text-ds-text-primary mb-4">Stops</h3>
+              <div className="flex flex-col gap-3">
+                {selectedGuide.stops.map((stopName: string, index: number) => {
+                  const location = mockLocations.find(loc => loc.name === stopName);
+                  return location ? (
+                    <StackedList
+                      key={stopName}
+                      title={`${index + 1}. ${location.name}`}
+                      subtitle={location.details?.overview?.description || location.address}
+                      metadata={[
+                        {
+                          icon: <Ticket className="w-3.5 h-3.5" />,
+                          label: location.admission === 'free' ? 'Free' : 'Paid'
+                        }
+                      ]}
+                      thumbnail={location.images?.[0]}
+                      showThumbnail={true}
+                      onClick={() => {
+                        onLocationSelect(location);
+                      }}
+                    />
+                  ) : null;
+                })}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        // List view
+        <>
+          {/* Header Section - Only show on desktop */}
+          {!isMobile && (
+            <div className="px-6 py-6">
+              <PanelHeader
+                title="KL Art Map"
+                description="Discover art galleries and museums around the city of Kuala Lumpur that are all walkable from the train stations"
+                isMobile={isMobile}
+              />
+            </div>
+          )}
+
           {/* Content Section with padding */}
-          <div className="flex-1 px-6 pb-6">
+          <div className={`flex-1 px-6 pb-6 ${isMobile ? 'pt-4' : ''}`}>
             {/* Search + view toggles */}
             <div className="flex gap-3 items-center w-full">
               <InputGroup className="flex-1 h-10 rounded-full [&>*:first-child]:rounded-l-full [&>*:last-child]:rounded-r-full">
@@ -290,40 +355,47 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
                   <Search className="w-5 h-5" />
                 </InputGroupAddon>
                 <InputGroupInput
-                  placeholder="Search places"
+                  placeholder={mode === 'galleries' ? "Search places" : "Search walks"}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </InputGroup>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('list')}
-                  className="rounded-full"
-                >
-                  <Rows className="w-5 h-5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode('grid')}
-                  className="rounded-full"
-                >
-                  <Grid2x2 className="w-5 h-5" />
-                </Button>
-              </div>
+              {mode === 'galleries' && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setViewMode('list')}
+                    className="rounded-full"
+                  >
+                    <Rows className="w-5 h-5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setViewMode('grid')}
+                    className="rounded-full"
+                  >
+                    <Grid2x2 className="w-5 h-5" />
+                  </Button>
+                </div>
+              )}
             </div>
 
-      {/* Location counter */}
+      {/* Counter */}
       <div className="flex justify-between items-center mt-4">
         <span className="text-sm text-ds-text-secondary">
-          Showing {filteredLocations.length} {filteredLocations.length === 1 ? 'place' : 'places'}
+          {mode === 'galleries'
+            ? `Showing ${filteredLocations.length} ${filteredLocations.length === 1 ? 'place' : 'places'}`
+            : `${guides.length} ${guides.length === 1 ? 'walk' : 'walks'}`
+          }
         </span>
       </div>
 
-      {/* Location list */}
-      {viewMode === 'list' ? (
+      {/* Content based on mode */}
+      {mode === 'galleries' ? (
+        // Galleries list
+        viewMode === 'list' ? (
         <div className="flex flex-col gap-3 mt-4">
           {filteredLocations.length === 0 ? (
             <div className="py-6 text-sm text-ds-text-muted">No locations found</div>
@@ -387,6 +459,32 @@ export default function SidePanel({ selectedLocation, onLocationSelect, onBack, 
               );
             })
           )}
+        </div>
+      )
+      ) : (
+        // Guides list
+        <div className="flex flex-col gap-3 mt-4">
+          {guides.map((guide: any) => (
+            <StackedList
+              key={guide.id}
+              title={guide.name}
+              subtitle={guide.description}
+              metadata={[
+                {
+                  icon: <MapPin className="w-3.5 h-3.5" />,
+                  label: `${guide.stops.length} stops`
+                },
+                {
+                  label: guide.distance
+                },
+                {
+                  label: guide.duration
+                }
+              ]}
+              showThumbnail={false}
+              onClick={() => onGuideSelect?.(guide)}
+            />
+          ))}
         </div>
       )}
           </div>

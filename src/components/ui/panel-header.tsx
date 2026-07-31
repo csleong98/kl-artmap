@@ -22,6 +22,7 @@ interface PanelHeaderProps {
   tags?: React.ReactNode;
   onShare?: () => void;
   onBack?: () => void;
+  isMobile?: boolean;
 }
 
 export default function PanelHeader({
@@ -33,6 +34,7 @@ export default function PanelHeader({
   tags,
   onShare,
   onBack,
+  isMobile = false,
 }: PanelHeaderProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -95,27 +97,31 @@ export default function PanelHeader({
         <div className="flex flex-col gap-3">
           <h1 className={`text-ds-text-primary ${
             variant === 'main'
-              ? 'text-[32px] uppercase font-bold leading-[1.15]'
+              ? isMobile
+                ? 'text-[24px] uppercase font-bold leading-[1.15]'
+                : 'text-[32px] uppercase font-bold leading-[1.15]'
               : 'text-[32px] font-medium leading-[1.05]'
           }`}>
             {title}
           </h1>
 
-          <div className="flex flex-col gap-1">
-            <p className={`text-base leading-[1.4] text-ds-text-secondary ${
-              !isExpanded ? 'line-clamp-3' : ''
-            }`}>
-              {description}
-            </p>
-            {description && description.length > 150 && (
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="text-sm text-blue-600 hover:text-blue-800 self-start font-medium"
-              >
-                {isExpanded ? 'View Less' : 'View More'}
-              </button>
-            )}
-          </div>
+          {!isMobile && (
+            <div className="flex flex-col gap-1">
+              <p className={`text-base leading-[1.4] text-ds-text-secondary ${
+                !isExpanded ? 'line-clamp-3' : ''
+              }`}>
+                {description}
+              </p>
+              {description && description.length > 150 && (
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="text-sm text-blue-600 hover:text-blue-800 self-start font-medium"
+                >
+                  {isExpanded ? 'View Less' : 'View More'}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
