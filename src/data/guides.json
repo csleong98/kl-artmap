@@ -1,0 +1,36 @@
+[
+  {
+    "id": "heritage-quarter",
+    "name": "Heritage Quarter Walk",
+    "description": "Explore old KL through street art, contemporary galleries, and colonial architecture",
+    "stops": [
+      "Kwai Chai Hong",
+      "UR-MU n+ Tun HS Lee",
+      "Sultan Abdul Samad Building"
+    ],
+    "distance": "1.2 km",
+    "duration": "20 min",
+    "color": "#3B82F6",
+    "routeCoordinates": [
+      [101.69767906714453, 3.14150583499496],
+      [101.69654887072686, 3.1447376875622948],
+      [101.6942, 3.1487]
+    ]
+  },
+  {
+    "id": "klcc-contemporary",
+    "name": "KLCC Contemporary Loop",
+    "description": "Modern Malaysian art at two major galleries in the heart of KLCC",
+    "stops": [
+      "ILHAM Gallery",
+      "PETRONAS Art Gallery"
+    ],
+    "distance": "500 m",
+    "duration": "10 min",
+    "color": "#EF4444",
+    "routeCoordinates": [
+      [101.7187, 3.1590],
+      [101.7121, 3.1581]
+    ]
+  }
+]

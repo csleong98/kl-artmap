@@ -216,7 +216,18 @@ function getDefaultPinSVG(fillColor: string, locationType?: string, imageUrl?: s
             "
             alt="Location"
           />
-        ` : ''}
+        ` : `
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            style="flex-shrink: 0;"
+          >
+            ${getIconPath(locationType, 'white')}
+          </svg>
+        `}
       </div>
 
       <!-- Triangle tail -->
@@ -274,7 +285,18 @@ function getActivePinSVG(location: any, fillColor: string, locationType?: string
             "
             alt="${location.name}"
           />
-        ` : ''}
+        ` : `
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            style="flex-shrink: 0;"
+          >
+            ${getIconPath(locationType, 'white')}
+          </svg>
+        `}
       </div>
 
       <!-- Triangle tail -->

@@ -22,8 +22,10 @@ function HomeContent() {
   const foundLocation = locationFromUrl ? mockLocations.find(l => l.name === locationFromUrl) : null;
 
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(foundLocation ?? null);
+  const [selectedGuide, setSelectedGuide] = useState<any>(null);
   const [initialTab, setInitialTab] = useState<string | undefined>(tabFromUrl || undefined);
   const [isMobile, setIsMobile] = useState(false);
+  const [mode, setMode] = useState<'galleries' | 'guides'>('galleries');
   const mapRef = useRef<any>(null);
   const drawerRef = useRef<MobileDrawerRef>(null);
 
@@ -71,6 +73,7 @@ function HomeContent() {
     if (!location) return;
 
     setSelectedLocation(location);
+    // Don't clear selectedGuide - keep guide context when viewing location from guide
     setInitialTab('about');
     updateUrl(location.name, 'about');
     muteOtherMarkers(location.name);
@@ -87,6 +90,16 @@ function HomeContent() {
     }
   }, [updateUrl]);
 
+  const handleGuideSelect = useCallback((guide: any) => {
+    if (!guide) return;
+
+    setSelectedGuide(guide);
+    setSelectedLocation(null);
+    if (mapRef.current) {
+      mapRef.current.resize();
+    }
+  }, []);
+
   const handleTabChange = useCallback((tab: string) => {
     if (!selectedLocation) return;
     updateUrl(selectedLocation.name, tab);
@@ -95,6 +108,7 @@ function HomeContent() {
   const handleBack = useCallback(() => {
     unmuteAllMarkers();
     setSelectedLocation(null);
+    setSelectedGuide(null);
     setInitialTab(undefined);
     updateUrl(null);
 
@@ -123,17 +137,51 @@ function HomeContent() {
           initialLocation={selectedLocation}
           isMobile={false}
           mapPadding={{ left: 482, top: 16, right: 16, bottom: 16 }}
+          mode={mode}
+          selectedGuide={selectedGuide}
         />
+
+        {/* Floating Tab Switcher - Only show on list view */}
+        {!selectedLocation && !selectedGuide && (
+          <div className="absolute top-6 left-[calc(50%+256px)] -translate-x-1/2 z-30">
+            <div className="flex items-center bg-white rounded-full shadow-lg p-1.5">
+              <button
+                onClick={() => setMode('galleries')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  mode === 'galleries'
+                    ? 'bg-[#140f00] text-white'
+                    : 'text-[#595959] hover:text-[#282828]'
+                }`}
+              >
+                Galleries
+              </button>
+              <button
+                onClick={() => setMode('guides')}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                  mode === 'guides'
+                    ? 'bg-[#140f00] text-white'
+                    : 'text-[#595959] hover:text-[#282828]'
+                }`}
+              >
+                Guides
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Floating Side Panel */}
         <aside className="absolute left-4 top-4 bottom-4 w-[480px] bg-white rounded-3xl shadow-lg overflow-hidden z-10">
           <div className="h-full overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <SidePanel
               selectedLocation={selectedLocation}
+              selectedGuide={selectedGuide}
               onLocationSelect={handleLocationSelect}
+              onGuideSelect={handleGuideSelect}
               onBack={handleBack}
               onTabChange={handleTabChange}
               initialTab={initialTab}
+              mode={mode}
+              isMobile={false}
             />
           </div>
         </aside>
@@ -150,16 +198,50 @@ function HomeContent() {
             initialLocation={selectedLocation}
             isMobile={true}
             mapPadding={{ bottom: typeof window !== 'undefined' ? window.innerHeight * 0.5 : 400 }}
+            mode={mode}
+            selectedGuide={selectedGuide}
           />
+
+          {/* Floating Tab Switcher - Mobile */}
+          {!selectedLocation && !selectedGuide && (
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 px-4">
+              <div className="flex items-center bg-white rounded-full shadow-lg p-1.5">
+                <button
+                  onClick={() => setMode('galleries')}
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                    mode === 'galleries'
+                      ? 'bg-[#140f00] text-white'
+                      : 'text-[#595959] hover:text-[#282828]'
+                  }`}
+                >
+                  Galleries
+                </button>
+                <button
+                  onClick={() => setMode('guides')}
+                  className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                    mode === 'guides'
+                      ? 'bg-[#140f00] text-white'
+                      : 'text-[#595959] hover:text-[#282828]'
+                  }`}
+                >
+                  Guides
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Custom Drawer with Snap Points */}
           <MobileDrawer ref={drawerRef}>
             <SidePanel
               selectedLocation={selectedLocation}
+              selectedGuide={selectedGuide}
               onLocationSelect={handleLocationSelect}
+              onGuideSelect={handleGuideSelect}
               onBack={handleBack}
               onTabChange={handleTabChange}
               initialTab={initialTab}
+              mode={mode}
+              isMobile={true}
             />
           </MobileDrawer>
         </div>
