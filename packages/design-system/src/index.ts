@@ -11,3 +11,6 @@ export { Tooltip, type TooltipProps } from './components/Tooltip';
 export { Menu, type MenuProps } from './components/Menu';
 export { Timeline, type TimelineProps } from './components/Timeline';
 export { TimelineItem, type TimelineItemProps } from './components/TimelineItem';
+export { CarouselDot, type CarouselDotProps } from './components/CarouselDot';
+export { CarouselIndicator, type CarouselIndicatorProps } from './components/CarouselIndicator';
+export { ImageCarousel, type ImageCarouselProps, type ImageCarouselImage } from './components/ImageCarousel';
