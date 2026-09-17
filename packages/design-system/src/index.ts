@@ -9,3 +9,5 @@ export { Alert, type AlertProps } from './components/Alert';
 export { MenuItem, MenuSectionTitle, type MenuItemProps } from './components/MenuItem';
 export { Tooltip, type TooltipProps } from './components/Tooltip';
 export { Menu, type MenuProps } from './components/Menu';
+export { Timeline, type TimelineProps } from './components/Timeline';
+export { TimelineItem, type TimelineItemProps } from './components/TimelineItem';
