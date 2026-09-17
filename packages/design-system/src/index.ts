@@ -1,3 +1,5 @@
+export { AccordionCard, type AccordionCardProps, type AccordionCardChip } from './components/AccordionCard';
+export { Badge, type BadgeProps } from './components/Badge';
 export { Button, type ButtonProps } from './components/Button';
 export { ButtonGroup, type ButtonGroupProps } from './components/ButtonGroup';
 export { IconButton, type IconButtonProps } from './components/IconButton';
