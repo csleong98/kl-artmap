@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -10,11 +10,14 @@
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
 /build
+
+# storybook
+storybook-static/
 
 # misc
 .DS_Store
@@ -42,3 +45,4 @@ LEARNING_LOG.md
 PROPS_FLOW.md
 REACT_COMPONENTS.md
 README.md
+*storybook.log
