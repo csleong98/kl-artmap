@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Compass, MapTrifold, BookmarkSimple, User } from '@phosphor-icons/react';
 import { Tabs } from './Tabs';
 
 const meta: Meta<typeof Tabs> = {
@@ -80,6 +81,40 @@ export const Line: Story = {
       </Tabs.Panel>
       <Tabs.Panel value="four" className="pt-4 text-sm text-foreground">
         Content for tab four.
+      </Tabs.Panel>
+    </Tabs>
+  ),
+};
+
+export const WithIcons: Story = {
+  name: 'With icons (opt-in)',
+  render: () => (
+    <Tabs variant="pills" defaultValue="explore">
+      <Tabs.List>
+        <Tabs.Tab value="explore" icon={<Compass />}>
+          Explore
+        </Tabs.Tab>
+        <Tabs.Tab value="map" icon={<MapTrifold />}>
+          Map
+        </Tabs.Tab>
+        <Tabs.Tab value="saved" icon={<BookmarkSimple />}>
+          Saved
+        </Tabs.Tab>
+        <Tabs.Tab value="profile" icon={<User />}>
+          Profile
+        </Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="explore" className="pt-4 text-sm text-foreground">
+        Content for Explore.
+      </Tabs.Panel>
+      <Tabs.Panel value="map" className="pt-4 text-sm text-foreground">
+        Content for Map.
+      </Tabs.Panel>
+      <Tabs.Panel value="saved" className="pt-4 text-sm text-foreground">
+        Content for Saved.
+      </Tabs.Panel>
+      <Tabs.Panel value="profile" className="pt-4 text-sm text-foreground">
+        Content for Profile.
       </Tabs.Panel>
     </Tabs>
   ),

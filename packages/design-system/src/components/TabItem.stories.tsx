@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Compass } from '@phosphor-icons/react';
 import { TabItem } from './TabItem';
 
 const meta: Meta<typeof TabItem> = {
@@ -79,6 +80,30 @@ export const LineRow: Story = {
       <TabItem variant="line">Tab text</TabItem>
       <TabItem variant="line">Tab text</TabItem>
       <TabItem variant="line">Tab text</TabItem>
+    </div>
+  ),
+};
+
+export const WithIcon: Story = {
+  name: 'With icon (opt-in)',
+  render: () => (
+    <div className="flex flex-col items-start gap-6">
+      <div className="inline-flex w-fit items-center gap-1 rounded-lg bg-secondary p-1">
+        <TabItem variant="pills" icon={<Compass />} active>
+          Explore
+        </TabItem>
+        <TabItem variant="pills" icon={<Compass />}>
+          Explore
+        </TabItem>
+      </div>
+      <div className="inline-flex items-center gap-6">
+        <TabItem variant="line" icon={<Compass />} active>
+          Explore
+        </TabItem>
+        <TabItem variant="line" icon={<Compass />}>
+          Explore
+        </TabItem>
+      </div>
     </div>
   ),
 };

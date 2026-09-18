@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { createContext, useContext, type ReactElement, type ReactNode } from 'react';
 import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import { TabItem } from './TabItem';
 
@@ -49,18 +49,20 @@ function List({ children, className }: { children: ReactNode; className?: string
 export interface TabProps {
   value: string;
   children: ReactNode;
+  /** Off by default - pass to opt this tab into a leading icon. */
+  icon?: ReactElement<{ weight?: string }>;
   disabled?: boolean;
   className?: string;
 }
 
-function Tab({ value, children, disabled, className }: TabProps) {
+function Tab({ value, children, icon, disabled, className }: TabProps) {
   const variant = useContext(TabsVariantContext);
   return (
     <BaseTabs.Tab
       value={value}
       disabled={disabled}
       render={
-        <TabItem variant={variant} className={className}>
+        <TabItem variant={variant} icon={icon} className={className}>
           {children}
         </TabItem>
       }
