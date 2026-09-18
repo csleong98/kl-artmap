@@ -14,3 +14,5 @@ export { TimelineItem, type TimelineItemProps } from './components/TimelineItem'
 export { CarouselDot, type CarouselDotProps } from './components/CarouselDot';
 export { CarouselIndicator, type CarouselIndicatorProps } from './components/CarouselIndicator';
 export { ImageCarousel, type ImageCarouselProps, type ImageCarouselImage } from './components/ImageCarousel';
+export { TabItem, type TabItemProps } from './components/TabItem';
+export { Tabs, type TabsProps, type TabProps } from './components/Tabs';
