@@ -16,3 +16,4 @@ export { CarouselIndicator, type CarouselIndicatorProps } from './components/Car
 export { ImageCarousel, type ImageCarouselProps, type ImageCarouselImage } from './components/ImageCarousel';
 export { TabItem, type TabItemProps } from './components/TabItem';
 export { Tabs, type TabsProps, type TabProps } from './components/Tabs';
+export { ListItem, type ListItemProps, type ListItemPhoto } from './components/ListItem';
