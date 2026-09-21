@@ -33,3 +33,11 @@ export const Empty: Story = {
     </div>
   ),
 };
+
+export const Rounded: Story = {
+  render: () => (
+    <div style={{ width: 384 }}>
+      <SearchInput radius="rounded" />
+    </div>
+  ),
+};
