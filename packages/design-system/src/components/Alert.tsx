@@ -26,7 +26,7 @@ const alertVariants = cva(
   }
 );
 
-export interface AlertProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
+export interface AlertProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>, VariantProps<typeof alertVariants> {
   /** Pass `false` to hide the icon entirely. Defaults to a generic Question icon. */
   icon?: ReactNode | false;
   title: ReactNode;

@@ -18,6 +18,11 @@ import { MapPin } from '@phosphor-icons/react';
 // frame rather than Figma's specific left-shifted placement (tuned pixel-for-pixel for one
 // demo layout) - easy to nudge once this is actually sitting on the map and the real
 // anchor/overlap behavior with other markers is visible.
+//
+// `labelVisible="always"` exists for the v2 map view (Figma node 367:23196, "Listing view +
+// cluster"), which shows every visible marker's name persistently rather than only on hover -
+// a real, deliberate difference from this atom's own standalone spec, not a bug - so the
+// default stays `'hover'` and compositions opt into the persistent look explicitly.
 export interface MapMarkerPhoto {
   src: string;
   alt?: string;
@@ -29,10 +34,13 @@ export interface MapMarkerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElem
   photo?: MapMarkerPhoto;
   /** Tooltip shown on hover, e.g. a place name or an action like "Add to library". */
   label?: ReactNode;
+  /** @default 'hover' */
+  labelVisible?: 'hover' | 'always';
 }
 
-export function MapMarker({ type = 'pin', photo, label, className, ...props }: MapMarkerProps) {
+export function MapMarker({ type = 'pin', photo, label, labelVisible = 'hover', className, ...props }: MapMarkerProps) {
   const isPhoto = type === 'photo' && !!photo;
+  const alwaysVisible = labelVisible === 'always';
 
   return (
     <button
@@ -51,7 +59,13 @@ export function MapMarker({ type = 'pin', photo, label, className, ...props }: M
         />
       )}
       {label && (
-        <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 scale-95 whitespace-nowrap rounded-md bg-popover px-3 py-1.5 text-sm text-popover-foreground opacity-0 shadow-[0px_2px_2px_rgba(30,41,59,0.25)] transition duration-150 ease-out group-hover:scale-100 group-hover:opacity-100 [font-family:var(--font-geist)]">
+        <span
+          className={`pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-popover px-2.5 py-2 text-body leading-6 text-popover-foreground shadow-[0px_2px_2px_rgba(30,41,59,0.25)] transition duration-150 ease-out [font-family:var(--font-geist)] ${
+            alwaysVisible
+              ? 'scale-100 opacity-100'
+              : 'scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100'
+          }`}
+        >
           {label}
         </span>
       )}
