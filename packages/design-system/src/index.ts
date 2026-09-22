@@ -27,3 +27,4 @@ export {
   type RouteMarkerProps,
   type RouteMarkerColor,
 } from './components/RouteMarker';
+export { RouteCard, type RouteCardProps, type RouteCardChip } from './components/RouteCard';

@@ -150,3 +150,15 @@ export interface StationWithMetadata {
 export type FilterType = 'all' | 'art_gallery' | 'art_museum' | 'monument';
 export type TabType = 'art_museums' | 'art_galleries' | 'art_spaces' | 'overview' | 'station_guide' | 'contact';
 export type PanelState = 'collapsed' | 'expanded';
+
+// v2 "Gallery Routes" mode (Figma node 373:23701 and onward). Mock content for now - expect
+// this shape to keep changing as the actual curated routes get written.
+export interface GalleryRoute {
+  id: string;
+  name: string;
+  description: string;
+  /** "About this area" tab content. */
+  story: string;
+  /** `Location.name` values, in the order the route visits them. */
+  stopNames: string[];
+}

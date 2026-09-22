@@ -204,13 +204,20 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
 
     return () => {
       cancelled = true;
-      markersRef.current.forEach(({ marker, root }) => {
-        root.unmount();
-        marker.remove();
-      });
-      markersRef.current.clear();
+      const staleMarkers = markersRef.current;
+      markersRef.current = new Map();
+      // Unmounting is deferred for the same reason `doRender` defers its own renders: this
+      // cleanup can run inside React's commit phase (e.g. the whole map unmounting because a
+      // parent switched away from it), and calling `root.unmount()` synchronously there hits
+      // "Attempted to synchronously unmount a root while React was already rendering." The
+      // Mapbox-side teardown (`marker.remove()`, `map.remove()`) isn't a React operation, so
+      // it stays synchronous - removing a marker's DOM node before its root unmounts is fine.
+      staleMarkers.forEach(({ marker }) => marker.remove());
       mapRef.current?.remove();
       mapRef.current = null;
+      queueMicrotask(() => {
+        staleMarkers.forEach(({ root }) => root.unmount());
+      });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
