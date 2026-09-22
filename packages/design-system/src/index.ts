@@ -19,3 +19,11 @@ export { Tabs, type TabsProps, type TabProps } from './components/Tabs';
 export { ListItem, type ListItemProps, type ListItemPhoto } from './components/ListItem';
 export { MapMarker, type MapMarkerProps, type MapMarkerPhoto } from './components/MapMarker';
 export { Cluster, type ClusterProps } from './components/Cluster';
+export {
+  RouteMarker,
+  RouteMarkerStartIcon,
+  RouteMarkerEndIcon,
+  RouteMarkerTrainIcon,
+  type RouteMarkerProps,
+  type RouteMarkerColor,
+} from './components/RouteMarker';
