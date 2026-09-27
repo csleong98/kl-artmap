@@ -94,7 +94,7 @@ function RouteMapComponent({ className, stops }: RouteMapProps) {
           const marker = new mapboxglModule.Marker({ element: el, anchor: 'center' })
             .setLngLat(stop.coordinates)
             .addTo(map);
-          root.render(<MapMarker type={stopPhoto(stop) ? 'photo' : 'pin'} photo={stopPhoto(stop)} label={stop.name} labelVisible="always" />);
+          root.render(<MapMarker type={stopPhoto(stop) ? 'photo' : 'pin'} photo={stopPhoto(stop)} label={stop.name} />);
           markersRef.current.push({ marker, root });
         });
       });
@@ -136,18 +136,20 @@ function RouteMapComponent({ className, stops }: RouteMapProps) {
           icon={<Gps />}
           aria-label="Find my location"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
         />
         <IconButton
           icon={<CornersOut />}
           aria-label="Toggle fullscreen"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
         />
       </div>
 
       <div className="absolute right-4 top-4 flex flex-col gap-2">
-        <ButtonGroup orientation="vertical" className="shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]">
+        <ButtonGroup orientation="vertical" radius="rounded" className="shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]">
           <IconButton icon={<Plus />} aria-label="Zoom in" size="sm" onClick={() => mapRef.current?.zoomIn()} />
           <IconButton icon={<Minus />} aria-label="Zoom out" size="sm" onClick={() => mapRef.current?.zoomOut()} />
         </ButtonGroup>
@@ -155,6 +157,7 @@ function RouteMapComponent({ className, stops }: RouteMapProps) {
           icon={<Compass />}
           aria-label="Reset bearing"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
           onClick={() => mapRef.current?.resetNorthPitch()}
         />

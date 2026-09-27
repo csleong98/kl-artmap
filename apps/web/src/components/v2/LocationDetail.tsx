@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type UIEvent } from 'react';
 import { ImageCarousel, Tabs, type ImageCarouselImage } from 'design-system';
 import type { Location } from '@/types';
 import { LocationHeader } from './LocationHeader';
@@ -22,6 +22,7 @@ export interface LocationDetailProps {
 
 export function LocationDetail({ location, allLocations, onBack, onSelectLocation }: LocationDetailProps) {
   const [tab, setTab] = useState<DetailTab>('history');
+  const [scrolled, setScrolled] = useState(false);
 
   const images: ImageCarouselImage[] = location.images?.length
     ? location.images.map((src) => ({ src, alt: location.name }))
@@ -29,9 +30,16 @@ export function LocationDetail({ location, allLocations, onBack, onSelectLocatio
       ? [{ src: location.imageUrl, alt: location.name }]
       : [];
 
+  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
+    setScrolled(event.currentTarget.scrollTop > 4);
+  };
+
   return (
-    <div className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <LocationHeader location={location} onBack={onBack} />
+    <div
+      className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      onScroll={handleScroll}
+    >
+      <LocationHeader location={location} onBack={onBack} scrolled={scrolled} />
 
       {images.length > 0 && (
         <div className="flex justify-center px-6 pt-6">

@@ -34,6 +34,7 @@ function ContactRow({ label, value, href }: { label: string; value: string; href
           icon={<Copy />}
           aria-label={`Copy ${label.toLowerCase()}`}
           size="sm"
+          radius="rounded"
           onClick={() => navigator.clipboard.writeText(value)}
         />
       </div>

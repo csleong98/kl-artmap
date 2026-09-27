@@ -25,9 +25,16 @@ import type { AccordionCardChip } from './AccordionCard';
 // splits its own two-state one: hover is a real `:hover` pseudo-class, not a prop, while
 // `active` (a row the parent has selected, e.g. the place currently focused on the map) is
 // an explicit boolean since only the parent knows that. The border also stays a constant
-// 2px across all states rather than Figma's 1px default/2px active, for the same reason
+// width across all states rather than Figma's 1px default/2px active, for the same reason
 // `AccordionCard` fixed its own border width: a width change shifts the whole row by a
-// pixel on each edge, which reads as a jump rather than a clean color change.
+// pixel on each edge, which reads as a jump rather than a clean color change. That constant
+// is 1px (matching every other bordered surface in this design system - `SearchInput`,
+// `Button`'s outline variant, and so on), not 2px - `active` is communicated by swapping to
+// `border-ring`, which doesn't need extra thickness to still read as selected.
+//
+// `title` clamps to 2 lines rather than truncating to 1 - a name like "Istana Budaya
+// (National Theater)" was getting cut mid-word on a single line, and this row has no fixed
+// height forcing it to stay that short.
 export interface ListItemPhoto {
   src: string;
   alt?: string;
@@ -73,7 +80,7 @@ export function ListItem({ title, photos, chips = [], active, onClick, className
     <Container
       type={onClick ? 'button' : undefined}
       onClick={onClick}
-      className={`group flex w-full items-start gap-3 rounded-[20px] border-2 bg-background p-4 text-left transition-colors ${
+      className={`group flex w-full items-start gap-3 rounded-[20px] border bg-background p-4 text-left transition-colors ${
         active ? 'border-ring' : 'border-border hover:bg-brand-50'
       } ${className ?? ''}`}
     >
@@ -100,7 +107,7 @@ export function ListItem({ title, photos, chips = [], active, onClick, className
         </div>
       )}
       <div className="flex min-w-0 flex-1 flex-col gap-2 self-stretch">
-        <p className="w-full truncate text-h4 leading-7 text-card-foreground">{title}</p>
+        <p className="line-clamp-2 w-full text-h4 leading-7 text-card-foreground">{title}</p>
         {chips.length > 0 && (
           <div className="flex flex-col items-start justify-center gap-0.5">
             {chips.map((chip, index) => (

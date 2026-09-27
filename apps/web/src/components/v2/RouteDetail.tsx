@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type UIEvent } from 'react';
 import { Tabs } from 'design-system';
 import { getRouteStops } from '@/lib/routeStats';
 import type { GalleryRoute, Location } from '@/types';
@@ -20,11 +20,19 @@ export interface RouteDetailProps {
 
 export function RouteDetail({ route, locations, onBack, onSelectLocation }: RouteDetailProps) {
   const [tab, setTab] = useState<RouteDetailTab>('route-details');
+  const [scrolled, setScrolled] = useState(false);
   const stops = getRouteStops(route, locations);
 
+  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
+    setScrolled(event.currentTarget.scrollTop > 4);
+  };
+
   return (
-    <div className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <RouteHeader title={route.name} onBack={onBack} />
+    <div
+      className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      onScroll={handleScroll}
+    >
+      <RouteHeader title={route.name} onBack={onBack} scrolled={scrolled} />
 
       <div className="flex flex-col gap-6 p-6">
         <Tabs variant="rounded" value={tab} onValueChange={(value) => setTab(value as RouteDetailTab)}>

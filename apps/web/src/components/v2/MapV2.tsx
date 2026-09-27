@@ -111,7 +111,6 @@ function renderMapMarkers(
           type={photoSrc ? 'photo' : 'pin'}
           photo={photoSrc ? { src: photoSrc, alt: location.name } : undefined}
           label={location.name}
-          labelVisible="always"
           onClick={() => onMarkerClick?.(location)}
           className={selectedName === location.name ? 'z-10 ring-4 ring-ring/40' : undefined}
         />
@@ -229,25 +228,27 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Rebuild the cluster index if `locations` changes after mount.
-  useEffect(() => {
-    indexRef.current = buildIndex(locations);
-    if (mapLoaded) renderMarkersRef.current();
-  }, [locations, mapLoaded]);
-
-  // Fly to the selected location and refresh marker styling.
+  // Rebuild the cluster index whenever `locations` or `selectedName` changes, and fly to the
+  // selected location. A selection means the sidebar is showing that one place's detail view,
+  // so the index is narrowed to just that location - every other marker/cluster should
+  // disappear rather than keep sharing the map with a place the user has drilled into,
+  // exactly as Discover Places' own list-vs-detail sidebar hides the other rows.
   useEffect(() => {
     const map = mapRef.current;
-    if (!map || !mapLoaded) return;
-    if (selectedName) {
+    const effectiveLocations = selectedName
+      ? locations.filter((location) => location.name === selectedName)
+      : locations;
+    indexRef.current = buildIndex(effectiveLocations);
+
+    if (map && mapLoaded && selectedName) {
       const location = byNameRef.current.get(selectedName);
       if (location) {
         map.flyTo({ center: location.coordinates, zoom: 16, duration: 800 });
       }
     }
-    renderMarkersRef.current();
+    if (mapLoaded) renderMarkersRef.current();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedName, mapLoaded]);
+  }, [locations, selectedName, mapLoaded]);
 
   if (error) {
     return (
@@ -266,18 +267,20 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
           icon={<Gps />}
           aria-label="Find my location"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
         />
         <IconButton
           icon={<CornersOut />}
           aria-label="Toggle fullscreen"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
         />
       </div>
 
       <div className="absolute right-4 top-4 flex flex-col gap-2">
-        <ButtonGroup orientation="vertical" className="shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]">
+        <ButtonGroup orientation="vertical" radius="rounded" className="shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]">
           <IconButton
             icon={<Plus />}
             aria-label="Zoom in"
@@ -295,6 +298,7 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
           icon={<Compass />}
           aria-label="Reset bearing"
           size="sm"
+          radius="rounded"
           className="bg-background shadow-[0px_2px_1.5px_rgba(0,0,0,0.1)]"
           onClick={() => mapRef.current?.resetNorthPitch()}
         />
