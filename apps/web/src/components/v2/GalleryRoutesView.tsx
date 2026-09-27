@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Faders } from '@phosphor-icons/react';
-import { IconButton, RouteCard, SearchInput } from 'design-system';
+import { IconButton, RouteCard, SearchInput, type RouteCardProps } from 'design-system';
 import { MuralArtwork } from '@/components/MuralArtwork';
 import { getRouteDistanceKm, getRouteEstMinutes, getRouteStops } from '@/lib/routeStats';
 import type { GalleryRoute, Location } from '@/types';
@@ -19,16 +19,37 @@ function locationPhoto(location: Location): { src: string; alt?: string } | unde
   return src ? { src, alt: location.name } : undefined;
 }
 
-export function GalleryRoutesView({ routes, locations, onSelectRoute }: GalleryRoutesViewProps) {
-  const [query, setQuery] = useState('');
+export function routeCardProps(route: GalleryRoute, locations: Location[]): RouteCardProps {
+  const stops = getRouteStops(route, locations);
+  return {
+    title: route.name,
+    description: route.description,
+    previewImage: locationPhoto(stops[0]),
+    chips: [
+      { label: 'Places', value: stops.length },
+      { label: 'Distance', value: `${getRouteDistanceKm(stops).toFixed(1)} km` },
+      {
+        label: 'Est. travel time',
+        value: `${getRouteEstMinutes(stops)} mins`,
+        tooltip: 'Estimated from walking pace between stops plus time to look around each one.',
+      },
+    ],
+  };
+}
 
-  const filtered = useMemo(() => {
+export function useFilteredRoutes(routes: GalleryRoute[], query: string) {
+  return useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return routes;
     return routes.filter(
       (route) => route.name.toLowerCase().includes(q) || route.description.toLowerCase().includes(q)
     );
   }, [routes, query]);
+}
+
+export function GalleryRoutesView({ routes, locations, onSelectRoute }: GalleryRoutesViewProps) {
+  const [query, setQuery] = useState('');
+  const filtered = useFilteredRoutes(routes, query);
 
   return (
     <div className="relative flex-1 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -65,28 +86,13 @@ export function GalleryRoutesView({ routes, locations, onSelectRoute }: GalleryR
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            {filtered.map((route) => {
-              const stops = getRouteStops(route, locations);
-              const previewImage = locationPhoto(stops[0]);
-              return (
-                <RouteCard
-                  key={route.id}
-                  title={route.name}
-                  description={route.description}
-                  previewImage={previewImage}
-                  onClick={onSelectRoute ? () => onSelectRoute(route) : undefined}
-                  chips={[
-                    { label: 'Places', value: stops.length },
-                    { label: 'Distance', value: `${getRouteDistanceKm(stops).toFixed(1)} km` },
-                    {
-                      label: 'Est. travel time',
-                      value: `${getRouteEstMinutes(stops)} mins`,
-                      tooltip: 'Estimated from walking pace between stops plus time to look around each one.',
-                    },
-                  ]}
-                />
-              );
-            })}
+            {filtered.map((route) => (
+              <RouteCard
+                key={route.id}
+                {...routeCardProps(route, locations)}
+                onClick={onSelectRoute ? () => onSelectRoute(route) : undefined}
+              />
+            ))}
           </div>
         </div>
       </div>

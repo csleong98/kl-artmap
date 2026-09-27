@@ -4,7 +4,7 @@ import { LOCATION_HISTORY } from '@/data/locationHistory';
 import type { Location } from '@/types';
 import { Section } from './Section';
 
-export function HistoryTab({ location }: { location: Location }) {
+export function HistoryTab({ location, mobile = false }: { location: Location; /** 16px section spacing (Figma mobile) instead of 32px. */ mobile?: boolean }) {
   const description = location.details?.overview.description;
   const milestones = LOCATION_HISTORY[location.name];
 
@@ -20,7 +20,7 @@ export function HistoryTab({ location }: { location: Location }) {
   const displayMilestones = milestones ? [...milestones].reverse() : undefined;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className={`flex flex-col ${mobile ? 'gap-4' : 'gap-8'}`}>
       {description && (
         <Section title="Overview">
           <p className="text-p-ui text-foreground">{description}</p>

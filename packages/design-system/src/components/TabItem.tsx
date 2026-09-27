@@ -35,16 +35,22 @@ export interface TabItemProps extends Omit<ButtonHTMLAttributes<HTMLButtonElemen
 // visibility trick `AccordionCard` uses for its caret icons, keeping the active/inactive
 // look fully attribute-driven like the rest of this component instead of needing to know
 // `active` at render time.
+//
+// The whole thing is wrapped in a `hidden md:inline-flex` span: `TopNav`'s mobile Figma frame
+// (node 431:9983) drops these icons entirely to fit its tab pill into a much narrower bar,
+// while the desktop frame (367:23656) keeps them - `hidden` (not just visually hiding the
+// icon) is what actually reclaims the `gap-1.5` space next to it below `md`, since a
+// display:none child doesn't contribute to a flex gap.
 function TabIcon({ icon }: { icon: ReactElement<{ weight?: string }> }) {
   return (
-    <>
+    <span className="hidden md:inline-flex md:items-center">
       <span className="hidden size-4 shrink-0 text-primary [&_svg]:size-4 group-data-[active]:inline-flex">
         {isValidElement(icon) ? cloneElement(icon, { weight: 'duotone' }) : icon}
       </span>
       <span className="inline-flex size-4 shrink-0 text-muted-foreground [&_svg]:size-4 group-data-[active]:hidden">
         {isValidElement(icon) ? cloneElement(icon, { weight: 'regular' }) : icon}
       </span>
-    </>
+    </span>
   );
 }
 

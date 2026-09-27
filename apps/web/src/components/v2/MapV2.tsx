@@ -23,6 +23,15 @@ export interface MapV2Props {
   locations: Location[];
   selectedName?: string | null;
   onMarkerClick?: (location: Location) => void;
+  /**
+   * Requires two fingers (mobile) / ctrl+scroll (desktop) to pan/zoom, so a single-finger
+   * scroll gesture over the map passes through to an ancestor's own scrolling instead of
+   * being captured as a map interaction. Needed wherever the map sits inside a page that
+   * scrolls past it (e.g. `DiscoverPlacesMobile`'s collapsing map card) - not needed, and not
+   * worth the ctrl+scroll friction, in a map that already owns its own fixed pane (desktop).
+   * @default false
+   */
+  cooperativeGestures?: boolean;
 }
 
 interface PointProps {
@@ -127,7 +136,7 @@ function renderMapMarkers(
   }
 }
 
-function MapV2Component({ className, locations, selectedName, onMarkerClick }: MapV2Props) {
+function MapV2Component({ className, locations, selectedName, onMarkerClick, cooperativeGestures }: MapV2Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef(new Map<string, MarkerEntry>());
@@ -169,6 +178,7 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
         center: [101.7, 3.15],
         zoom: 13,
         attributionControl: false,
+        cooperativeGestures,
       });
       mapRef.current = map;
 

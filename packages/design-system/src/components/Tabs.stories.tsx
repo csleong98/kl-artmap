@@ -140,3 +140,29 @@ export const WithDisabledTab: Story = {
     </Tabs>
   ),
 };
+
+// `width="fill"` - the row stretches to its container and every tab takes an equal share,
+// instead of each tab hugging its own label.
+export const FillWidth: Story = {
+  name: 'Fill width',
+  render: () => (
+    <div style={{ width: 480 }}>
+      <Tabs variant="rounded" width="fill" defaultValue="one">
+        <Tabs.List>
+          <Tabs.Tab value="one">Route details</Tabs.Tab>
+          <Tabs.Tab value="two">Getting ready</Tabs.Tab>
+          <Tabs.Tab value="three">About this area</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="one" className="pt-4 text-sm text-foreground">
+          Content for tab one.
+        </Tabs.Panel>
+        <Tabs.Panel value="two" className="pt-4 text-sm text-foreground">
+          Content for tab two.
+        </Tabs.Panel>
+        <Tabs.Panel value="three" className="pt-4 text-sm text-foreground">
+          Content for tab three.
+        </Tabs.Panel>
+      </Tabs>
+    </div>
+  ),
+};
