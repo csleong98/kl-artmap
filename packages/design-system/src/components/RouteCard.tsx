@@ -20,6 +20,9 @@ import { Tooltip } from './Tooltip';
 // disproportionately long) - so this uses an aspect ratio matching Figma's own width:height
 // instead, which holds the same proportions at any card width.
 //
+// Below `md` it follows Figma's mobile card instead (node 430:7704): 16px padding and a wider
+// 364:279 preview, since a single full-width column has room for a landscape image.
+//
 // Chips are a generic `{ label, value, tooltip? }` array rather than three fixed props
 // (places/distance/time) - Figma only ever shows those three, but nothing about the card
 // requires exactly that set, and `tooltip` covers the one chip ("Est. travel time") that
@@ -46,19 +49,19 @@ export function RouteCard({ title, description, previewImage, chips = [], onClic
     <Container
       type={onClick ? 'button' : undefined}
       onClick={onClick}
-      className={`flex w-full flex-col items-start gap-4 overflow-hidden rounded-3xl border border-border bg-background p-6 text-left transition-colors ${
+      className={`flex w-full flex-col items-start gap-4 overflow-hidden rounded-3xl border border-border bg-background p-4 text-left transition-colors md:p-6 ${
         onClick ? 'hover:bg-brand-50' : ''
       } ${className ?? ''}`}
     >
-      <div className="aspect-[41/38] w-full shrink-0 overflow-hidden rounded-xl border border-brand-300 bg-brand-50">
+      <div className="aspect-[364/279] w-full shrink-0 overflow-hidden rounded-xl border border-brand-300 bg-brand-50 md:aspect-[41/38]">
         {previewImage && (
           <img src={previewImage.src} alt={previewImage.alt ?? ''} className="size-full object-cover" />
         )}
       </div>
       <div className="flex w-full flex-col items-start gap-4">
         <div className="flex w-full flex-col items-start gap-0.5">
-          <p className="w-full truncate text-h4 text-card-foreground">{title}</p>
-          {description && <p className="w-full truncate text-p-ui text-foreground">{description}</p>}
+          <p className="w-full truncate text-h4 leading-7 text-card-foreground">{title}</p>
+          {description && <p className="w-full truncate text-p-ui leading-7 text-foreground">{description}</p>}
         </div>
         {chips.length > 0 && (
           <div className="flex w-full items-start gap-6">

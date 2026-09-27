@@ -1,10 +1,12 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Faders, Ticket, Train } from '@phosphor-icons/react';
 import { IconButton, ListItem, SearchInput, type ListItemPhoto } from 'design-system';
 import { MuralArtwork } from '@/components/MuralArtwork';
+import { DiscoverPlacesMobile } from '@/components/v2/DiscoverPlacesMobile';
+import { GalleryRoutesMobile } from '@/components/v2/GalleryRoutesMobile';
 import { GalleryRoutesView } from '@/components/v2/GalleryRoutesView';
 import { LocationDetail } from '@/components/v2/LocationDetail';
 import { RouteDetail } from '@/components/v2/RouteDetail';
@@ -39,6 +41,18 @@ export default function MapV2Page() {
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Location | null>(null);
   const [selectedRoute, setSelectedRoute] = useState<GalleryRoute | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Matches the `md` breakpoint already used elsewhere (e.g. v1's page.tsx) for switching
+  // between the desktop list+map split and mobile's single stacked scroll. Gated in JS
+  // rather than just CSS `hidden`/`md:hidden` so only one `MapV2` ever actually mounts at a
+  // time - two live Mapbox instances (one just visually hidden) would be wasteful.
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // A stop's "View details" button (inside the route timeline) reuses Discover Places'
   // own location detail rather than duplicating it - so it switches modes and selects that
@@ -75,9 +89,27 @@ export default function MapV2Page() {
               <RouteMap className="h-full w-full" stops={getRouteStops(selectedRoute, allLocations)} />
             </div>
           </div>
+        ) : isMobile ? (
+          <GalleryRoutesMobile routes={GALLERY_ROUTES} locations={allLocations} onSelectRoute={setSelectedRoute} />
         ) : (
           <GalleryRoutesView routes={GALLERY_ROUTES} locations={allLocations} onSelectRoute={setSelectedRoute} />
         )
+      ) : !selected && isMobile ? (
+        <DiscoverPlacesMobile
+          locations={filtered}
+          query={query}
+          onQueryChange={setQuery}
+          onSelectLocation={setSelected}
+          mapSlot={
+            <MapV2
+              className="h-full w-full"
+              locations={allLocations}
+              selectedName={null}
+              onMarkerClick={setSelected}
+              cooperativeGestures
+            />
+          }
+        />
       ) : (
         <div className="flex flex-1 gap-4 overflow-hidden p-4">
           <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">
