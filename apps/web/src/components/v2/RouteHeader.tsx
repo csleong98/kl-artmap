@@ -51,7 +51,7 @@ export function RouteHeader({ title, onBack, scrolled = false }: RouteHeaderProp
         onClick={onBack}
       />
       <p
-        className={`relative z-10 min-w-0 flex-1 truncate text-center text-foreground transition-[font-size,line-height] duration-200 ${
+        className={`line-clamp-2 relative z-10 min-w-0 flex-1 text-center text-foreground transition-[font-size,line-height] duration-200 ${
           scrolled ? 'text-h3' : 'text-h2'
         }`}
       >
