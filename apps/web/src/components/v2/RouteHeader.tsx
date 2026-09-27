@@ -19,18 +19,30 @@ import { MuralArtwork } from '@/components/MuralArtwork';
 // it isn't needed (a background-image is already confined to its own box) and it broke this
 // header's flex auto-height for some content combinations - see that component's comment for
 // the full story.
+//
+// `mobile` mirrors `LocationHeader`'s mobile variant (Figma node 430:8512): 16px padding and a
+// 24px title that compacts to 20px on scroll.
 export interface RouteHeaderProps {
   title: string;
   onBack: () => void;
   scrolled?: boolean;
+  mobile?: boolean;
 }
 
-export function RouteHeader({ title, onBack, scrolled = false }: RouteHeaderProps) {
+export function RouteHeader({ title, onBack, scrolled = false, mobile = false }: RouteHeaderProps) {
+  const titleSize = mobile
+    ? scrolled
+      ? 'text-h4 leading-7'
+      : 'text-h3 leading-8'
+    : scrolled
+      ? 'text-h3'
+      : 'text-h2';
+
   return (
     <div
-      className={`sticky top-0 z-20 flex items-center gap-3 p-6 transition-[padding,border-color] duration-200 ${
-        scrolled ? 'border-b border-border py-4' : 'border-b border-transparent pb-0'
-      }`}
+      className={`sticky top-0 z-20 flex items-center gap-3 transition-[padding,border-color] duration-200 ${
+        mobile ? 'p-4' : 'p-6'
+      } ${scrolled ? 'border-b border-border py-4' : `border-b border-transparent ${mobile ? '' : 'pb-0'}`}`}
     >
       <MuralArtwork
         className="absolute inset-0"
@@ -51,9 +63,7 @@ export function RouteHeader({ title, onBack, scrolled = false }: RouteHeaderProp
         onClick={onBack}
       />
       <p
-        className={`line-clamp-2 relative z-10 min-w-0 flex-1 text-center text-foreground transition-[font-size,line-height] duration-200 ${
-          scrolled ? 'text-h3' : 'text-h2'
-        }`}
+        className={`line-clamp-2 relative z-10 min-w-0 flex-1 text-center text-foreground transition-[font-size,line-height] duration-200 ${titleSize}`}
       >
         {title}
       </p>

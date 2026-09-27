@@ -1,5 +1,6 @@
 import { Copy, Footprints, Path } from '@phosphor-icons/react';
 import { AccordionCard, Badge, Button, IconButton } from 'design-system';
+import type { ReactNode } from 'react';
 import type { Location } from '@/types';
 import { Section } from './Section';
 
@@ -42,14 +43,23 @@ function ContactRow({ label, value, href }: { label: string; value: string; href
   );
 }
 
-export function GettingThereTab({ location }: { location: Location }) {
+export interface GettingThereTabProps {
+  location: Location;
+  /** Rendered first (mobile's embedded map). */
+  map?: ReactNode;
+  /** Figma's mobile frame spaces sections 16px apart instead of desktop's 32px. */
+  mobile?: boolean;
+}
+
+export function GettingThereTab({ location, map, mobile = false }: GettingThereTabProps) {
   const details = location.details;
   const overview = details?.overview;
   const stations = details?.stationGuide.stations ?? [];
   const contact = details?.contact;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className={`flex flex-col ${mobile ? 'gap-4' : 'gap-8'}`}>
+      {map}
       {overview?.admission && (
         <Section title="Admission">
           <p className="text-p-ui text-foreground">{overview.admission}</p>

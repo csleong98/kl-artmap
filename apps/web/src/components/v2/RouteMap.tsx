@@ -19,6 +19,13 @@ import type { Location } from '@/types';
 export interface RouteMapProps {
   className?: string;
   stops: Location[];
+  /** See `MapV2`'s prop of the same name - needed when the map sits inside a scrolling page. */
+  cooperativeGestures?: boolean;
+  /**
+   * Smaller stop pins for a small embedded map (mobile's route details tab) - at full 114px,
+   * a route's stops pile on top of each other and hide the route line in a ~360px frame.
+   */
+  compactPins?: boolean;
 }
 
 function stopPhoto(location: Location) {
@@ -26,7 +33,7 @@ function stopPhoto(location: Location) {
   return src ? { src, alt: location.name } : undefined;
 }
 
-function RouteMapComponent({ className, stops }: RouteMapProps) {
+function RouteMapComponent({ className, stops, cooperativeGestures, compactPins }: RouteMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<{ marker: mapboxgl.Marker; root: Root }[]>([]);
@@ -63,6 +70,7 @@ function RouteMapComponent({ className, stops }: RouteMapProps) {
         center: coordinates[0],
         zoom: 14,
         attributionControl: false,
+        cooperativeGestures,
       });
       mapRef.current = map;
 
@@ -94,7 +102,14 @@ function RouteMapComponent({ className, stops }: RouteMapProps) {
           const marker = new mapboxglModule.Marker({ element: el, anchor: 'center' })
             .setLngLat(stop.coordinates)
             .addTo(map);
-          root.render(<MapMarker type={stopPhoto(stop) ? 'photo' : 'pin'} photo={stopPhoto(stop)} label={stop.name} />);
+          root.render(
+            <MapMarker
+              type={stopPhoto(stop) ? 'photo' : 'pin'}
+              photo={stopPhoto(stop)}
+              label={stop.name}
+              className={compactPins && stopPhoto(stop) ? 'scale-[0.55]' : undefined}
+            />
+          );
           markersRef.current.push({ marker, root });
         });
       });

@@ -39,20 +39,31 @@ import type { Location } from '@/types';
 // worth chasing further). It isn't needed anyway: `MuralArtwork` is a background-image, which
 // is already confined to its own element's box regardless of any ancestor's overflow, and
 // `inset-0` already ties it exactly to the header's own (now correctly computed) height.
+//
+// `mobile` follows Figma's mobile header (node 430:8512) instead: a 24px title (20px once
+// scrolled) and just the Open/Free chips - no walking-distance chip.
 export interface LocationHeaderProps {
   location: Location;
   onBack: () => void;
   scrolled?: boolean;
+  mobile?: boolean;
 }
 
-export function LocationHeader({ location, onBack, scrolled = false }: LocationHeaderProps) {
-  const nearestStation = location.details?.stationGuide.stations[0];
+export function LocationHeader({ location, onBack, scrolled = false, mobile = false }: LocationHeaderProps) {
+  const nearestStation = mobile ? undefined : location.details?.stationGuide.stations[0];
+  const titleSize = mobile
+    ? scrolled
+      ? 'text-h4 leading-7'
+      : 'text-h3 leading-8'
+    : scrolled
+      ? 'text-h3'
+      : 'text-h2';
 
   return (
     <div
-      className={`sticky top-0 z-20 flex items-center gap-3 p-6 transition-[padding,border-color] duration-200 ${
-        scrolled ? 'border-b border-border py-4' : 'border-b border-transparent pb-0'
-      }`}
+      className={`sticky top-0 z-20 flex items-center gap-3 transition-[padding,border-color] duration-200 ${
+        mobile ? 'p-4' : 'p-6'
+      } ${scrolled ? 'border-b border-border py-4' : `border-b border-transparent ${mobile ? '' : 'pb-0'}`}`}
     >
       <MuralArtwork
         className="absolute inset-0"
@@ -74,9 +85,7 @@ export function LocationHeader({ location, onBack, scrolled = false }: LocationH
       />
       <div className="relative z-10 flex min-w-0 flex-1 flex-col items-center">
         <p
-          className={`line-clamp-2 w-full text-center text-foreground transition-[font-size,line-height] duration-200 ${
-            scrolled ? 'text-h3' : 'text-h2'
-          }`}
+          className={`line-clamp-2 w-full text-center text-foreground transition-[font-size,line-height] duration-200 ${titleSize}`}
         >
           {location.name}
         </p>

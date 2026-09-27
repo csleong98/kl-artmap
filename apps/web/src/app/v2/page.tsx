@@ -75,7 +75,18 @@ export default function MapV2Page() {
       <TopNav mode={mode} onModeChange={setMode} />
 
       {mode === 'routes' ? (
-        selectedRoute ? (
+        selectedRoute && isMobile ? (
+          <div className="min-h-0 flex-1">
+            <RouteDetail
+              key={selectedRoute.id}
+              route={selectedRoute}
+              locations={allLocations}
+              onBack={() => setSelectedRoute(null)}
+              onSelectLocation={handleSelectLocationFromRoute}
+              mobile
+            />
+          </div>
+        ) : selectedRoute ? (
           <div className="flex flex-1 gap-4 overflow-hidden p-4">
             <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">
               <RouteDetail
@@ -94,6 +105,17 @@ export default function MapV2Page() {
         ) : (
           <GalleryRoutesView routes={GALLERY_ROUTES} locations={allLocations} onSelectRoute={setSelectedRoute} />
         )
+      ) : selected && isMobile ? (
+        <div className="min-h-0 flex-1">
+          <LocationDetail
+            key={selected.name}
+            location={selected}
+            allLocations={allLocations}
+            onBack={() => setSelected(null)}
+            onSelectLocation={setSelected}
+            mobile
+          />
+        </div>
       ) : !selected && isMobile ? (
         <DiscoverPlacesMobile
           locations={filtered}

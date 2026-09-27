@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Button, RouteMarkerEndIcon, RouteMarkerStartIcon, Timeline } from 'design-system';
 import { Section } from '@/components/v2/details/Section';
 import { getRouteDistanceKm, getRouteEstMinutes } from '@/lib/routeStats';
@@ -16,6 +17,10 @@ export interface RouteDetailsTabProps {
   route: GalleryRoute;
   stops: Location[];
   onSelectLocation: (location: Location) => void;
+  /** Rendered first (mobile's embedded route map). */
+  map?: ReactNode;
+  /** Figma's mobile spacing: 16px between blocks instead of 32px. */
+  mobile?: boolean;
 }
 
 function stopPhoto(location: Location): { src: string; alt: string } | undefined {
@@ -23,9 +28,10 @@ function stopPhoto(location: Location): { src: string; alt: string } | undefined
   return src ? { src, alt: location.name } : undefined;
 }
 
-export function RouteDetailsTab({ route, stops, onSelectLocation }: RouteDetailsTabProps) {
+export function RouteDetailsTab({ route, stops, onSelectLocation, map, mobile = false }: RouteDetailsTabProps) {
   return (
-    <div className="flex flex-col gap-8">
+    <div className={`flex flex-col ${mobile ? 'gap-4' : 'gap-8'}`}>
+      {map}
       <div className="flex w-full items-start gap-3">
         <div className="flex flex-1 flex-col items-start justify-center gap-0.5 overflow-hidden rounded-xl bg-accent p-3">
           <span className="text-subtle text-muted-foreground">Places</span>

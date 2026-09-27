@@ -9,12 +9,24 @@ import { TabItem } from './TabItem';
 // `Tabs` and threaded to every `Tabs.Tab` via context, so callers don't repeat it per tab -
 // matching how Figma's composed "tabs" example (node 349:7447) is one consistent style per
 // row, not a per-tab choice.
+//
+// `width` is threaded the same way: `hug` (the default, and Figma's component) sizes each
+// tab to its own label; `fill` stretches the row to its container and splits it evenly
+// between tabs - what the detail pages' tab rows use, where a hugging row would leave a
+// ragged empty end. Both stay available since a short row of tabs in a toolbar still wants
+// to hug its content.
 type TabsVariant = 'pills' | 'rounded' | 'line';
+type TabsWidth = 'hug' | 'fill';
 
-const TabsVariantContext = createContext<TabsVariant>('pills');
+const TabsVariantContext = createContext<{ variant: TabsVariant; width: TabsWidth }>({
+  variant: 'pills',
+  width: 'hug',
+});
 
 export interface TabsProps {
   variant?: TabsVariant;
+  /** `hug` sizes tabs to their labels; `fill` spreads them evenly across the full width. @default 'hug' */
+  width?: TabsWidth;
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
@@ -22,23 +34,24 @@ export interface TabsProps {
   className?: string;
 }
 
-export function Tabs({ variant = 'pills', children, className, ...rootProps }: TabsProps) {
+export function Tabs({ variant = 'pills', width = 'hug', children, className, ...rootProps }: TabsProps) {
   return (
     <BaseTabs.Root className={className} {...rootProps}>
-      <TabsVariantContext.Provider value={variant}>{children}</TabsVariantContext.Provider>
+      <TabsVariantContext.Provider value={{ variant, width }}>{children}</TabsVariantContext.Provider>
     </BaseTabs.Root>
   );
 }
 
 function List({ children, className }: { children: ReactNode; className?: string }) {
-  const variant = useContext(TabsVariantContext);
+  const { variant, width } = useContext(TabsVariantContext);
   const containerRadius = variant === 'rounded' ? 'rounded-full' : 'rounded-lg';
+  const display = width === 'fill' ? 'flex w-full' : 'inline-flex';
   return (
     <BaseTabs.List
       className={
         variant === 'line'
-          ? `inline-flex items-center gap-6 ${className ?? ''}`
-          : `inline-flex w-fit items-center gap-1 ${containerRadius} bg-secondary p-1 ${className ?? ''}`
+          ? `${display} items-center gap-6 ${className ?? ''}`
+          : `${display} ${width === 'fill' ? '' : 'w-fit'} items-center gap-1 ${containerRadius} bg-secondary p-1 ${className ?? ''}`
       }
     >
       {children}
@@ -56,13 +69,13 @@ export interface TabProps {
 }
 
 function Tab({ value, children, icon, disabled, className }: TabProps) {
-  const variant = useContext(TabsVariantContext);
+  const { variant, width } = useContext(TabsVariantContext);
   return (
     <BaseTabs.Tab
       value={value}
       disabled={disabled}
       render={
-        <TabItem variant={variant} icon={icon} className={className}>
+        <TabItem variant={variant} icon={icon} className={`${width === 'fill' ? 'min-w-0 flex-1' : ''} ${className ?? ''}`}>
           {children}
         </TabItem>
       }
