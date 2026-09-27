@@ -140,6 +140,41 @@ export function ImageCarousel({ images, current, defaultCurrent = 0, onCurrentCh
     onCurrentChange?.(next);
   };
 
+  // A single photo has no "fan" to speak of - the peek slots and nav controls exist to
+  // hint at more photos either side, which don't exist here. Rendering it through the same
+  // fixed 212x241 polaroid slot just leaves most of the 352x380 card empty, so a lone photo
+  // instead fills the card directly (minus a flat inset) rather than sitting in that slot.
+  //
+  // The inset wrapper is a plain `div`, not the `img` itself: an absolutely positioned
+  // *replaced* element (img/video) with only `inset` set and no explicit width/height can
+  // size itself from its own intrinsic dimensions instead of stretching to fill, so a
+  // portrait or landscape source could overflow past the card depending on its own aspect
+  // ratio. A non-replaced div reliably stretches to fill its inset; the img then just takes
+  // `h-full w-full` of that already-correctly-sized box, so `object-cover` crops it the same
+  // way regardless of the source's own orientation.
+  //
+  // Keeps the same white-border-and-drop-shadow "photo" treatment as the fanned polaroids,
+  // just a little thinner (8px vs. their 10px) since it'd otherwise look heavier at this
+  // much larger size. `box-border` makes the border count *inside* the `h-full`/`w-full` box
+  // rather than adding to it, so the bordered photo still exactly fills the inset wrapper -
+  // no overflow risk regardless of source aspect ratio, and no need to clip it.
+  if (count === 1) {
+    return (
+      <div
+        className={`relative overflow-hidden rounded-lg border border-accent bg-brand-50 ${className ?? ''}`}
+        style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}
+      >
+        <div className="absolute inset-5">
+          <img
+            src={images[0].src}
+            alt={images[0].alt ?? ''}
+            className="box-border h-full w-full rounded-sm border-[8px] border-white object-cover shadow-[0px_10px_10px_2px_rgba(0,0,0,0.08)]"
+          />
+        </div>
+      </div>
+    );
+  }
+
   const visible = images
     .map((image, index) => ({ image, index, distance: slotDistance(activeIndex, index, count) }))
     .filter(({ distance }) => Math.abs(distance) <= 1);

@@ -26,6 +26,13 @@ export const Playground: Story = {
 // Mixed portrait/landscape sources, to confirm the peek amount stays the same on both
 // sides regardless of each photo's own dimensions (every photo is cropped into the same
 // fixed box via `object-cover`, so source size was never actually the variable at play).
+export const SingleImage: Story = {
+  name: 'Single image',
+  args: {
+    images: [images[0]],
+  },
+};
+
 export const MixedAspectRatios: Story = {
   name: 'Mixed portrait/landscape sources',
   args: {
