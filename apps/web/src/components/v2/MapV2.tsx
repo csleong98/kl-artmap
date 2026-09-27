@@ -178,8 +178,15 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
       // and the `setMapLoaded`/`selectedName` state updates that trigger a re-render can
       // otherwise overlap with this function mounting/unmounting its own independent React
       // roots, which React flags as "unmount a root while already rendering".
+      //
+      // The `cancelled` check guards a second race: a 'move' event can fire and queue this
+      // microtask right before the component unmounts (e.g. switching away from Discover
+      // Places mode) - by the time the microtask actually runs, this effect's cleanup has
+      // already called `map.remove()`, and calling `marker.addTo()` against a torn-down map
+      // throws ("Cannot read properties of undefined (reading 'appendChild')").
       const doRender = () => {
-        queueMicrotask(() =>
+        queueMicrotask(() => {
+          if (cancelled) return;
           renderMapMarkers(
             map,
             indexRef.current,
@@ -188,8 +195,8 @@ function MapV2Component({ className, locations, selectedName, onMarkerClick }: M
             byNameRef.current,
             onMarkerClickRef.current,
             selectedNameRef.current
-          )
-        );
+          );
+        });
       };
       renderMarkersRef.current = doRender;
 

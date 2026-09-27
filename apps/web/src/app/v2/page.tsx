@@ -7,10 +7,12 @@ import { IconButton, ListItem, SearchInput, type ListItemPhoto } from 'design-sy
 import { MuralArtwork } from '@/components/MuralArtwork';
 import { GalleryRoutesView } from '@/components/v2/GalleryRoutesView';
 import { LocationDetail } from '@/components/v2/LocationDetail';
+import { RouteDetail } from '@/components/v2/RouteDetail';
 import { TopNav, type MapV2Mode } from '@/components/v2/TopNav';
 import { getAllLocations } from '@/data/helpers';
 import { GALLERY_ROUTES } from '@/data/routes';
-import type { Location } from '@/types';
+import { getRouteStops } from '@/lib/routeStats';
+import type { GalleryRoute, Location } from '@/types';
 
 // Matches Figma's "Listing view + cluster" (node 367:23196): a top nav bar, then a row with
 // the place list and the map as two separate side-by-side cards - not v1's/the earlier
@@ -23,6 +25,7 @@ import type { Location } from '@/types';
 // full-width listing grid (Figma node 373:23701, "Listing view + cluster") - it has no map
 // alongside it, unlike Discover Places.
 const MapV2 = dynamic(() => import('@/components/v2/MapV2'), { ssr: false });
+const RouteMap = dynamic(() => import('@/components/v2/RouteMap'), { ssr: false });
 
 const allLocations = getAllLocations();
 
@@ -35,6 +38,15 @@ export default function MapV2Page() {
   const [mode, setMode] = useState<MapV2Mode>('discover');
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Location | null>(null);
+  const [selectedRoute, setSelectedRoute] = useState<GalleryRoute | null>(null);
+
+  // A stop's "View details" button (inside the route timeline) reuses Discover Places'
+  // own location detail rather than duplicating it - so it switches modes and selects that
+  // location there instead of trying to render `LocationDetail` a second way in routes mode.
+  const handleSelectLocationFromRoute = (location: Location) => {
+    setSelected(location);
+    setMode('discover');
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -49,7 +61,23 @@ export default function MapV2Page() {
       <TopNav mode={mode} onModeChange={setMode} />
 
       {mode === 'routes' ? (
-        <GalleryRoutesView routes={GALLERY_ROUTES} locations={allLocations} />
+        selectedRoute ? (
+          <div className="flex flex-1 gap-4 overflow-hidden p-4">
+            <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">
+              <RouteDetail
+                route={selectedRoute}
+                locations={allLocations}
+                onBack={() => setSelectedRoute(null)}
+                onSelectLocation={handleSelectLocationFromRoute}
+              />
+            </aside>
+            <div className="flex-1 overflow-hidden">
+              <RouteMap className="h-full w-full" stops={getRouteStops(selectedRoute, allLocations)} />
+            </div>
+          </div>
+        ) : (
+          <GalleryRoutesView routes={GALLERY_ROUTES} locations={allLocations} onSelectRoute={setSelectedRoute} />
+        )
       ) : (
         <div className="flex flex-1 gap-4 overflow-hidden p-4">
           <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">

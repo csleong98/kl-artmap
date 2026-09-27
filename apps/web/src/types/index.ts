@@ -161,4 +161,6 @@ export interface GalleryRoute {
   story: string;
   /** `Location.name` values, in the order the route visits them. */
   stopNames: string[];
+  /** Freeform display date, e.g. "13 Sep 2026" - matches Figma's own plain-text treatment. */
+  lastUpdated: string;
 }

@@ -18,6 +18,7 @@ export const GALLERY_ROUTES: GalleryRoute[] = [
     story:
       "This pocket of old Chinatown packs restored shophouse alleys and colonial-era civic buildings into a walk of well under a kilometer. Start at Kwai Chai Hong, once a neglected back lane and now a free open-air gallery of 1960s-Chinatown murals, then continue past The Zhongshan Building and UR-MU The Toffee - both adaptive reuse projects turning older shoplots into gallery and event space - before finishing at the Sultan Abdul Samad Building, the Moorish-revival landmark that anchors Merdeka Square.",
     stopNames: ['Kwai Chai Hong', 'The Zhongshan Building', 'UR-MU The Toffee', 'Sultan Abdul Samad Building'],
+    lastUpdated: '13 Sep 2026',
   },
   {
     id: 'merdeka-heritage-route',
@@ -31,5 +32,6 @@ export const GALLERY_ROUTES: GalleryRoute[] = [
       'Telekom Museum',
       'Bank Negara Malaysia Museum & Art Gallery',
     ],
+    lastUpdated: '13 Sep 2026',
   },
 ];
