@@ -55,7 +55,7 @@ export function RouteCard({ title, description, previewImage, chips = [], onClic
     >
       <div className="aspect-[364/279] w-full shrink-0 overflow-hidden rounded-xl border border-brand-300 bg-brand-50 md:aspect-[41/38]">
         {previewImage && (
-          <img src={previewImage.src} alt={previewImage.alt ?? ''} className="size-full object-cover" />
+          <img loading="lazy" decoding="async" src={previewImage.src} alt={previewImage.alt ?? ''} className="size-full object-cover" />
         )}
       </div>
       <div className="flex w-full flex-col items-start gap-4">

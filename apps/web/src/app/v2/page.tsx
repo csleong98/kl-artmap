@@ -43,12 +43,13 @@ export default function MapV2Page() {
   const [selectedRoute, setSelectedRoute] = useState<GalleryRoute | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Matches the `md` breakpoint already used elsewhere (e.g. v1's page.tsx) for switching
-  // between the desktop list+map split and mobile's single stacked scroll. Gated in JS
-  // rather than just CSS `hidden`/`md:hidden` so only one `MapV2` ever actually mounts at a
+  // Below Tailwind's `lg` (1024px) the single-column mobile layout is used - that includes
+  // tablets held upright, where the desktop split left the map only a thin strip beside a
+  // fixed-width sidebar. The mobile views cap their own width on wider screens. Gated in JS
+  // rather than just CSS `hidden`/`lg:hidden` so only one `MapV2` ever actually mounts at a
   // time - two live Mapbox instances (one just visually hidden) would be wasteful.
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -88,7 +89,7 @@ export default function MapV2Page() {
           </div>
         ) : selectedRoute ? (
           <div className="flex flex-1 gap-4 overflow-hidden p-4">
-            <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">
+            <aside className="relative flex w-[400px] shrink-0 xl:w-[465px] flex-col overflow-hidden rounded-2xl border border-border bg-background">
               <RouteDetail
                 route={selectedRoute}
                 locations={allLocations}
@@ -134,7 +135,7 @@ export default function MapV2Page() {
         />
       ) : (
         <div className="flex flex-1 gap-4 overflow-hidden p-4">
-          <aside className="relative flex w-[465px] shrink-0 flex-col overflow-hidden rounded-2xl border border-border bg-background">
+          <aside className="relative flex w-[400px] shrink-0 xl:w-[465px] flex-col overflow-hidden rounded-2xl border border-border bg-background">
             {selected ? (
               <LocationDetail
                 location={selected}

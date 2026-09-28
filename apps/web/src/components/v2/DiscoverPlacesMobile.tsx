@@ -97,6 +97,9 @@ export function DiscoverPlacesMobile({
       className="min-h-0 flex-1 overflow-y-auto [overflow-anchor:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       onScroll={handleScroll}
     >
+      {/* Width cap for tablets. It's an inner wrapper rather than a cap on the scroll
+          container itself, so dragging in the side margins still scrolls the page. */}
+      <div className="mx-auto w-full max-w-[640px]">
       {/* The sticky anchor is zero-height so it has the spacer's full height as slack and
           stays pinned purely by the browser's own sticky positioning - it doesn't wait on the
           scroll handler. If the card itself sat in the sticky element, the element would be
@@ -179,6 +182,7 @@ export function DiscoverPlacesMobile({
 
       <div className="mx-4 mb-4 rounded-b-[20px] border-x border-b border-border bg-background px-4 pb-4">
         <LocationsList locations={locations} onSelectLocation={onSelectLocation} />
+      </div>
       </div>
     </div>
   );

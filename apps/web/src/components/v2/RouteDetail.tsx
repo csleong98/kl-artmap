@@ -51,6 +51,8 @@ export function RouteDetail({ route, locations, onBack, onSelectLocation, mobile
       className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       onScroll={handleScroll}
     >
+      {/* Width cap for tablets; an inner wrapper so the side margins still scroll the page. */}
+      <div className={mobile ? 'mx-auto w-full max-w-[640px]' : 'contents'}>
       <RouteHeader title={route.name} onBack={onBack} scrolled={scrolled} mobile={mobile} />
 
       <div className={`flex flex-col ${mobile ? 'gap-4 p-4 pb-8' : 'gap-6 p-6'}`}>
@@ -78,6 +80,7 @@ export function RouteDetail({ route, locations, onBack, onSelectLocation, mobile
             <AboutAreaTab route={route} />
           </Tabs.Panel>
         </Tabs>
+      </div>
       </div>
     </div>
   );

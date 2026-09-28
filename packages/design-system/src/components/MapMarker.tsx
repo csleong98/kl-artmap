@@ -47,7 +47,7 @@ export function MapMarker({ type = 'pin', photo, label, className, ...props }: M
     >
       {isPhoto ? (
         <div className="size-full overflow-hidden rounded-[20px] border-[6px] border-popover shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
-          <img src={photo!.src} alt={photo!.alt ?? ''} className="size-full object-cover" />
+          <img loading="lazy" decoding="async" src={photo!.src} alt={photo!.alt ?? ''} className="size-full object-cover" />
         </div>
       ) : (
         <MapPin

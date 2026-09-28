@@ -153,7 +153,7 @@ function CarouselPhoto({ src, alt, distance, geometry }: CarouselPhotoProps) {
       className="absolute left-0 top-0 transition-transform duration-300 ease-out will-change-transform"
       style={{ transform: `translate(${x}px, ${y}px)`, zIndex }}
     >
-      <img
+      <img loading="lazy" decoding="async"
         src={src}
         alt={alt}
         style={{
@@ -234,7 +234,7 @@ export function ImageCarousel({
     return (
       <div ref={cardRef} className={cardClass} style={cardStyle}>
         <div className="absolute inset-5">
-          <img
+          <img loading="lazy" decoding="async"
             src={images[0].src}
             alt={images[0].alt ?? ''}
             className="box-border h-full w-full rounded-sm border-[8px] border-white object-cover shadow-[0px_10px_10px_2px_rgba(0,0,0,0.08)]"
