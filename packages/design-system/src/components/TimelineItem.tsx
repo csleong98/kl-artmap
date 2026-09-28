@@ -124,7 +124,7 @@ export function TimelineItem({
   );
 
   const thumbnailEl = thumbnail && (
-    <img
+    <img loading="lazy" decoding="async"
       src={thumbnail}
       alt={thumbnailAlt}
       className="size-12 shrink-0 rounded-xl border-2 border-popover object-cover shadow-[0px_1px_3px_0px_rgba(0,0,0,0.12)]"

@@ -95,7 +95,7 @@ export function ListItem({ title, photos, chips = [], active, onClick, className
                 className={`absolute inset-0 transition-transform duration-300 ease-out ${frame.rest} ${frame.hover}`}
               >
                 <div className="relative size-[132px] shrink-0 rounded-lg border-4 border-white shadow-[0px_2px_10px_1px_rgba(0,0,0,0.08)]">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={photo.src}
                     alt={photo.alt ?? ''}
                     className="absolute inset-0 size-full rounded-lg object-cover"

@@ -43,7 +43,9 @@ export function GalleryRoutesMobile({ routes, locations, onSelectRoute }: Galler
           gradientEndColor="rgba(240, 228, 208, 0)"
         />
 
-        <div className="relative z-10 flex flex-col p-4">
+        {/* Content is capped (and the cards go two-up) on tablets; the header's mural
+            background stays full width. */}
+        <div className="relative z-10 mx-auto flex max-w-[800px] flex-col p-4">
           <h1
             className={`text-foreground transition-[font-size,line-height] duration-200 ${
               compact ? 'text-h4 leading-7' : 'text-h2 leading-9'
@@ -87,7 +89,7 @@ export function GalleryRoutesMobile({ routes, locations, onSelectRoute }: Galler
         />
       </div>
 
-      <div className="flex flex-col gap-4 px-4 pb-4">
+      <div className="mx-auto grid max-w-[800px] gap-4 px-4 pb-4 sm:grid-cols-2">
         {filtered.map((route) => (
           <RouteCard
             key={route.id}

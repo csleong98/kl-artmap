@@ -18,7 +18,9 @@ export interface TopNavProps {
 export function TopNav({ mode, onModeChange }: TopNavProps) {
   return (
     <header className="flex h-16 w-full shrink-0 items-center justify-between border-b border-border bg-background px-3 md:h-[72px]">
-      <div className="flex shrink-0 items-center gap-1">
+      {/* A plain `<a>` (not Next's `Link`) on purpose: a full page load is the simplest way
+          to reset everything - mode, selection, search, scroll - back to the default view. */}
+      <a href="/v2" aria-label="KL Art Map home" className="flex shrink-0 items-center gap-1">
         {/* `shrink-0` matters here specifically: Tailwind's `grid-cols-2` is
             `repeat(2, minmax(0, 1fr))` - the explicit `0` minimum (vs. a track's normal
             content-based minimum) makes this grid uniquely willing to collapse to nothing
@@ -37,7 +39,7 @@ export function TopNav({ mode, onModeChange }: TopNavProps) {
         <p className="hidden text-lg font-semibold uppercase tracking-tight text-foreground md:inline">
           KL Art Map
         </p>
-      </div>
+      </a>
 
       <Tabs variant="rounded" value={mode} onValueChange={(value) => onModeChange(value as MapV2Mode)}>
         <Tabs.List>

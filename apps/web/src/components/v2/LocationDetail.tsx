@@ -94,6 +94,8 @@ export function LocationDetail({ location, allLocations, onBack, onSelectLocatio
       className="flex h-full flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       onScroll={handleScroll}
     >
+      {/* Width cap for tablets; an inner wrapper so the side margins still scroll the page. */}
+      <div className={mobile ? 'mx-auto w-full max-w-[640px]' : 'contents'}>
       <LocationHeader location={location} onBack={onBack} scrolled={scrolled} mobile={mobile} />
 
       {images.length > 0 && (
@@ -135,6 +137,7 @@ export function LocationDetail({ location, allLocations, onBack, onSelectLocatio
             />
           </Tabs.Panel>
         </Tabs>
+      </div>
       </div>
     </div>
   );
